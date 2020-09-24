@@ -1,0 +1,64 @@
+%kapitola6
+\chapter{Vícerozměrná lineární regrese}
+Předpokládejme model
+$$Y_i=\beta_1X_{i1}+\ldots+\beta_pX_{ip}+\epsilon_i, \quad i=1,\ldots,n, $$
+kde $\epsilon_1,...,\epsilon_n~iid~\NN(0,\sigma^2)$.
+%\boldsymbol{\beta} - vektorové beta
+V maticové formě
+$$\Y=\X\beta+\epsilon,$$
+kde $\Y=\Y_{n\times 1},~\epsilon=\epsilon_{n\times 1},~\beta=\beta_{p\times 1}$ a $\X=\X_{n\times p}$. Sloupce matice $\X$ označíme $X_1,...,X_p$, tedy $\X=(X_1,...,X_p) $ a předpokládejme, že jsou nezávislé. Pokud by nebyly nezávislé, nebylo by možné získat (rekonstruovat) parametr $\beta$ z $\X$ a $\Y$ ani kdyby nebyl přítomný šum $\epsilon$. (Vlastně bychom měli soustavu $\X\beta=\Y$.)\\
+\begin{remark}
+V jednorozměrné regresi by to odpovídalo případu, kdy jsou všechny $X_i$ stejné, tzn. že by nebylo možné odhadnout přímku přímo z pozorování pouze v jednom bodě.
+\end{remark}
+Dále předpokládejme, že
+$$n>p, \quad h(\X)=p.$$
+Zkusíme následně vypočítat MLE parametrů $\beta, \sigma^2$.
+\begin{theorem}
+Pro MLE parametrů $\beta$ a $\sigma^2$ platí, že
+$$\widehat{\beta}=(\X^T\X)^{-1}\X^TY $$
+a
+$$\widehat{\sigma}^2=\frac{1}{n}(\Y-X\widehat{\beta})^T(\Y-\X\widehat{\beta})=\frac{1}{n}\|Y-\X\widehat{\beta} \|^2=\frac{1}{n}\left\|Y-\X(\X^T\X)^{-1}\X^T\Y \right\|^2. $$
+\begin{proof}
+zřejmě $Y_i\sim \NN(\beta_1X_{i1}+\ldots+\beta_pX_{ip}  ,\sigma^2)$ a její hustota tedy je
+$$f_i(y)=\frac{1}{\sqrt{2\pi \sigma^2}}\exp{-\frac{(y-\beta_1X_{i1}-\ldots-\beta_pX_{ip})^2}{2\sigma^2}} $$
+a věrohodnostní funkce
+\begin{align*}
+L&=\prod_{i=1}^{n}f_i(Y_i)=\Br{\frac{1}{\sqrt{2\pi \sigma^2}}}^n\exp{-\frac{\sum_{i=1}^{n}(Y_i-\beta_1X_{i1}-\ldots-\beta_pX_{ip})^2}{2\sigma^2}}\\
+&=\Br{\frac{1}{\sqrt{2\pi \sigma^2}}}^n \exp{-\frac{1}{2\sigma^2}\left\|Y-X\beta \right\|^2}\\
+l&=\ln L=C-\frac{n}{2}\ln{\sigma^2}-\frac{1}{2\sigma^2}\left\|Y-X\beta\right\|^2
+\end{align*}
+Je třeba minimalizovat 
+\begin{align*}
+\left\|Y-X\beta\right\|^2&=(Y-X\beta)^T(Y-X\beta)=(Y-\sum_{i=1}^{p}\beta_iX_i)^T(Y-\sum_{i=1}^{p}\beta_iX_I)\\
+&=Y^TY-2\sum_{i=1}^{p}\beta_iYX_i+\sum_{j=1}^{p}\sum_{i=1}^{p}\beta_i\beta_jX_i^TX_j. 
+\end{align*}
+Derivujeme podle $\beta_i$. Potom
+$$-2Y^TX_i+2\sum_{j=1}^{p}\beta_jX_i^TX_j=0,\quad\text{a tedy}\quad Y^TX_i=\sum_{j=1}^{p}\beta_jX_i^TX_j, \quad \forall i \leq p.$$
+V maticovém zápisu se 
+$\X^T\Y=\X^T\X\beta$ nazývá \textbf{soustava normálních rovnic}. Matice $\X^T\X$ má rozměr $p\times p$ a je invertibilní, protože $h(\X)=p$ a $h(\X^T\X)=h(\X)$ pro libovolnou matici $\X$. Proto tedy
+$$\widehat{\beta}=(\X^T\X)^{-1}\X^T\Y.$$
+Derivujeme podle $\sigma^2$. Potom
+\begin{align*}
+&-\frac{n}{2}\frac{1}{\sigma^2}+\frac{1}{2\sigma^4}\left\|Y-X\beta\right\|^2=0,\\
+&\widehat{\sigma}^2=\frac{1}{n}\left\|Y-X\widehat{\beta} \right\|^2=\frac{1}{n}\underbrace{(Y-X\widehat{\beta})^T(Y-X\widehat{\beta})}_{R}=\frac{1}{n}R,
+\end{align*}
+kde $R$ je reziduální součet čtverců.
+\end{proof}
+\end{theorem}
+Pro statistickou analýzu potřebujeme rozdělení odhadů $\widehat{\beta}, \widehat{\sigma}^2$.
+\begin{theorem}
+Platí, že
+$$\widehat{\beta}\sim \NN_p(\beta,\sigma^2(\X^T\X)^{-1})\quad \text{a} \quad \frac{n\widehat{\sigma}^2}{\sigma^2}\sim \chi^2_{n-p}.$$
+Odhady $\widehat{\beta}, \widehat{\sigma}^2$ jsou nezávislé.
+\begin{proof}
+$\Y=\X\beta+\epsilon$, a proto
+$$\widehat{\beta}=(\X^T\X)^{-1}\X^T(\X\beta+\epsilon)=(\X^T\X)^{-1}(\X^T\X)\beta +(\X^T\X)^{-1}\X^T\epsilon=\beta+(\X^T\X)^{-1}\X^T\epsilon.$$
+Z toho vyplývá, že $\E{\widehat{\beta}}=\beta$, protože $\E{\epsilon}=0 $.
+Kovarianční matici můžeme napsat ve tvaru
+\begin{align*}
+\E{(\widehat{\beta}-\beta)(\widehat{\beta}-\beta)^T}&=\E((X^TX)^{-1}X^T\epsilon\epsilon^T\X(\X^T\X)^{-1})=(\X^T\X)^{-1}\X^T\E(\epsilon\epsilon^T)\X(\X^T\X)^{-1}\\
+&=(\X^T\X)^{-1}\X^T\X\sigma^2(\X^T\X)^{-1} =\sigma^2(\X^T\X)^{-1}
+\end{align*}
+
+\end{proof}
+\end{theorem}

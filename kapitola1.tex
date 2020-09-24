@@ -1,0 +1,312 @@
+%regresní analýza
+\chapter{Regresní analýza}
+\section{Jednorozměrná lineární regrese}
+%příklad matlab
+Předpokládejme, že se~sledují dvě fyzikální veličiny $X$ a~$Y$ mezi~kterými existuje lineární závislost
+$$Y=\beta_0+\beta_1X .$$
+$\beta_0$ a~$\beta_1$ nejsou známy, a~proto se~provádí experiment, při~němž se~zjišťují hodnoty dvojic $(X,Y)$. Často se~stává, že měření hodnot $X$ probíhá prakticky zcela přesně (například $X$ se~nastavuje na~předem dané úrovně), zatímco $Y$ se~měří s~určitou chybou. Zavádí se~tedy model
+$$Y_i=\beta_0 +\beta_1X_i + e_i \quad \forall~i=1,...,n,$$
+kde $e_i$ je náhodný šum a~$e_1,...,e_n$ jsou $iid~\NN(0,{\sigma}^2)$ a~dvojice $(x_1,y_1),...,(x_n,y_n)$ získáme měřením. Neznáme parametry jsou $\beta_0,\beta_1, {\sigma}^2$, chtěli bychom je odhadnout na~základě výběru (MLE odhady).\\
+
+Rozdělení $Y_i$ je $Y_i\sim\NN(\beta_0 + \beta_1x,{\sigma}^2)$, a~tedy věrohodnostní funkce výběru $y_1,...,y_n$ je
+$$L=\Br{\frac{1}{\sqrt{2\pi{\sigma}^2}}}^n \e{-\frac{1}{2{\sigma}^2}\sum_{i=1}^{n}(Y_i-\beta_0-\beta_1x)^2}.$$
+$$l=\ln L=-\frac{n}{2}\ln{2\pi}-\frac{n}{2}\ln{{\sigma}^2}-\frac{1}{2{\sigma}^2}\sum_{i=1}^{n}(Y_i-\beta_0-\beta_1x_i)^2.$$
+Je zřejmé, že pro~libovolné ${\sigma}^2$ potřebujeme minimalizovat
+$$S(\beta_0,\beta_1)=\sum_{i=1}^{n}(Y_i-\beta_0-\beta_1x_i)^2   $$
+přes $\beta_0,\beta_1$, na~což použijeme metodu nejmenších čtverců (poznámka?).
+$$\frac{\partial l}{\partial \beta_0}=2\frac{1}{2{\sigma}^2}\sum_{i=1}^{n}(Y_i-\beta_0-\beta_1x_i)=0,  $$
+$$\frac{\partial l}{\partial \beta_1}=\frac{1}{{\sigma}^2}\sum_{i=1}^{n}(Y_i-\beta_0-\beta_1x_i) x_i=0. $$
+Z toho pak
+$$  \sum_{i=1}^{n} Y_i -n\beta_0-\beta_1 \sum_{i=1}^{n} x_i=0, $$
+$$ \beta_0=\Oyn -\beta_1\oxnn=\frac{1}{n}\sum_{i=1}^{n}Y_i-\beta_1\frac{1}{n}\sum_{i=1}^{n}x_i.$$
+Po vynásobení poslední rovnice $n$ úpravou dostaneme vztah
+$$\sum_{i=1}^{n}(Y_i-\Oyn+\beta_1\oxnn-\beta_1x_i)x_i=0  $$
+a následně i~vztah
+$$ \sum_{i=1}^{n}Y_ix_i-\Oyn\sum_{i=1}^{n}+\beta_1\oxnn\sum_{i=1}^{n}x_i-\beta_1\sum_{i=1}^{n}x_i^2=0. $$
+Z toho už následně vyjádříme
+$$ \widehat{\beta}_1=\frac{\sum_{i=1}^{n}x_iY_i-n\Oyn\oxnn}{\sum_{i=1}^{n}x_i^2-n\oxnn^2}\qquad\text{a}\qquad \widehat{\beta}_0=\Oyn-\widehat{\beta}_1\oxnn. $$
+Nyní již spočítáme logaritmickou věrohodnostní funkci
+$$\frac{\partial l}{\partial ({\sigma}^2)}=-\frac{n}{2}\frac{1}{{\sigma}^2}+\frac{1}{2({\sigma}^2)^2}\sum_{i=1}^{n}(Y_i-\beta_0-\beta_1x_i)^2=0,$$
+odkud
+$$\hsn=\frac{1}{n}\sum_{i=1}^{n}(Y_i-\widehat{\beta}_0-\widehat{\beta}_1x_i)^2. $$
+Pokud dále označíme
+$$\widehat{Y}_i=\widehat{\beta}_0+\widehat{\beta}_1x_i, $$
+pak rozdíly
+$$r_i=Y_i-\widehat{Y}_i $$
+nazýváme \textbf{rezidua} (která by měla mít normální rozdělení, aby byly splněny předpoklady modelu) a~
+$$ \sum_{i=1}^{n}r_i^2=\sum_{i=1}^{n}(Y_i-\widehat{\beta}_0-\widehat{\beta}_1x_i)^2=S_e  $$
+nazveme \textbf{reziduální součet čtverců}.
+\subsection*{$R^2$ statistika}
+Tuto statistiku definujeme vztahem
+$$R^2=1-\frac{\sum_{i=1}^{n}r_i^2}{\sum_{i=1}^{n}(Y_i-\oyn)^2}=1-\frac{\sum_{i=1}^{n}(Y_i-\widehat{Y}_i)^2}{\sum_{i=1}^{n}(Y_i-\oyn)^2}, $$
+který se~dá chápat jako podíl součtu reziduálních čtverců a~rozptylu $Y$.
+$R^2$ se~interpretuje jako poměr variability v~datech vysvětlené lineárním modelem. Čím větší je $R^2$, tím lépe vysvětluje náš model data, v~ideálním případě pak $R^2=1$.
+Dále bychom chtěli:
+\begin{enumerate}
+\item sestrojit IS pro~parametry modelu $\beta_0, \beta_1, {\sigma}^2$,
+
+\item intervaly pro~predikci hodnoty $y$ v~daném bodě $x$ a
+
+\item testovat hypotézy na~parametrech modelu, například F-stat. v~MATLABu testuje $H_0:\beta_0=0$ a~$\beta_1=0$, že vysvětlující proměnná $y$ není korelovaná s~vysvětlovanou proměnnou $x$.
+\end{enumerate}
+
+
+Vše je podobné testům o~parametrech $N(\mu,{\sigma}^2)$ (t-test, F-test), potřebujeme rozdělení odhadů $\widehat{\beta}_0,\widehat{\beta}_1, \widehat{{\sigma}^2}$. Sdružené rozdělení $\widehat{\beta}_0,\widehat{\beta}_1$ se~najde snadno, protože to jsou lineární funkce $Y_i$ takže budou mít normální rozdělení, stačí tedy určit střední hodnoty, rozptyly, kovariance,...\\
+Označme výběrový rozptyl $x$ jako
+$${\sigma_x}^2=\frac{1}{n}\sum_{i=1}^{n}x_i^2-\oxnn^2. $$
+Platí, že
+\begin{enumerate}
+\item $$ \widehat{\beta}_1\sim \n{\beta_1,\frac{{\sigma}^2}{n{\sigma_x}^2}}, $$
+$$\widehat{\beta}_0\sim \n{\beta_0,{\sigma}^2\Br{\frac{1}{n}+\frac{(\oxnn)^2}{n{\sigma_x}^2}}}=\n{\beta_0,\frac{{\sigma}^2}{n{\sigma_x}^2}\frac{1}{n}\sum_{i=1}^{n}x_i^2}, $$
+$$\Cov(\widehat{\beta}_0,\widehat{\beta}_1)=-\frac{\oxnn{\sigma}^2}{n{\sigma_x}^2}, $$
+\item $\widehat{\sigma}^2 $ je nezávislé na~$\widehat{\beta}_0$ a~$\widehat{\beta}_1$,
+\item $$\frac{n\widehat{\sigma}^2}{\sigma^2} \sim {\chi}^2(n-2).$$
+\end{enumerate}
+%
+
+\begin{remark}
+První bod znamená, že $(\beta_0,\beta_1)\sim \NN(\mu,\sum)$, kde
+$$\bmu=(\beta_0,\beta_1)\quad \text{a}\quad \sum=\frac{\sigma^2}{n\sigma_x^2}\begin{pmatrix}
+\oxnn^2 & -\oxnn\\
+-\oxnn & 1
+\end{pmatrix}. $$
+%\mu vektorově
+\end{remark}
+
+
+Konfidenční intervaly\\
+\begin{enumerate}
+\item $\sigma^2$, a~protože $\frac{n\widehat{\sigma}^2}{\sigma^2}\sim {\chi}^2(n-2)$, víme, že s~pravděpodobností $\PP=1-\alpha$ bude
+$${\chi}^2_{\frac{\alpha}{2}}(n-2) \leq \frac{n\widehat{\sigma}^2}{\sigma^2} \leq {\chi}^2_{1-\frac{\alpha}{2}}(n-2),$$
+a tedy $(1-\alpha)$\% IS (interval spolehlivosti) pro~$\sigma^2$ je
+$$\frac{n\widehat{\sigma}^2}{{\chi}^2_{1-\frac{\alpha}{2}}(n-2)} \leq \sigma^2 \leq \frac{n\widehat{\sigma}^2}{{\chi}^2_{\frac{\alpha}{2}}(n-2)}.$$
+\item $\beta_1$\\
+Veličiny 
+$\frac{\widehat{\beta}_1-\beta_1}{\sqrt{\frac{\sigma^2}{n\sigma_x^2}}}\sim \NN(0,1) $
+a
+$\frac{n\widehat{\sigma}^2}{\sigma^2} \sim {\chi}^2(n-2) $
+jsou nezávislé. Z~toho vyplývá, že 
+$$
+ \frac{(\widehat{\beta}_1-\beta_1)\Big/\sqrt{\frac{\sigma^2}{n\sigma_x^2}}}{\sqrt{\frac{n\widehat{\sigma}^2}{\sigma^2}\frac{1}{n-2}}} \sim t(n-2).$$
+
+Z toho potom
+\begin{align}
+ \frac{\widehat{\beta}_1-\beta_1}{\sqrt{\frac{\widehat{\sigma}^2}{(n-2)\sigma_x^2}}}=(\widehat{\beta}_1-\beta_1)\sqrt{\frac{(n-2)\sigma_x^2}{\widehat{\sigma}^2}}\sim t(n-2), \label{eq1}
+\end{align}
+což znamená, že
+$$-t_{1-\frac{\alpha}{2}}(n-2) \leq (\widehat{\beta}_1-\beta_1)\sqrt{\frac{(n-2)\sigma_x^2}{\widehat{\sigma}^2}}   \leq t_{1-\frac{\alpha}{2}}(n-2)$$
+s pravděpodobností $\PP=1-\alpha$, a~tedy
+$$\widehat{\beta}_1-t_{1-\frac{\alpha}{2}}(n-2)\sqrt{\frac{\widehat{\sigma}^2}{(n-2)\sigma_x^2}}  \leq \beta_1 \leq \widehat{\beta}_1+t_{1-\frac{\alpha}{2}}(n-2)\sqrt{\frac{\widehat{\sigma}^2}{(n-2)\sigma_x^2}}$$
+je $100(1-\alpha)$\% IS pro~$\beta_1$.
+Podobně pro~$\beta_0$ dostaneme, že 
+$$ \frac{\widehat{\beta}_0-\beta_0}{\sqrt{\sigma^2(\frac{1}{n}+\frac{\overline{x}_n^2}{\sigma_x^2})}} \frac{1}{\sqrt{\frac{n\widehat{\sigma}^2}{\sigma^2}\frac{1}{n-2}}} \sim t(n-2), $$
+\begin{align}
+\frac{\widehat{\beta}_0-\beta_0}{\sqrt{(1+\frac{\overline{x}_n^2}{\sigma_x^2})\widehat{\sigma}^2\frac{1}{n-2}}} \sim t(n-2), \label{eq2}
+\end{align}
+a tedy
+$$\widehat{\beta}_0-t_{1-\frac{\alpha}{2}}(n-2){\sqrt{(1+\frac{\oxnn^2}{\sigma_x^2})\widehat{\sigma}^2\frac{1}{n-2}}} \leq \beta_0 \leq \widehat{\beta}_0+t_{1-\frac{\alpha}{2}}(n-2){\sqrt{(1+\frac{\oxnn^2}{\sigma_x^2})\widehat{\sigma}^2\frac{1}{n-2}}}$$
+je $100(1-\alpha)$\% IS pro~$\beta_0$.
+\end{enumerate}
+
+Statistiky \eqref{eq1} a~\eqref{eq2} se~dají použít i~pro~konstrukci testů například $H_0: ~\beta_1=0$. Za~platnosti $H_0$ totiž
+$$T_1=\widehat{\beta}_1\sqrt{\frac{(n-2)\sigma_x^2}{\widehat{\sigma2}}} \sim t(n-2),$$
+a tedy $H_0$ zamítáme, pokud
+$$|T_1|>t_{1-\frac{\alpha}{2}}(n-2).$$
+$$ \test{|T_1|>t_{1-\frac{\alpha}{2}}(n-2)} $$
+\begin{example}[Měření rychlosti zvuku v~závislosti na~teplotě]~\\
+	
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+\multicolumn{1}{|c|}{{ \textbf{teplota}}} & -20 & \multicolumn{1}{c|}{0} & 20  & 50  & 100 \\ \hline
+\textbf{rychlost (m/s)}                                       & 323 & 327                    & 340 & 364 & 386 \\ \hline
+\end{tabular}
+
+\end{center}
+\begin{align*}
+&\Oxn=\frac{1}{n}\sum_{i=1}^{n}X_i=30,\quad\Oyn=348,\quad
+\sum_{i=1}^{n}X_iY_i=57 140,\quad
+\sum_{i=1}^{n}X_i^2=13 300,\\
+&\sigma_x^2=\frac{1}{n}\sum_{i=1}^{n}X_i^2-\overline{X_n^2}=\frac{1}{5}13 300-900=1 760,\\
+&\widehat{\beta}_1=\frac{\sum_{i=1}^{n}X_iY_i-5\oxnn\Oyn}{\sum_{i=1}^{n}X_i^2-5\overline{X_n^2}}=0.561,\\
+&\widehat{\beta}_0=\Oyn-\widehat{\beta}_1\oxnn=331.16,\\
+&\widehat{\sigma}^2=\frac{1}{5}\sum_{i=1}^{n}(Y_i-\widehat{\beta}_0-\widehat{\beta}_1X_i)^2=11.37\text{ a~nestranný }\\
+& s^2=\frac{1}{5-2}\sum_{i=1}^{n}(Y_i-\widehat{\beta}_0-\widehat{\beta}_1X_i)^2=18.95.
+\end{align*}
+Spočítáme IS například pro~$\beta_1$. Dostaneme tedy $t_{0.975}(5-2)=3.18$, který dosadíme do~vzorečku na~výpočet IS pro~$\beta_1$, kde $\beta_1 \in (0.414,0.709)$.\\
+ $\beta_1=0$, $
+T_1=12.097$, $|T_1| \geq t_{0.975}(3)=3.18$, a~proto nezamítáme $H_0$.
+\end{example}
+
+%příklad matlab
+
+\section{Intervaly predikce}
+Předpokládejme, že máme nové pozorování $X$, pro~které je $Y$ neznámé a~my bychom chtěli predikovat hodnoty $Y$, případně najít intervaly spolehlivosti pro~$Y$. Vzhledem k~lineárnímu regresnímu modelu $Y=\beta_0+\beta_1 X + e$ je přirozené vzít za~predikci
+$$\widehat{Y}=\widehat{\beta}_0+\widehat{\beta}_1X .$$
+Najdeme rozdělení rozdílu $Y-\widehat{Y}$. Zřejmě se~jedná o~normální rozdělení ($\beta_0\sim \NN(...),\\ \beta_1 \sim \NN(...),e_1 \sim \NN(...), Y \sim \NN(...)$) stačí tedy určit střední hodnotu a~rozptyl.
+$$\E(\widehat{Y}-Y)=\E(\widehat{\beta}_0)+\E(\widehat{\beta}_1X)-\beta_0-\beta_1 X-\E(e)=\beta_0+\beta_1 X-\beta_0-\beta_1 X -0=0. $$
+Protože nový pár $(X,Y)$ je nezávislý na~předchozích datech, platí, že $Y$ je nezávislé na~$\widehat{Y}$ ($\beta_0,\beta_1$ jsou spočteny pouze pomocí $Y_1,...,Y_n$). Pak tedy
+$$\D (\widehat{Y}-Y)=\D (\widehat{Y})+\D (Y)=\D (\widehat{Y})+\sigma^2,$$
+protože $\D (Y)=\D (e)=\sigma^2$.
+\[
+\begin{split}
+\D (\widehat{Y})&=\D (\widehat{\beta_0}+\widehat{\beta}_1X)=\E(\widehat{\beta}_0+\widehat{\beta}_1X-\beta_0-\beta_1 X)^2=\EE{\widehat{\beta}_0-\beta_0+X(\widehat{\beta}_1-\beta_1)}^2=\\
+&=\underbrace{\E(\widehat{\beta}_0-\beta_0)^2}_{\D \widehat{\beta}_0}+\underbrace{X^2\E(\widehat{\beta}_1-\beta_1)}_{\D \widehat{\beta}_0}+2X\underbrace{\E(\widehat{\beta}_0-\beta_0)(\widehat{\beta}_1-\beta_1)}_{\D(\widehat{\beta}_0,\widehat{\beta}_1)}=\\
+&=\Br{\frac{1}{n}+\frac{(\oxnn)^2}{x\sigma_X^2}}\sigma^2+X^2\frac{\sigma^2}{n\sigma_X^2}-2X\frac{\oxnn\sigma^2}{n\sigma_X^2}=\sigma^2\Br{\frac{1}{n}+\frac{(\oxnn-X)^2}{n\sigma_x^2}}
+\end{split}
+\]
+Máme tedy
+$$\widehat{Y}-Y \sim \n{0, \sigma^2\Br{1+\frac{1}{n}+\frac{(\oxnn-X)^2}{n\sigma_X^2}} },$$
+a proto
+$$ \frac{{(\widehat{Y}-Y)}\Big/{\sqrt{\sigma^2(1+\frac{1}{n}+\frac{(\overline{x_n}-X)^2}{n\sigma_x^2})}}}{\sqrt{\frac{1}{n-2}\frac{n\widehat{\sigma}^2}{\sigma^2}}}$$
+a tedy $100(1-\alpha)$\% interval prediktu??? je
+$$\widehat{Y}-t_{1-\frac{\alpha}{2}}(n-2)\sqrt{\frac{\widehat{\sigma}^2}{n-2}\Br{n+1+\frac{(\oxnn-X)^2}{\sigma_x^2}}} \leq Y \leq \widehat{Y}+t_{1-\frac{\alpha}{2}}(n-2)\sqrt{\frac{\widehat{\sigma}^2}{n-2}\Br{n+1+\frac{(\oxnn-X)^2}{\sigma_x^2}}}.$$
+Tohle kreslí MATLAB (polytool)
+\begin{example}[Rychlost zvuku]Mějme 
+$\oxnn=30, ~\sigma_X^2=1760,~\widehat{\beta}_1=0.561,~\widehat{\beta}_0=331.16,~$\\$\sigma^2=11.37,~ \text{nestraný},~\widehat{s}^2=18.95$.
+Nové $X=35^\circ C$ a~$\widehat{Y}=331.16+0.561\cdot 35=350.8$.
+$$\sqrt{\frac{\widehat{\sigma}^2}{n-2}\Br{n+1+\frac{(\oxnn-X)^2}{\sigma_x^2}}}=\sqrt{\frac{11.37}{3}\Br{6+\frac{(30-35)^2}{1760}}}=4.77 $$
+$$t_{0.975}(3)=3.1824 ~ \text{a tedy}~IP=(335.6,366.0)$$
+\end{example}
+
+
+%%%%%%%%%%% 21-30
+\begin{remark}
+	Někdy dopředu známe kandidáta $b_1$ jako hodnotu parametru $\beta_1$ a~chtěli bychom testovat 
+	$\hypothesis{\beta_1=b_1}{\beta_1\neq b_1}$. Test bude zamítnut $H_0$, pokud 
+	$$ \abs{\beta_1-b_1}\cdot \frac{\sqrt{S_{xx}}}{s_n}> t_{1-\frac{\alpha}{2}}(n-2). $$
+\end{remark}
+\subsection{Test významnosti interceptu}
+Otázka je, zda přímka prochází počátkem $(0,0)$, tedy $\hypothesis{\beta_0=0}{\beta_0\neq0}$. Nezamítnutí $H_0$ znamená, že jednodušší model $y=\beta_1 x+e$ lépe popisuje datta, než $y=\beta_0+\beta_1 x+e$. $H_0$ potom zamítneme, pokud
+$$ T_n=\frac{|\widehat{\beta}_0|}{\widehat{\sigma}(\widehat{\beta}_0)}=|\widehat{\beta}_0|\frac{1}{s_n\sqrt{\frac{1}{n}+\frac{\overline{x}^2}{S_{xx}}}}>t_{1-\frac{\alpha}{2}}(n-2). $$
+
+\subsection{ANOVA přístup pro~testování}
+Odvodili jsme $t$-test významnosti koeficientů a~nyní odvodíme ekvivalentní $F$-test, který může být zobecněn na~test celkové významnosti vícerozměrného regresního modelu (testy významnosti jednotlivých koeficientů mohou být totiž zavádějící). 
+
+Myšlenkou metody (analýza rozptylu ANOVA) je určit, kolik variability v~pozorováních $(y_1,y_2,...,y_n)$ je "vysvětleno" regresním modelem (přímkou). Míru variability v~datech pak spočítáme jako podíl součtu sum od~regrese a~celkového počtu čtverců, tedy
+$$ \SST=\sum_{i=1}^{n}(y_i-\overline{y}_n)^2, $$
+pokud regresní přímka $y=\widehat{\beta}_0+\widehat{\beta}_1 x$ dobře prokládá data, tedy $\widehat{y}_i\approx y_i$. Dále bude platit, že 
+$$ \sumin (\hyi-\lhyn)^2\approx\sumin (y_i-\lyn)^2. $$
+Ukážeme, že $\lhy=\lyn$ a~tak 
+$$ \sumin(\hyi-\lhyn)^2=\sumin (\hyi-\lyn)^2=\SSR $$ regresi sum ob squares, regresní součet čtverců. Podíl
+$$ \RMR^2=\frac{\SSR}{\SST}=\frac{\sumin (\hyi-\lyn)^2}{\sumin (y_i-\lyn)^2}$$ tak vyjadřuje variabilitu v~$(y_1,...,y_n)$ vysvětlené regresním modelem. 
+
+$\RMR^2$ - \textit{koeficient determinace (coefficient of determination)} (pro každý model by měl mít hodnotu $\RMR^2\approx1$). Ukážeme, že $\RMR^2$ je kvadrát výběrového korelačního koeficientu mezi~$\textbf{x}$ a~$\textbf{y}$, což dává statistice $´^2$ význam míry "dobré shody". 
+
+Pokud bychom znali rozdělení pravděpodobnostní statistiky $\RMR^2$, nabízí se~její použití pro~test $H_0:~\beta_1=0$, kterou bychom zamítli, pokud bude $\RMR^2\approx1$. Protože každá monotonní funkce $\RMR^2$ vede na~ekvivalentní test, budeme uvažovat statistiku $$ \mathrm{F}=\frac{(n-2)\RMR}{1-\RMR^2}. $$
+
+\begin{lemma}\label{lemma_k_vete}
+	Nechť $\widehat{e}_i=y_i-\hyi$ značí rezidua, kde $\hyi=\wbeta_0+\wbeta_1 x_i$ a~$ \wbeta_0,\wbeta_1$ jsou LSE. Potom \begin{enumerate}
+		\item $\sumin\widehat{e}_i=0$,
+		\item $\lhyn=\lyn$,
+		\item $\sumin \widehat{e}_i\hyi=0$.
+	\end{enumerate}
+\begin{proof}
+	\begin{enumerate}
+		\item Z~rovnice $\frac{\partial S}{\partial\beta_0}=0$ dostaneme $$ 0=\sumin (y_i-\wbeta_0-\wbeta_1 x_i)=\sumin(y_i-\hyi)=\sumin \widehat{e}_i.$$
+		\item Z~bodu 1) plyne, že $\sumin\hyi=\sumin y_i$, podělením $n$ dostaneme dokazované tvrzení.
+		\item Z~rovnice $\frac{\partial S}{\partial\beta_1}=0$ dostaneme $$0=\sumin(y_i-\wbeta_0-\wbeta_1 x_i)x_i=\sumin \hei x_i$$ a~tedy $$ \sumin \hei\hyi=\sumin \hei (\wbeta_0+\wbeta_1 x_i)=\sumin\hei\wbeta_0+\sumin x_i \hei\wbeta_1=\wbeta_0\underbrace{\sumin \hei}_{=0}+\wbeta_1\underbrace{\sumin x_i\hei}_{=0}=0.$$
+	\end{enumerate}
+\end{proof}
+\end{lemma}
+\begin{theorem}
+	Předpokládejme, že $\SST\neq 0$. Potom platí\begin{enumerate}
+		\item $0\leq \RMR^2\leq1$,
+		\item $\RMR^2=1-\frac{\SSE}{\SST}$, kde $\SSE=\sumin(y_i-\hyi)^2$ jako reziduální součet čtverců,
+		\item $\RMR^2=1~\Leftrightarrow~(\forall i~\in\hat{n})(\hyi=y_i)$ (všechna data leží na~přímce),
+		\item pokud označíme $\textbf{x}=(x_1,...,x_n)$ a~$\textbf{y}=(y_1,...,y_n)$, potom $\RMR^2=\rho^2(\textbf{x},\textbf{y})$, kde $$\rho(\textbf{x},\textbf{y})=\frac{\Big(\sumin(x_i-\overline{x}_n)(y_i-\lyn)\Big)^2}{S_{xx}S_{yy}}$$ je druhá mocnina výběrového korelačního koeficientu vektorů $\textbf{x},\textbf{y}$,
+		\item $\mathrm{F}=\frac{\SSR}{s_n^2}=\mathrm{T}^2$,
+		\item pokud jsou chyby $e_1,...,e_n~iid~\NN(0,\sigma^2)$ a~$\beta_1=0$ (platí $H_0:~\beta_1=0$) v~modelu, potom  $\mathrm{F}\sim\mathrm{F}(1,n-2)$.
+	\end{enumerate}
+\begin{proof}
+	Důkaz věty bude založen na~rozkladu
+	$$ \sumin (y_i-\lyn)^2=\sumin(\hyi-\ly)^2 + \sumin (y_i-\hyi)^2 $$ neboli $\SST=\SSR+\SSE$. Z~lemmatu \ref{lemma_k_vete} vyplývá, že 
+	\[
+	\begin{split}
+	\SST&=\sumin (y_i-\lyn)^2=\sumin\big[ (y_i-\hyi)+(\hyi-\lyn) \big]^2=\\&=\sumin(y_i-\hyi)^2+\sumin(\hyi-\lyn)^2+2\sumin(y_i-\hyi)(\hyi-\lyn)=\SSE+\SSR+0 ,
+	\end{split}
+	\]
+	neboť $$ \sumin(\underbrace{(y_i-\hyi)}_{=\hei}(\hyi-\lyn))=\underbrace{\sumin\hei\hyi}_{=0}-\lyn\underbrace{\sumin\hei}_{=0}=0.$$
+	Z toho potom dokazujeme jednotlivé body věty. \begin{enumerate}
+		\item Protože $\SST=\SSE+\SSR$, pak $0\leq \RMR^2=\frac{\SSR}{\SST}\leq \frac{\SST}{\SST}=1$.
+		\item $\SSR=\SST-\SSE~\Rightarrow~\RMR^2=\frac{\SST-\SSE}{\SST}=1-\frac{\SSE}{\SST}$.
+		\item Z~bodu 2 plyne, že $\RMR^2=1~\Leftrightarrow~\SSE=0$ a~$\SSE=\sumin(y_i-\hyi)^2=0~\Leftrightarrow~y_i=\hyi ~\forall i~\in\hat{n}$.
+		\item  $\hyi=\underbrace{\wbeta_0}_{=\lyn=\wbeta_1 x_n} + \wbeta_1 x_i=\lyn-\wbeta_1(\overline{x}_n-x_i)$. Proto pak $$ \SSR=\sumin(\hyi-\hyn)^2+\wbeta_1^2\sumin(x_i-\overline{x}_n)^2=\wbeta_1^2 S_{xx},$$ a~protože $\wbeta_1=\frac{1}{S_{xx}}\sumin(x_i-\overline{x}_n)(y_i-\lyn)$, dostaneme 
+		$$ \rho^2(\textbf{x},\textbf{y})=\frac{\Big[\sumin(x_i-\overline{x}_n)(y_i-\lyn)\Big]^2}{S_{xx}S_{yy}}=\frac{\wbeta_1^2 S_{xx}}{S_{yy}}=\frac{\SSR}{\SST}=\RMR^2, $$ neboť $S_{yy}=\sumin(y_i-\lyn)^2=\SST$.
+		\item Z~definice $\mathrm{F}$ plyne, že 
+		$$ \mathrm{F}=\frac{(n-2)\RMR^2}{1-\RMR^2}=\frac{(n-2)\frac{\SSR}{\SST}}{\frac{\SSE}{\SST}}=\frac{\SSR}{\frac{\SSE}{n-2}}=\frac{\SSR}{s_n^2}. $$ Protože $T_n=\wbeta_1\frac{\sqrt{S_{xx}}}{s_n}$, pak $$ \mathrm{T}^2=\frac{\wbeta_1^2 S_{xx}}{s_n^2}=\frac{\SSR}{s_n^2}=\mathrm{F}. $$
+		\item $T\sim t(n-2)~\Rightarrow~\mathrm{F}=\mathrm{T}^2\sim\mathrm{F}(1,n-2)$.
+		
+	\end{enumerate}
+\end{proof}
+\end{theorem}
+\begin{remark}
+\begin{enumerate}
+	\item 	Z bodů 5 a~6 vyplývá, že použití libovolné statistiky $T_n,\RMR^2$ nebo $\mathrm{F}$ vede na~ekvivalentní test významnosti regrese.
+	\item $\RMR^2$ poskytuje hrubou představu o~kvalitě modelu, čím je blíže $1$, tím lépe přímka prokládá data (nicméně je třeba jisté obezřetnosti, jak uvidíme později).
+	\item $\mathrm{F}$ lze chápat jako statistiku pro~test významnosti velkých hodnot $\RMR^2$.
+\end{enumerate}
+\end{remark}
+Výsledky se~většinou uvádí v~tabulce ANOVA:
+\begin{table}[h]\label{ANOVA_table}
+	\begin{tabular}{|lllll|}
+	\hline
+	Source & df & SS & MS & F\\
+	\hline
+	Regression & 1 & SSR & MSR=SSR & $\frac{\mathrm{MSR}}{\mathrm{MSE}}$ \\
+	Residual & $n-2$ & SSE & $\mathrm{MSE}=\frac{\mathrm{SSE}}{n-2}=s_n^2$ & \\
+	Total & $n-1$ & SST & & \\ \hline
+\end{tabular}
+\end{table}
+
+$$\RMR^2=\frac{\SSR}{\SST}$$
+Kde \textbf{source} je zdroj součtu čtverců, \textbf{df} počet stupňů volnosti příslušný danému součtu čtverců, \textbf{SS} počet čtverců a~\textbf{MS} $(\mathrm{MS}=\frac{\mathrm{SS}}{\mathrm{df}})$ "mean squares". 
+\begin{remark}
+	$H_0:~\beta_1=0$ je zamítnul, pokud $\mathrm{F}>\mathrm{F}_{1-\alpha}(1,n-2)$. V~tomto jednorozměrném případě je to ekvivalentní $t$-testu, neboť $\mathrm{F}=\mathrm{T}^2$.
+\end{remark} 
+\begin{theorem}
+	Mějme $e_1,...,e_n~iid~\NN(0,\sigma^2)$. Za~platnosti $H_0:~\beta_1=0$ je splněno, že
+	$$ \frac{\SSR}{\sigma^2}\sim\chi^2(1),\qquad\frac{\SSE}{\sigma^2}\sim\chi^2(n-2),\qquad\frac{\SST}{\sigma^2}\sim\chi^2(n-1). $$
+\end{theorem}
+\begin{remark}
+	Proto v~tabulce ANOVA \ref{ANOVA_table} uvádí df po~řadě $1,n-2,n-1$. Používají se~však i~v případě jiného rozdělení chyb. Představit si je lze takto:\begin{enumerate}
+		\item $\SSE=\sumin\hei^2$, na~$n$-rezidní $\he_1,...,\he_n$ máme 2 podmínky $\sumin\hei=0$ a~$\sumin x_i\hei=0$. Z~toho vyplývá, že mají $n-2$ stupňů volnosti.
+		\item $\SST=\sumin(y_i-\lyn)^2$... $y_i-\lyn$ musí splňovat $\sumin(y_i-\lyn)=0$, a~proto má $n-1$ stupňů volnosti.
+		\item $\SSR=\SST-\SSE$, a~počet stupňůů volnosti je roven $(n-1)-(n-2)=1$.
+	\end{enumerate} 
+\begin{proof}
+	V důkazu věty ?? jsme ukázali, že $\SSR=\wbeta_1^2 S_{xx}$, takže $\frac{\SSR}{\sigma^2}=\Big( \frac{\wbeta_1\sqrt{S_{xx}}}{\sigma} \Big)^2$, víme, že $\wbeta_1\sim\NN\big(\beta_1,\frac{\sigma^2}{S_{xx}}\big)$ a~tedy $(\wbeta_1-\beta_1)\frac{S_{xx}}{\sigma}\sim\NN(0,1)$. Pro~$\beta_1=0$ tedy $$\wbeta_1\frac{\sqrt{S_{xx}}}{\sigma}\sim\NN(0,1)~\Rightarrow~\frac{\SSR}{\sigma^2}\sim\chi^2(1).$$
+	Zároveň také $\frac{\SSE}{\sigma^2}=\frac{(n-2)s_n^2}{\sigma^2}\sim\chi^2(n-2)$ (viz dříve) a~nezávisí na~$\wbeta_1$. Z~toho vyplývá, že $\frac{\SSR}{\sigma^2}$ a~$\frac{\SSE}{\sigma^2}$ jsou nezávislé. Dále platí, že 
+	$$ \frac{\SST}{\sigma^2}=\frac{\SSR}{\sigma^2}+\frac{\SSE}{\sigma^2}~\Rightarrow~\frac{\SST}{\sigma^2}\sim\chi^2(n-1).$$
+\end{proof}
+\end{remark}
+\begin{remark}
+	$\RMR^2$ statistika - pozor na~zjednodušení kvality modelu. \begin{enumerate}
+		\item Nízké hodnoty $\RMR^2$ nemusí znamenat, že regresní model není významný. V~datech jen může být velké množství nevysvětlitelné náhodné variability. Například opakování hodnoty regresoru $x$ snižují hodnotu $\RMR^2$ oproti~modelům s~různými $x$.
+		\item Velké hodnoty $\RMR^2$ mohou být způsobeny velkým měřítkem dat ($S_{xx}$ je velká). Platí totiž, že 
+		$$ \E(\RMR^2)\approx\frac{\beta_1^2 S_{xx}}{\beta_1^2 S_{xx}+\sigma^2},$$ což je rostoucí funkce $S_{xx}$.
+		
+		Velký rozptyl $(x_1,...,x_n)$ může mít za~následek velké $\RMR^2$ a~přitom nic neříká o~kvalitě modelu.
+		
+		$\E(\RMR^2)$ je také rostoucí funkcí $\beta_1^2$. Modely s~$velkou$ směrnicí tedy budou mít obecně větší $yRMR^2$, než modely s~"malou" směrnicí. 
+	\end{enumerate}
+\end{remark}
+
+Při hodnocení kvality modelu potřebujeme více kritérií. Mezi~ně patří například\begin{enumerate}
+	\item "velké" $\RMR^2$,
+	\item "velké" $\mathrm{F}$ nebo $|\mathrm{T}|$ hodnoty,
+	\item "malé" hodnoty $s_n^2$ vzhledem k~$\lyn$.
+\end{enumerate}
+Další kritéria budeme probírat později.
+\begin{example}
+	Velká hodnota $\RMR^2$ indikuje přibližně lineární vztah mezi~$x$ a~$y$, ale vysoký stupeň korelace nemusí znamenat příčinný vztah.
+	data: 1924-1937
+	
+	$y_i$ - počet mentálních onemocnění na~$100000$ obyvatel Anglie.\\
+	$x_i$ - počet rádií v~populaci.\\
+	model - $y_i=\beta_0+\beta_1 x_i+e_i$.
+	$$ \wbeta_0=4.5822,\qquad\wbeta_1=2.2042,\qquad\RMR^2=0.984,$$
+	tzv. velmi významný lineární vztah mezi~$x$ a~$y$. Závěr by mohl být, že rádia způsobují mentální onemocnění. I~když by to mohla být pravda, nabízí se~věrohodnější vysvětlení, a~to takové, že $x$ i~$y$ rostou lineárně s~časem, tzn. $y$ roste lineárně s~$x$. 
+	
+	Rádia byla s~časem dostupnější, lepší diagnostické procedury umožňovaly identifikovat více lidí s~mentálními problémy.
+\end{example}
