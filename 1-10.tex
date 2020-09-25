@@ -173,9 +173,91 @@ I když $ s^{2}_{n} $ je nestranný odhad $ \sigma^{2} $, $ s_{n} $ je vychýlen
 Je to obecná vlastnost odhadů (nestranných) rozptylů, neboť $ s^{2} $ nestranný odhad $ \sigma^{2} \, \Rightarrow \E[s] \leq \sigma $ 
 \end{remark}
 
-Uvažujme náhodnou veličinu $ X $  pro~kterou platí, že $ \D [ X ] < + \infty $
 
+Uvažujme náhodnou veličinu $ X $  pro kterou platí, že $ \D [ X ] < + \infty $
+\begin{equation*}
+\begin{aligned}
+ \E [X^{2}] = \D [ X ] +  \E [X]^{2} \quad \text{dosazením} \quad X = s \quad \text{dostaneme} \\
+  \E [s^{2}] = \D [ s ] +  \E [s]^{2}
+ \end{aligned} 
+\end{equation*}
+\begin{equation}
+\E [s]^{2} \leq \sigma^{2} \quad \E [s] \leq \sigma
+\end{equation}
+a rovnost nastává pokud $ \D [ s ] = 0 $.
 
+Například pro normální chyby je $ s_{n}^{2} \, \propto \, \chi^{2} \, \Rightarrow \, \E [s_{n}] < \sigma $
+
+\begin{remark}
+	předpokládali jsme, že hdnoty $ x_{i} $ jsou dány přesně, což nemusí být vždy pravda. Často obě veličiny $ (x,y) $ jsou měřeny nepřesně. EIV models "error in variable" v těchto modelech jsou často preferovány jiné odhady než LSE. Populární metoda: total least squares (ortogonal least squares). Zde minimalizujeme $ \sum_{i=1}^{n} d_{i}^{2} $, kde $ d_{i} $ je minimální vzdálenost bodu a přímky (kolmice na přímku protínající bod). To znamená, že neupřednostňujeme veličinu $ x $, ale přistupujeme k $ x $ a $ y $ rovnoměrně.
+\end{remark}
+\begin{center}
+    \includegraphics[scale=2.0]{pictures/picture_2_F.pdf}
+\end{center}
+
+\begin{remark}
+v literatuře se někdy $ x $ uvažují jako realizace náhodné veličiny ( ne vždy se $ x $ nastavuje předem, nebo je jasně dané (třeba pohlaví -- ???? (8 strana)) 
+\end{remark}
+Model má potom tvar
+$$
+ \E [ Y_{i} \vert X_{i} ] = \beta_{0} + \beta_{1} \quad  \D [ Y_{i} \vert X_{i} ] = \sigma^{2}
+$$
+pro většinu výsledků prezentovaných v této přednášce ale není podstatné, zde je $ x $ chápáno jako pevné nebo náhodné.
+Důkazy většinou fungují s podmíněnými výrazy $ ( \E , \D , \dots )  $ při dané hodnotě $ x $ místo nepodmíněných.
+Nicméně větší pozornost je třeba u odvození asymptotických rozdělení odhadů.
+
+\subsection{Vlastnosti odhadů}
+Vlastnosti odhadů $ \widehat{\beta}_{0} , \widehat{\beta}_{1} ,  s_{n}^{2} $.
+\begin{theorem}
+   Nechť $ \widehat{\beta}_{0} , \widehat{\beta}_{1} $ jsou $ \LSE $ odhady parametrů $ \beta_{0}, \beta_{1} $ v lineárním modelu 
+   $$
+   		Y_{i} = \beta_{0} + \beta_{1} x_{i} + e_{i} \quad i = 1 , \dots , n ,
+   $$
+   kde $ e_{i} $ jsou nezávislé náhodné veličiny (postačí i nekorelovanost) se stejným rozptylem $ \sigma^{2} $. Potom platí:
+   \begin{enumerate}
+  \item $ \E [ \widehat{\beta}_{0} ] = \beta_{0} \quad , \quad \E [ \widehat{\beta}_{1} ] = \beta_{1} $ , (nestranné odhady)
+  \item $  \D [ \widehat{\beta}_{0} ] = \frac{\sigma^{2}}{S_{xx}}  \quad $ , kde $ \quad S_{xx} = \sumin (x_{i} - \oxnn )^{2} $
+  \item $ \D [ \widehat{\beta}_{0} ] = \sigma^{2} \left( \frac{1}{n} + \frac{\oxnn ^{2}}{S_{xx}} \right) $
+  \item Pokud navíc platí, že $ e_{i} \sim \NN ( 0 , \sigma^{2} ) \quad i = 1 , \dots , n \quad $ potom $ \quad \widehat{\beta}_{j} \sim \NN ( \beta_{j} , \D [ \widehat{\beta}_{j} ] ) \quad j = 0 , 1  $ 
+\end{enumerate}
+\end{theorem}
+\begin{proofname}
+
+   \begin{enumerate}
+  \item upravíme $ \widehat{\beta}_{1} $
+  		\begin{equation*}
+  		\begin{aligned}
+  		    \widehat{\beta}_{1} = \dfrac{\sum_{i=1}^{n} y_{i} x_{i} - n \overline{x}_{n} \overline{y}_{n}}{\sum_{i=1}^{n} x_{i}^{2} - n \overline{x}_{n}^{2}} = \frac{\sumin (x_i - \oxnn )(y_i - \oynn )}{\sumin (x_i - \oxnn )^{2}} = \\
+  		    = \frac{1}{S_{xx}} \left( \sumin (x_i - \oxnn ) y_i - \oynn \sumin (x_i - \oxnn )  \right) =  \frac{1}{S_{xx}} \sumin (x_i - \oxnn ) y_i 
+  		    \end{aligned}
+  		\end{equation*}
+  		potom má střední hodnota $ \widehat{\beta}_{1} $ tvar
+  		\begin{equation*}
+  		\begin{aligned}
+  		    \E [ \widehat{\beta}_{1} ] = \E \left[ \frac{1}{S_{xx}} \sumin (x_i - \oxnn ) Y_i \right] = \frac{1}{S_{xx}} \sumin (x_i - \oxnn ) \E [ Y_i ] 
+  		    = \frac{1}{S_{xx}} \sumin (x_i - \oxnn ) ( \beta_{0} + \beta_{1} x_i ) = \\ = \frac{\beta_{0}}{S_{xx}} \sumin (x_i - \oxnn ) + \frac{\beta_{1}}{S_{xx}} \sumin (x_i - \oxnn ) x_i = 0 + \frac{\beta_{1}}{S_{xx}} S_{xx} = \beta_{1}
+  		    \end{aligned}
+  		\end{equation*}
+  		a střední hodnota pro $ \widehat{\beta}_{0} $ má tvar 
+  		\begin{equation*}
+  		\begin{aligned}
+  		    \E [ \widehat{\beta}_{0} ] = \E [ \oyn - \widehat{\beta}_{1} \oxn ] = \E [ \oyn ] - \oxnn \E [ \widehat{\beta}_{1} ] = \dfrac{1}{n} \sumin \E [ Y_i ] - \oxnn \beta_1 = \beta_0 + \frac{\beta_1}{n} \sumin x_i - \oxnn \beta_1 = \beta_0
+  		    \end{aligned}
+  		\end{equation*}
+  \item \begin{equation*}
+  			\D [ \widehat{\beta}_{1} ] = \D \left[ \frac{1}{S_{xx}} \sumin (x_i - \oxnn ) Y_i \right] = \frac{1}{S_{xx} ^{2}} \sumin (x_i - \oxnn )^{2} \D [ Y_i ] = \frac{\sigma^{2} S_{xx}}{S_{xx}^{2}} = \frac{\sigma^{2}}{S_{xx}}
+  		\end{equation*}
+  \item  \begin{equation*}
+  \begin{aligned}
+  			\D [ \widehat{\beta}_{0} ] = \D [ \oyn - \widehat{\beta}_{1} \oxnn ] = \d [ \oyn ] + \oxnn ^{2} \D [ \widehat{\beta}_{1} ] - 2 \oxnn \text{cov}(\oyn , \widehat{\beta}_{1} ) = \\
+  	= \frac{\sigma^{2}}{n} + \frac{\oxnn ^{2} \sigma^{2} }{S_{xx}} - 2 \oxnn \text{cov}( \oyn ,  \widehat{\beta}_{1} ) \\
+\text{cov}( \oyn ,  \widehat{\beta}_{1} ) = \text{cov} \left( \oyn , \frac{1}{S_{xx}} \sumin ( x_i - \oxnn ) Y_i \right) = \frac{1}{S_{xx}} \sumin ( x_i - \oxnn ) \, \text{cov} ( \oyn , Y_i )  \\
+\text{cov} ( \oyn , Y_i ) = \text{cov} ( \frac{1}{n} \sumjn Y_j , Y_i ) =  \frac{1}{n} \sumjn \text{cov} ( Y_j , Y_i ) = \frac{1}{n} \text{cov} ( Y_i , Y_i ) =  	\frac{1}{n} \D Y_i =  \frac{\sigma^{2}}{n}	\\
+\Rightarrow  \text{cov}( \oyn ,  \widehat{\beta}_{1} ) = 0 = \frac{\sigma^{2}}{n S_{xx}} \sumin ( x_i - \oxnn )	
+  			\end{aligned}
+  		\end{equation*}
+\end{enumerate}
+\end{proofname}
 
 
 
