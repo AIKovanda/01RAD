@@ -192,7 +192,16 @@ Například pro normální chyby je $ s_{n}^{2} \, \propto \, \chi^{2} \, \Right
 	předpokládali jsme, že hdnoty $ x_{i} $ jsou dány přesně, což nemusí být vždy pravda. Často obě veličiny $ (x,y) $ jsou měřeny nepřesně. EIV models "error in variable" v těchto modelech jsou často preferovány jiné odhady než LSE. Populární metoda: total least squares (ortogonal least squares). Zde minimalizujeme $ \sum_{i=1}^{n} d_{i}^{2} $, kde $ d_{i} $ je minimální vzdálenost bodu a přímky (kolmice na přímku protínající bod). To znamená, že neupřednostňujeme veličinu $ x $, ale přistupujeme k $ x $ a $ y $ rovnoměrně.
 \end{remark}
 \begin{center}
-    \includegraphics[scale=2.0]{pictures/picture_2_F.pdf}
+    
+    \begin{tikzpicture}
+    \node[inner sep=0pt] (pic) at (0,0)
+    {\includegraphics[width=7cm]{pictures/picture_2_F.pdf}};
+    \draw [color=red](1.0,-0.45) node[anchor=north west] {$d$};
+    \draw [color=red!20!black](1.35,1.00) node[anchor=north west] {Fisherova distribuce};
+    \draw [color=black](-2.9,-1.25) node[anchor=north west] {nějaký text};
+    \draw [color=black](-1,-1.25) node[anchor=north west] {$1$};
+    \draw [color=black](0.75,-1.25) node[anchor=north west] {$a=bx$};
+    \end{tikzpicture}
 \end{center}
 
 \begin{remark}
@@ -209,7 +218,7 @@ Nicméně větší pozornost je třeba u odvození asymptotických rozdělení o
 \subsection{Vlastnosti odhadů}
 Vlastnosti odhadů $ \widehat{\beta}_{0} , \widehat{\beta}_{1} ,  s_{n}^{2} $.
 \begin{theorem}
-   Nechť $ \widehat{\beta}_{0} , \widehat{\beta}_{1} $ jsou $ \LSE $ odhady parametrů $ \beta_{0}, \beta_{1} $ v lineárním modelu 
+   Nechť $ \widehat{\beta}_{0} , \widehat{\beta}_{1} $ jsou $ \mathrm{LSE} $ odhady parametrů $ \beta_{0}, \beta_{1} $ v lineárním modelu 
    $$
    		Y_{i} = \beta_{0} + \beta_{1} x_{i} + e_{i} \quad i = 1 , \dots , n ,
    $$
