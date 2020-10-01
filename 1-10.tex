@@ -1,9 +1,9 @@
-\chapter{1-10}
-\section{Jednorozměrná lineární regrese}
+% pages 1-10
+\chapter{Jednorozměrná lineární regrese}
 Předpokládejme, že sledujeme dvě veličiny $ x $ a~$ y $ mezi~kterými existuje lineární závislost
 
 $$
-	y = \beta_{0} + \beta_{1} x,\quad \text{kde } \beta_{0}, \beta_{1} \text{ neznáme.} 
+	y = \beta_{0} + \beta_{1} x,\quad \text{kde } \beta_{0}, \beta_{1} \text{ neznáme.}
 $$
 
 Provede se~experiment a~zjistí se~hodnoty dvojic ($ x , y $). Často se~stává, že $ x $ je změřeno prakticky zcela přesně.
@@ -15,7 +15,7 @@ Provede se~experiment a~zjistí se~hodnoty dvojic ($ x , y $). Často se~stává
 Oproti tomu u~$ y $ obvykle předpokládáme měření s~chybou. Chyba může být náhodná a~proto i~$ y $ budeme chápat jako náhodnou veličinu, kterou budeme značit $ Y $. Pro~dvojice $ (x_{1}, Y_{1}), \dots ,( x_{n}, Y_{n} )$ se~zavádí model
 
 $$
-	Y_{i} = \beta_{0} + \beta_{1} x_{i} + e_{i} \quad \text{kde} \quad i~= 1, \dots ,n .
+	Y_{i} = \beta_{0} + \beta_{1} x_{i} + e_{i} \quad (*) \quad i= 1, \dots ,n.
 $$
 
 Jednotlivé proměnné se~pak nazývají následovně
@@ -29,7 +29,7 @@ Jednotlivé proměnné se~pak nazývají následovně
 
 Budeme předpokládat, že $ e_{i} $ jsou nezávislé (někdy bude dokonce stačit, aby byly nekorelované) a~$ e_{i} \sim (0,\sigma ^{2}) $. A~tedy splňuje $ \E [ e_{i} ]  = 0 $ , $ \D [ e_{i} ] = \sigma ^{2} $ pro~$ \forall i~$ (homoskedasticita).
 
-Měřením získáme data $ (x_{1}, y_{1}), \dots ,( x_{n}, y_{n} )$ a~cílem statistické analýzy je určit, zda model ?? schopen popsat pozorovanou variabilitu u~$ y $. 
+Měřením získáme data $ (x_{1}, y_{1}), \dots ,( x_{n}, y_{n} )$ a~cílem statistické analýzy je určit, zda model ($*$) schopen popsat pozorovanou variabilitu u~$ y $. 
 
 \textbf{První krok }
 
@@ -54,7 +54,7 @@ Zde máme následující možnosti:
 \end{remark}
 
 \textbf{Odhady parametrů}
-\subsection{Data s předpokladem normality dat}
+\section{Data s předpokladem normality dat}
 Předpokládáme, že $ e_{1}, \dots , e_{n} ~iid~ \text{N}(0,\sigma^{2}) $. To znamená, že $ Y_{i} \sim \text{N}(\beta_{0} + \beta_{1} x_{i},\sigma^{2}) $ a~jednotlivé $ Y_{1}, \dots , Y_{n} $ jsou nezávislé.
 
 \textbf{MLE odhady}
@@ -121,7 +121,7 @@ $$
 $$
 Tento odhad není nestranný.
 
-\subsection{Data bez předpokladu normality}
+\section{Data bez předpokladu normality}
 Bez předpokladu normality chyb. Tedy, že $ e_{1}, \dots , e_{n} $ jsou nekorelované, $ e_{1}, \dots , e_{n} \sim (0,\sigma^{2}) $.
 Pro odhad $ \beta_{0}, \beta_{1} $ lze použít minimalizaci S~(nejmenší čtverce), což je rozumné provedení, když si uvědomíme ?????? interpret??? (strana 5).
 
@@ -215,7 +215,7 @@ pro většinu výsledků prezentovaných v této přednášce ale není podstatn
 Důkazy většinou fungují s podmíněnými výrazy $ ( \E , \D , \dots )  $ při dané hodnotě $ x $ místo nepodmíněných.
 Nicméně větší pozornost je třeba u odvození asymptotických rozdělení odhadů.
 
-\subsection{Vlastnosti odhadů}
+\section{Vlastnosti odhadů}
 Vlastnosti odhadů $ \widehat{\beta}_{0} , \widehat{\beta}_{1} ,  s_{n}^{2} $.
 \begin{theorem}
    Nechť $ \widehat{\beta}_{0} , \widehat{\beta}_{1} $ jsou $ \mathrm{LSE} $ odhady parametrů $ \beta_{0}, \beta_{1} $ v lineárním modelu 
