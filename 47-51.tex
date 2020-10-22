@@ -1,0 +1,92 @@
+Předpokládejme, že kromě $y_i$ máme pro~každé $i\in\hat{n}$k dispozici také $m$ nezávislých proměnných $x_{i1},x_{i2},...,x_{im}$. Pak získáme model
+$$ Y_i=\beta_0+\sum_{j=1}^m \beta_j x_{ij}+e_i,\quad i\in\hat{n},$$
+kde $e_1,...,e_n$ jsou \textbf{nezávislé (nekorelované)} chyby a~$e_i\sim\NN(0,\sigma^2)$. Na~základě pozorování $(x_{i1},...,x_{im},y_i),~i\in\hat{n}$ chceme odhadnout parametr $\boldsymbol{\beta}=(\beta_0,\beta_1,...,\beta_m)^T$ (proložení dat $m+1$ dimenzionální nadrovinou). Předpokládejme, že $n>m+1$, tj. že máme více dat, než parametrů. Maticově můžeme tento stav zapsat jako
+$$ \textbf{Y}=(Y_1,...,Y_n)^T,\quad \textbf{y}=(y_1,...,y_n)^T,\quad \textbf{e}=(e_1,...,e_n)^T.$$
+Označme 
+$$ \textbf{X}=\left[ \begin{array}{cccc}
+1 & x_{11} & \dots & x_{1m} \\
+1 & x_{21} & \dots & x_{2m} \\
+1 & \vdots & \dots & \vdots \\
+ \vdots& x_{n1} & \dots & x_{nm} 
+\end{array}
+ \right]$$ jako \textbf{matici modelu} (regresní matici, !!něco matrix, nepřečtu to???). Dostaneme tak model ve~tvaru (důležitém)
+  \begin{equation}\label{the_chosen_one}
+ \textbf{Y}_{n\times 1}=\textbf{X}_{n\times(m+1)}\boldsymbol{\beta}_{(n+1)\times 1}+\textbf{e}_{bn\times 1}.
+ \end{equation}
+ 
+ Nyní budeme předpokládat, že $e_1,...,e_n$ jsou nezávislé a~$e_i \sim\NN(0\sigma^2)$, tzn. $\textbf{e}\sim\NN_n(\textbf{0},\sigma^2 I_n)$ a~$\textbf{Y}\sim\NN_n(\textbf{X}\beta,\sigma^2 I_n)$. 
+ 
+ Věrohodnostní funkce je potom ve~tvaru 
+ \[
+ \begin{split}
+ L(\beta,\sigma^2)&=f_\pi(\textbf{y})=\prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}}\e{-\frac{1}{2\sigma^2}(y_i-\mu_i)^2}=\frac{1}{(2\pi\sigma^2)^{\frac{n}{2}}}\e{-\frac{1}{2\sigma^2}\sumin (y_i-\mu_i)^2}= \\ &=\frac{1}{(2\pi\sigma^2)^{\frac{n}{2}}}\e{-\frac{1}{2\sigma^2}(\textbf{y}-\boldsymbol{\mu})^T(\textbf{y}-\boldsymbol{\mu})}=\frac{1}{(2\pi\sigma^2)^{\frac{n}{2}}}\e{-\frac{1}{2\sigma^2}(\textbf{y}-\textbf{X}\beta)^T(\textbf{y}-\textbf{X}\beta)},
+ \end{split}
+ \] kde $\mu_i=\beta_0+\sum_{j=1}^n \beta_j x_{ij}$ a~$\boldsymbol{\mu}=(\mu_1,...,\mu_n)^T=\textbf{X}\beta$.
+ 
+ Pro~pevné $\sigma^2$ je 
+ $$\max_\beta L(\beta,\sigma^2)\quad\Leftrightarrow\quad\min_\beta\underbrace{(\textbf{y}-\textbf{X}\beta)^T(\textbf{y}-\textbf{X}\beta)}_{g(\boldsymbol{\beta})}$$
+ je opět pomocí derivací, ukážeme algebraický přístup.
+ \begin{theorem}
+ 	Uvažujme model \ref{the_chosen_one} a~nechť $\textbf{e}\sim\NN(\textbf{0},\sigma^2 I_n)$. Potom $\wbeta$ je MLE $\beta$ právě tehdy, když $\wbeta$ je řešením soustavy rovnic
+ 	$$ \textbf{X}^T\textbf{X}\beta=\textbf{X}^T\textbf{y}\qquad\text{(soustava normálních rovnic)}.$$
+ 	Je-li matice $\textbf{X}^T\textbf{X}$ singulární, má tato soustava jednoznačné řešení ve~tvaru 
+ 	$$ \wbeta=(\textbf{X}^T\textbf{X})^{-1}\textbf{X}^T\textbf{y}.$$
+ 	\begin{proof}
+ 		\begin{enumerate}[$\Leftarrow$]
+ 			\item Ukážeme, že každé řešení $\wbeta$ soustavy $\textbf{X}^T\textbf{X}\beta=\textbf{X}^T\textbf{y}$ minimalizuje $g(\boldsymbol{\beta})$ a~pro~každé $\boldsymbol{\beta}$ platí, že 
+ 			$$ g(\bbeta)=(\textbf{y}-\textbf{X}\textbf{eta}^T(\textbf{y}-\textbf{x}\beta))=\textbf{y}^T\textbf{y}-2\underbrace{\textbf{y}^T\textbf{X}\beta}_{\wbeta^T\textbf{X}^T\textbf{X}}+beta^T\textbf{X}\textbf{X}\beta=\textbf{y}^T\textbf{y}-2\wbeta^T\textbf{X}^T\textbf{X}\beta+\beta^T\textbf{X}^T\textbf{X}\beta$$
+ 			má platit i~pro~$\wbeta$:
+ 			$$ g(\wbeta)=\textbf{y}^T\textbf{y}-2\wbeta^T\textbf{X}^T\textbf{X}\wbeta+\wbeta^T\textbf{X}^T\textbf{X}\wbeta=\textbf{y}^T\textbf{y}-\wbeta^T\textbf{X}^T\textbf{X}\wbeta$$
+ 			a tedy 
+ 			\begin{align}
+ 			g(\bbeta)-g(\wbeta)&=\beta^T\textbf{X}^T\textbf{X}\beta-2\wbeta^T\textbf{X}^T\textbf{X}\beta+\wbeta\textbf{X}^T\textbf{X}\wbeta=(\textbf{X}\beta-\textbf{X}\wbeta)^T(\textbf{X}\beta-\textbf{X}\wbeta)=\\&\label{tohle}=\big( \textbf{X}(\beta-\wbeta) \big)^T\big( \textbf{X}(\beta-\wbeta) \big)=\langle \textbf{X}(\beta-\wbeta),\textbf{X}(\beta-\wbeta) \rangle\geq 0,\quad\forall\beta,
+ 			\end{align}
+ 			 tedy $\wbeta$ minimalizuje $g(\bbeta)$ a~je tedy MLE parametru $\beta$.
+ 		\end{enumerate}
+ 	\begin{enumerate}[$\Rightarrow$]
+ 		\item Předpokládejme, že $\wbeta_1$ minimalizuje $g(\beta)$ (je tedy MLE). To potom znamená, že $g(\wbeta_1)\leq g(\beta),~\forall \beta$, speciálně $g(\wbeta_1)\leq g(\wbeta)$, kde $\wbeta$ je řešení soustavy $\textbf{X}^T\textbf{X}\beta=\textbf{X}^T\textbf{y}$. Z~rovnice \ref{tohle} vyplývá, že $g(\wbeta_1)\geq g(\wbeta)$. Celkem tedy $g(\wbeta_1)=g(\wbeta)$. Dosazením do~\ref{tohle} dostaneme, že 
+ 		$$ 0=g(\wbeta_1)-g(\wbeta)=\langle \textbf{X}(\wbeta_1-\wbeta),\textbf{X}(\wbeta_1-\wbeta) \rangle$$
+ 		a tedy $\textbf{X}(\wbeta_1-\wbeta)=\textbf{0}$ Potom ale vynásobením $\textbf{X}^T$ zleva dostaneme, že 
+ 		$$ \textbf{X}^T\textbf{X}\wbeta_1\underbrace{\textbf{X}^T\textbf{X}\wbeta}_{\textbf{X}^T\textbf{y}}=0\quad\Rightarrow\quad \textbf{X}^T\textbf{X}\wbeta_1=\textbf{X}^T\textbf{y}$$
+ 		 a~$\wbeta_1$ splňuje soustavu $\textbf{X}^T\textbf{X}\beta=\textbf{X}^T\textbf{y}$.
+ 		 
+ 		 Aby byl důkaz korektní, je třeba ukázat, že soustava $\textbf{X}^T\textbf{X}\beta=\textbf{X}^T\textbf{y}$ má vždy alespoň 1 řešení. Pokud existuje $(\textbf{X}^T\textbf{X})^{-1}$, není co dokazovat, řešení máme přímo. Co když je ale $\textbf{X}^T\textbf{X}$ singulární?
+ 	\end{enumerate}
+ 	\end{proof}
+ \end{theorem}
+\begin{lemma}
+	Soustava lineárních rovnic $\mathbb{A}\textbf{x}=\textbf{y}$ má řešení právě tehdy, když $\langle \textbf{y},\textbf{z}\rangle=0$ pro~všechna $\textbf{z}$ splňující $\mathbb{A}\textbf{z}=\textbf{0}$.
+\end{lemma}
+\begin{theorem}
+	Soustava normálních rovnic $\textbf{X}^T\textbf{X}\beta=\textbf{X}^T\textbf{y}$ má vždy alespoň jedno řešení.
+	\begin{proof}
+		Musíme ukázat, že $\langle \textbf{X}^T\textbf{y},\textbf{z}\rangle=0,~\forall\textbf{z}$ splňující $\textbf{X}^T\textbf{X}\textbf{z}=\textbf{0}$. Potom
+		$ \textbf{X}^T\textbf{X}\textbf{z}=\textbf{0}~\Rightarrow~ \langle \textbf{X}^T\textbf{X}\textbf{z},\textbf{z}\rangle=\langle \textbf{X}\textbf{z},\textbf{X}\textbf{z}\rangle=0$ a~tedy $\textbf{X}\textbf{z}=\textbf{0}$. Celkem tedy $\langle\textbf{X}^T\textbf{y},\textbf{z}\rangle=\langle\textbf{y},\textbf{X}\textbf{z}\rangle=0$. Obecně totiž platí, že $\langle \textbf{x},\mathbb{A}\textbf{y}\rangle=\langle \mathbb{A}^T\textbf{x},\textbf{y}\rangle$.
+	\end{proof}
+\end{theorem}
+\begin{remark}
+	Z vět vyplývá, že MLE $\beta$ může být nalezeno řešením $m+1$ lineárních rovnic o~$m+1$ neznámých. Málokdy existuje analytické řešení, je třeba použít numerické metody. Matice $\textbf{X}^T\textbf{X}$ může být v~praktických aplikacích špatně podmíněná, což ovlivňuje numerickou přesnost $\wbeta$. Proto se~často užívají metody jako Choleského rozklad, QR rozklad, singulární rozklad (SVD).
+	
+	Odvodili jsme to pro~normální chyby. Minimalizace $g(\boldsymbol{\beta})$ lze ale použít i~pro~jiné druhy chyb, potom se~$\wbeta$ nazývá \textbf{ordinary least squares estimate (OLS)} (obyčejné nejmenší čtverce). Asi nejužívanější metoda  pro~oblast $\beta$. 
+	
+	Jak poznat, že mají normální rovnice jednoznačné řešení bez~nutnosti výpočtu $\textbf{X}^T\textbf{X}$?
+\end{remark}
+\begin{theorem}
+	Matice $\textbf{X}^T\textbf{X}$ je nesignulární právě tehdy, když jsou sloupce matice $\textbf{X}$ LN.
+	\begin{proof}
+		\begin{enumerate}[$\Leftarrow$]
+			\item Sporem. Nechť jsou sloupce $\textbf{X}$ LN a~matice $\textbf{X}^T\textbf{X}$ singulární, tzn. $\exists c\neq0$ tak, že $\textbf{X}^T\textbf{X}c=0$. Potom
+			$$ 0=\langle c,\textbf{X}^T\textbf{X}c\rangle=\langle \textbf{X}c,\textbf{X}c\rangle\quad \Rightarrow\quad\textbf{X}c=0,\qquad\sum c_i\textbf{x}_i^c=0,$$
+			kde $c=(c_1,...,c_m)^T$ a~$\textbf{x}_i^c$ je $i$-tý sloupec matice $\textbf{X}$. Potom sloupce $\textbf{X}$ jsou LZ. Spor.
+		\end{enumerate}
+	\begin{enumerate}[$\Rightarrow$]
+	\item Sporem. Předpokládejme, že $\textbf{X}^T\textbf{X}$ je regulární a~sloupce $\textbf{X}$ LZ. Potom existuje $c\neq0$ takové, že $\textbf{X}c=0$, $\textbf{X}^T\textbf{X}c=0$. Z~toho vyplývá, že $\textbf{X}^T\textbf{X}$ je singulární. Spor.
+\end{enumerate}
+	\end{proof}
+\end{theorem}
+\begin{remark}
+	Pokud $\textbf{X}_{nx(m-1)},~n>m+1,~h(\textbf{X})=m+1,~\textbf{e}\sin\NN(0,\sigma^2 I_m)$. Potom existuje jednoznačné řešení normálních rovnic $\wbeta=(\textbf{X}^T\textbf{X})^{-1}\textbf{X}^T\textbf{y}$.
+\end{remark}
+\begin{remark}
+	Pokud jsou sloupce $\textbf{X}$ LZ, je $\textbf{X}^T\textbf{X}$ sigulární, což je většinou detekováno numerickou metodou výpočtu $\wbeta$.
+\end{remark}
