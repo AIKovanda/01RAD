@@ -1,0 +1,166 @@
+\begin{proof}
+\begin{enumerate}
+  \item $ \widehat{\beta} = ( \X^{T} \X )^{-1} \X^{T} \Y = ( \X^{T} \X )^{-1} \X^{T} ( \X \beta + \textbf{e} ) = \beta + ( \X^{T} \X )^{-1} \X^{T} \textbf{e} 
+$ \\
+a tedy $ \quad \widehat{\beta} - \beta =  ( \X^{T} \X )^{-1} \X^{T} \textbf{e} $ \\
+dále víme, že $ \widehat{\textbf{e}} = ( \text{I}_n - \textbf{H} ) \textbf{e} $ a vektor $ ( \widehat{\beta} - \beta , \widehat{\textbf{e}} )^{T} $ lze zapsat jako
+$$
+\textbf{Z} = \left( \begin{array}{c}
+ \widehat{\beta} - \beta \\
+ \widehat{\textbf{e}}  
+\end{array}
+ \right) 
+ =
+ \left( \begin{array}{c}
+ ( \X^{T} \X )^{-1} \X^{T} \\
+ \text{I}_n - \textbf{H}  
+ \end{array}
+ \right) \textbf{e}
+ =
+ \left( \begin{array}{c}
+ \textbf{A}  \\
+ \textbf{B}  
+ \end{array}
+ \right) \textbf{e} ,
+$$
+kde \textbf{Z} je funkcí pouze $ ( e_1 ,\dots , e_n ) = \textbf{e} \sim \N ( 0 , \sigma^{2} \text{I}_n ) \Rightarrow \textbf{Z} $ má vícerozměrné normální rozdělení ( i když degenerované, protože $ \text{Cov}( \textbf{Z} ) $ je singulární ) abychom ukázali, že $ \widehat{\beta} $ a $ \widehat{\textbf{e}} $ jsou  nezávislé. \\
+$ ( s_n^{2} = \frac{1}{n - m - 1} \widehat{\textbf{e}}^{T} \widehat{\textbf{e}} \quad \text{, tedy i } \widehat{\beta} \text{ a } s_n^{2} \text{ jsou nezávislé })  $
+\begin{remark}
+  $ \textbf{B} \textbf{B}^{T} = \text{I}_n - \textbf{H} \quad \text{je singulární, protože} \quad ( \text{I}_n - \textbf{H} ) \X = 0 $
+\end{remark}
+Stačí nám tedy ukázat, že $ \text{Cov}( \widehat{\beta}_i , \widehat{e}_j ) = 0 $ pro $ i = 0, \dots , m $ a $ j = 1, \dots , n $ \\
+spočtěme $ \text{Cov}( \textbf{Z} ) $: \\
+$$
+  \text{Cov}( \textbf{Z} ) 
+ = 
+  \left( \begin{array}{c}
+ \textbf{A}  \\
+ \textbf{B}  
+ \end{array}
+ \right) \text{Cov}( \textbf{e} ) \left(  \textbf{A}^{T} \textbf{B}^{T}  \right)
+ = 
+ \sigma^{2}
+ \left( \begin{array}{c}
+ \textbf{A}  \\
+ \textbf{B}  
+ \end{array} \right)
+ \left(  \textbf{A}^{T} \textbf{B}^{T}  \right)
+ = 
+ \sigma^{2}
+ \left( \begin{array}{cc}
+ \textbf{AA}^{T} & \textbf{AB}^{T} \\
+ \textbf{BA}^{T} & \textbf{BB}^{T}
+ \end{array} \right)
+$$
+
+$$
+ \left( \text{Cov}(  \widehat{\beta}_i , \widehat{e}_j ) \right)_{ \begin{array}{c}
+ i = 0, \dots , m \\
+ j = 1, \dots , n
+ \end{array} } = \textbf{AB}^{T}
+ = ( \X^{T} \X )^{-1} \X^{T} ( \text{I}_n - \X ( \X^{T} \X )^{-1} \X^{T} ) = 
+ $$
+ $$
+ = ( \X^{T} \X )^{-1} \X^{T} - ( \X^{T} \X )^{-1} \X^{T} \X ( \X^{T} \X )^{-1} \X^{T} = 0
+$$
+\item Výsledky z LA: \\
+\begin{itemize}
+\item $ \textbf{A}_{n \times n} $ symetrická matice $ \Rightarrow $ existuje ortogonální matice \textbf{Q} a diagonální matice $ \Lambda $ tak, že $ \textbf{A} = \textbf{Q} \Lambda \textbf{Q}^{T} $ , sloupce \textbf{Q} jsou ON vlastní vektory matice \textbf{A} a diagonální prvky matice $ \Lambda $ jsou ???? odpovídající vlastní čísla.
+\item $ \textbf{A}_{n \times n} $ idempotentní matice $ \Rightarrow $ vlastní čísla jsou pouze 0 nebo 1 $ \Rightarrow $ $ \text{h}( \textbf{A} ) = \text{tr}( \textbf{A} ) $ 
+\end{itemize}
+V důkazu předchozí věty $ (n - m -1) \frac{s_n^{2}}{\sigma^{2}} = \dfrac{\SSE}{\sigma^{2}} = \frac{1}{\sigma^{2}} \textbf{e}^{T} ( \text{I}_n - \textbf{H} ) \textbf{e} $ \\
+protože je $ \text{I}_n - \textbf{H} $ symetrické a idempotentní 
+$$
+ \text{I}_n - \textbf{H} = \textbf{Q} \Lambda \textbf{Q}^{T}  \quad \text{kde} \quad
+ \begin{array}{c}
+ _{\textbf{Q} \dots \text{ ortogonální matice}} \\
+ ^{\Lambda \dots \text{ diagonální matice s vlastními čísly } \text{I}_n - \textbf{H}}
+ \end{array}
+$$
+protože vlastní čísla $ \text{I}_n - \textbf{H} $ jsou 0 nebo 1 a $ \text{tr}(\text{I}_n - \textbf{H}) = \text{h}(\text{I}_n - \textbf{H}) = n - m - 1 $ \\
+$ \Lambda $ může být zapsána ve tvaru:
+$$
+ \Lambda = 
+ \left( \begin{array}{cc}
+ \textbf{I}_{n-m-1} & \textbf{0}  \\
+ \textbf{0} & \textbf{0} 
+ \end{array} \right)
+$$
+takže
+$$
+ \textbf{e} ( \text{I}_n - \textbf{H} ) \textbf{e} = \textbf{e} \textbf{Q} \Lambda \textbf{Q}^{T} \textbf{e} = \textbf{q}^{T} \Lambda \textbf{q} \quad \text{kde} \quad \textbf{q} = \textbf{Q}^{T} \textbf{e}
+$$
+\begin{theorem}
+	$ \textbf{V} \sim \textbf{N}_n ( \textbf{0} , \textbf{I}_n )  $ a $ \textbf{Q} $ je ortogonální matice, potom $ \textbf{QV} \sim \textbf{N}_n ( \textbf{0} , \textbf{I}_n ) $
+\end{theorem}
+tzn. $ \textbf{q} $ je vektor nezávislých $ \text{N}(0,\sigma^{2}) $ veličin $ ( \textbf{q} \sim \textbf{N}_n ( \textbf{0} , \sigma^{2} \textbf{I}_n )) $ \\
+a $ \frac{1}{\sigma^{2}} \textbf{e}^{T} ( \text{I}_n - \textbf{H} ) \textbf{e} = \frac{1}{\sigma^{2}} \textbf{q}^{T} \Lambda \textbf{q} = \sum_{i = 1}^{n-m-1}\frac{q_i^{2}}{\sigma^{2}} \quad \sim \chi^{2} (n - m - 1 ) $ \\
+je suma druhých mocnin $ n-m-1 $ nezávislých $ \text{N}(0,1) $ veličin.
+\item Z předchozí věty:
+$$
+  \frac{\widehat{\beta}_i - \beta_i}{\sigma \sqrt{v_i}} \sim \text{N}(0,1) \quad \text{a} \quad \frac{s_n}{\sigma} = \sqrt{\frac{\frac{(n-m-1) s_n^{2}}{\sigma^{2}}}{n-m-1}} = \sqrt{\frac{\chi^{2}( n-m-1 )}{n-m-1}}
+$$
+a z bodu $ 1) $ nezávislost
+$$
+  \text{T}_i = \frac{\widehat{\beta}_i - \beta_i}{s_n \sqrt{v_i}} = \dfrac{\frac{\widehat{\beta}_i - \beta_i}{\sigma \sqrt{v_i}}}{\dfrac{s_n}{\sigma}} \sim \text{t}(n-m-1)
+$$
+\item
+$ \textbf{C} \widehat{\beta} \sim \textbf{N}_r ( \textbf{C} \beta , \sigma^{2} \textbf{C} ( \X ^{T} \X )^{-1} \textbf{C}^{T} $ a tedy \\
+$ \textbf{C} ( \widehat{\beta} - \beta ) = \textbf{C}\widehat{\beta} - \textbf{C} \beta \sim \textbf{N}_r ( \textbf{0} , \sigma^{2} \textbf{C} ( \X ^{T} \X )^{-1} \textbf{C}^{T} $ \\
+stačí tedy ukázat, že pokud $ \textbf{Z} \sim \textbf{N}_r ( \textbf{0}, \Sigma ) $ , potom $ \textbf{Z}^{T} \Sigma \textbf{Z} \sim \chi^{2}(r) $ \\
+protože $ \Sigma $ je pozitivně definitní, existuje regulární matice \textbf{R} taková, že $ \Sigma = \textbf{RR}^{T} $ \\
+protože $ \textbf{U} = \textbf{R}^{-1} \textbf{Z} $ , potom $ \E \textbf{U} = \textbf{R}^{-1} \E [ \textbf{Z} ] = 0 $ \\
+$ \text{Cov}(\textbf{U}) = \textbf{R}^{-1} \Sigma (\textbf{R}^{-1} )^{T} = \textbf{R}^{-1} \textbf{RR}^{T} ( \textbf{R}^{T})^{-1} = \textbf{I}_r $ tedy $ \textbf{U} \sim \textbf{N}_r ( \textbf{0}, \textbf{I}_r ) $ \\
+takže složky \textbf{U} jsou nezávislé N(0,1) rozdělené náhodné veličiny. \\
+$ \textbf{R}^{T} \Sigma ^{-1} \textbf{R} = \textbf{U}^{T} \textbf{R}^{T} ( \textbf{R}^{T} )^{-1} \textbf{R}^{-1} \textbf{R} \textbf{U} = \textbf{U}^{T} \textbf{U} = \sum_i^{r} \text{U}_i^{2} \sim \chi^{2}(r) $ \\
+za $ \textbf{R} = \textbf{C} ( \widehat{\beta} - \beta ) $ a $ \Sigma^{-1} = \dfrac{1}{\sigma^{2}} [ \textbf{C} ( \X ^{T} \X )^{-1} \textbf{C}^{T} ]^{-1} \quad $ Q. E. D. 
+
+\end{enumerate}
+\end{proof}
+
+\subsection{Vlastnosti vektoru reziduí $ \widehat{\textbf{e}} $}
+
+\begin{theorem}
+	Uvažujeme model $ \textbf{Y} = \X \beta + \textbf{e} $, kde $ e_1, \dots , e_n $ jsou nekorelované a $ e_i \sim (0,\sigma^{2}) $. Nechť $ \widehat{\beta} $ je OLS $ \beta $ a $ \widehat{\textbf{e}} = \textbf{Y} - \widehat{\textbf{Y}} $ je vektor reziduí. Potom platí:
+	
+\begin{enumerate}
+\item $ \E [ \widehat{\textbf{e}} ] = 0 $
+\item $ \text{Cov}( \widehat{\textbf{e}} ) = \sigma^{2} ( \textbf{I}_n - \textbf{H} ) $
+\item pokud navíc $ \textbf{e} \sim \textbf{N}_n ( 0, \sigma^{2} \textbf{I}_n ) $, potom $ \widehat{\textbf{e}} \sim \textbf{N}_n ( \textbf{0} , \sigma^{2} ( \textbf{I}_n - \textbf{H} ) ) $
+\item jestliže má model intercept, tj. $ \beta_0 \neq 0 $, potom $ \sumin \widehat{e}_i = 0 $
+\item $ \sumin \widehat{e}_i \widehat{y}_i = 0 $
+\end{enumerate}		
+\end{theorem}
+
+\begin{proof}
+Ukázali jsme, že $ \widehat{\textbf{e}} = ( \textbf{I}_n - \textbf{H} ) \textbf{e} $
+\begin{enumerate}
+\item $ \E [ \widehat{\textbf{e}} ] = ( \textbf{I}_n - \textbf{H} ) \cdot \E [ \textbf{e} ] = ( \textbf{I}_n - \textbf{H} ) \cdot 0 = 0 $
+\item $ \text{Cov}( \widehat{\textbf{e}} ) = ( \textbf{I}_n - \textbf{H} ) \text{Cov}( \textbf{e} ) ( \textbf{I}_n - \textbf{H} )^{T} = \sigma^{2} ( \textbf{I}_n - \textbf{H} ) $
+\item $ \widehat{\textbf{e}} $ je LK složek $ \textbf{e}  \Rightarrow  \widehat{\textbf{e}} \sim \textbf{N}_n ( \textbf{0} , \sigma^{2} ( \textbf{I}_n - \textbf{H} ) ) $
+\item Soustava normálních rovnic $ \X ^{T} \X \beta = \X ^{T} \textbf{y} $ lze zapsat $ \X ^{T} ( \textbf{y} - \X \beta ) = 0 $ \\
+První rovnice: 
+$$
+ \sumin x_{i1} \cdot ( y_i - \textbf{x}_i^{T} \beta ) = 0
+$$
+pro $ \widehat{\beta} $ tedy platí 
+$$
+ 0 = \sumin ( y_i - \textbf{x}_i^{T} \widehat{\beta} ) = \sumin ( y_i - \widehat{y_i} ) = \sumin \widehat{e}_i 
+$$
+\item Z předchozího bodu platí pro OLS $ \widehat{\beta} $ 
+$$
+ \textbf{X}^{T} ( \textbf{y} - \textbf{X} \widehat{\beta} ) = 0 \quad \text{přenásobením zleva } \widehat{\beta}^{T}
+$$
+$$
+  0 = \widehat{\beta}^{T} \textbf{X}^{T} ( \textbf{y} - \textbf{X} \widehat{\beta} ) = \widehat{y}^{T} ( \textbf{y} - \widehat{\textbf{y}} ) = \widehat{\textbf{y}}^{T} \widehat{\textbf{e}} = \sumin \widehat{y}_i \widehat{e}_i
+$$
+\end{enumerate}
+\end{proof}
+Použitím bodů 4. a 5. dostaneme (stejně jako u jednorozměrné regrese)
+$$
+  \sumin ( y_i - \overline{y} )^{2} = \sumin ( \widehat{y}_i - \overline{y} )^{2} + \sumin ( y_i - \widehat{y}_i )^{2}
+$$
+tedy
+$$
+ \SST = \SSR + \SSE
+$$
