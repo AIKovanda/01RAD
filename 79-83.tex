@@ -1,0 +1,114 @@
+\section{Rezidua, diagnostika a transformace}
+\begin{itemize}
+ \item Je třeba ověřit adekvátnost modelu. Máme $ \text{R}^{2} , \text{t}, \text{F} $ statistiky, ty ale byly odvozeny za předpokladu linearity modelu a dalších podmínek na náhodné chyby. Pro ověření je důležitý nástroj analýza reziduí
+ \item Je také třeba ověřit vliv jednotlivých pozorování na model - analýza odlehlých (outliers) a influenčních pozorování. (Velké reziduum pro $ i $-té pozorování naznačuje problém s modelem, ale může to být i naopak, vlivné pozorování nemusí mít velké reziduum)
+ \item Pokud detekujeme nějaké problémy s modelem, mohou pomoci transformace proměnných nebo metoda na korekci nekonstantního rozptylu.
+\end{itemize}
+\subsection{Rezidua}
+připomenutí:
+$$
+ \widehat{\textbf{y}} = \X \widehat{\beta} = \textbf{Hy} , \quad \text{kde} \quad \textbf{H} = \X ( \X ^{T} \X )^{-1} \X ^{T}
+$$
+$$
+ \widehat{\textbf{e}} = \textbf{y} - \widehat{\textbf{y}} = ( \textbf{I}_n - \textbf{H} ) \textbf{y} =  ( \textbf{I}_n - \textbf{H} ) \textbf{e}
+$$
+Dále jsme ukázali:
+$$
+\E [ \widehat{\textbf{e}} ] = 0 \quad \text{Cov}(  \widehat{\textbf{e}} ) = \sigma^{2} ( \textbf{I}_n - \textbf{H} )
+$$
+Pokud navíc 
+$
+\textbf{e} \sim \text{N}_n ( 0 ,\sigma^{2} \textbf{I} ) $ potom $ \widehat{\textbf{e}} \sim \text{N}_n ( 0 ,\sigma^{2} ( \textbf{I}_n - \textbf{H})) 
+$. \\ Pokud označíme $ h_{ii} = \textbf{H}_{ii} $, $ \widehat{\textbf{e}}_i \sim \text{N} ( 0 , \sigma^2 (1 - h_{ii} ) $, $ \text{Cov}( \widehat{\textbf{e}}_i , \widehat{\textbf{e}}_j  ) = -\sigma^2 h_{ij} $. \\
+Obecně bývá vhodnější pracovat se standardizovanými rezidui, protože $ \D [  \widehat{\textbf{e}}_i ] = \sigma^2 (1 - h_{ii} ) $, pro $ r_i = \dfrac{\widehat{\textbf{e}}_i}{\sigma \sqrt{1-h_{ii}}} $ platí $ \D [ r_i ] = 1 $.
+$ \sigma $ odhadneme pomocí $ s_n =  \sqrt{\frac{1}{n-m-1} \text{SSE}}$, dostaneme
+$$
+  \widehat{r}_i = \frac{\widehat{\textbf{e}}_i}{s_n \sqrt{1 - h_{ii}}} \quad \text{kde} \quad i = 1, \dots , n \quad \text{(Interně studentizované reziduum)}
+$$
+(Někdy také standardizovaná rezidua) \\
+R : rstandard(.) \\
+Pokud $ \sigma^2 $ odhadneme na základě modelu, ve kterém bylo vynecháno $ i $-té pozorování, označíme tento odhad $ \sigma^2_{(-i)} $, potom
+$$
+ \widehat{\text{t}}_i = \frac{\widehat{\textbf{e}}_i}{  \sigma^2_{(-i)} \sqrt{1 - h_{ii}}} \quad \text{kde} \quad i = 1, \dots , n \quad \text{(Externě studentizované reziduum)} 
+$$
+(Někdy také studentizované rezidua) \\
+R : rstudent(.) \\
+Například $ \sigma^2_{(-i)} = \dfrac{\text{SSE}_{(-i)}}{n-m-1} $ je nestranný odhad $ \sigma^2 $ v modelu $ (-i) $.
+\begin{remark}
+Platí:
+\begin{itemize}
+\item Pokud $ h_{ii} $ je malé, pro velké $ n $ by se mělo $ \widehat{\text{e}}_i, \widehat{\text{r}}_i, \widehat{\text{t}}_i $ chovat přibližně stejně a $  \widehat{\text{r}}_i ,\widehat{\text{t}}_i \approx \text{N} ( 0 , 1 ) $. 
+\item Pro malé $ n $ $ ( n < 20 ) $ a / nebo  $ h_{ii} \approx 1 $ je preferováno použít $\widehat{\text{r}}_i$ nebo $\widehat{\text{t}}_i $ a aktuálně bývá častěji doporučována $\widehat{\text{t}}_i $ ( $ i $-té pozorování s velkými $ h_{ii} $ může zvyšovat odhad $ \sigma^2 $ a tím snižuje velikost svého rezidua).
+\item $ h_{ii} $ hraje zásadní roli v diagnostice modelu, probereme teď jeho základní vlastnosti.
+\end{itemize}
+\end{remark}
+
+\textbf{Leverage}$ h_{ii} $ - potenciál $ i $-tého pozorování (leverage point - píkový bod / vzdálený bod)
+
+\begin{itemize}
+\item $ \D [ \widehat{\text{e}}_i ] = \sigma^2 ( 1 - h_{ii} ) \geq 0 \Rightarrow h_{ii} \leq 1 $.
+\item $ \textbf{H}^2 = \textbf{H} \Rightarrow h_{ii} = \sumjn h_{ij} h_{ji} = \sumjn (h_{ij})^2 $ tedy $ h_{ii} > 0 $ (Dá se ukázat silnější tvrzení: $ h_{ii} \geq \frac{1}{n} $).
+\item $ \textbf{H}^2 = \textbf{H} \Rightarrow \textbf{A}_{i1} = \sumjn h_{ij} x_{j1} = \sumjn h_{ij} = x_{i1} = 1  $ tedy
+$$ \sumjn h_{ij} = 1 \quad \forall j \in \widehat{n} $$.
+\item Význam $ h_{ii} $ vyplyne z následujících úvahy:
+$$ 
+ \widehat{\textbf{y}} = \textbf{Hy} \Rightarrow \widehat{y}_i = \sumjn h_{ij}y_j = h_{ii} y_i + \sum\limits_{\substack{j=1 \\ i\neq j}}^n h_{ij} y_j
+ $$
+ pokud $ h_{ii} \approx 1 $, potom   $ \widehat{y}_i \approx y_i $ a model je nucen proložit přímku bodem ( $ \textbf{x}_i , y_i $) i když když tam neplatí body s "velkým $ h_{ii} $" - body s velkým potenciálem (high leverage points). Tyto body by měly být detekovány pro další zkoumání.
+ \item Otázka je, jaká hodnota $ h_{ii} $ je "velká".
+\end{itemize}
+\textbf{Heuristické pravidlo:}
+$ \sumin h_{ii} = \text{tr}(\textbf{H}) = m + 1 $, tzn. $ \dfrac{m+1}{n} $ je průměrná hodnota $ h_{ii}$ . $ i $-té pozorování má velký potenciál jestliže $ h_{ii} > \dfrac{3(m+1)}{n} $. (Stejně postupuje i jazyk R)
+
+\subsection{Grafy reziduí}
+\begin{enumerate}
+\item Ověření normality - histogramy, Q-Q plots \\
+tyto obrázky nezávisí na počtu nezávislých proměnných $ x $, vše stejné jako v jednoduché LR.
+\item Pro ověření funkční formy pro $ \E [ Y_x ] $ a / nebo konstantního rozptylu se nejčastěji používají:
+\begin{enumerate}
+\item Grafy $ \widehat{e}_i , \widehat{r}_i $ nebo $ \widehat{t}_i $ oproti $ \textbf{x}_j^c $, $ j = 1, \dots , m $, kde $ \textbf{x}_j^c $ je $ j $-tý sloupec $ \X $
+\item  Grafy $ \widehat{e}_i , \widehat{r}_i $ nebo $ \widehat{t}_i $ oproti $ \widehat{y}_i $
+\item Partial residual plots
+\end{enumerate}
+\end{enumerate}
+
+\begin{remark}
+Zdůvodnění:
+\begin{enumerate}
+\item Normální rovnice $ \X ^{T} ( \textbf{y} - \X \widehat{\beta} ) = 0 $ implikují $ \X ^{T} ( \textbf{y} - \widehat{\textbf{y}}) = \X ^T \widehat{\textbf{e}} $.
+$$
+ \text{Připomenutí:} \quad \text{Y}_i = \beta_1 x_i + e_i , \quad \widehat{\beta}_1 = \dfrac{\sumin x_i y_i}{\sumin x_i^{2}} = \frac{\textbf{x}^{T}\textbf{y}}{\Vert \textbf{x} \Vert ^2 }
+$$
+Pokud tedy naladíme LR model bez interceptu pro $ \widehat{\textbf{e}} $ v závislosti na $ \textbf{x}_j^c $, směrnice přímky bude
+$$
+  \widehat{\beta}_j^* = \frac{(\textbf{x}_j^c)^T \widehat{\textbf{e}}}{\Vert \textbf{x}_j^c \Vert ^2} = 0
+$$
+Graf $ \widehat{e}_i , \widehat{r}_i , \widehat{t}_i $ oproti $ \textbf{x}_j^c $ by měl dávat náhodně rozptýlené body kolem osy $ x $. (bez trendů, $  \widehat{r}_i , \widehat{t}_i $ uvnitř ???? $\pm 2$ )
+Pokud tomu tak není, může to naznačovat nelinearitu v $ \textbf{x}_j $ nebo nekonstantní rozptyl.
+\item Ukázali jsme $ \sumin \widehat{y}_i \widehat{e}_i = 0 $ pro LM bez interceptu pro $ \widehat{e}_i $ oproti $ \widehat{y}_i $ tedy platí
+$$
+  \widehat{\beta} = \frac{\widehat{\textbf{e}}^T \widehat{\textbf{y}}}{\Vert \widehat{\textbf{y}} \Vert ^2} = 0
+$$
+Body by opět měly být náhodně rozptýlené kolem osy $ x $
+\begin{itemize}
+\item Trychtýřovitý tvar indikuje nekonstantní rozptyl.
+\item Trendy indikují nelinearitu.
+\end{itemize}
+\end{enumerate}	
+\end{remark}
+
+\subsection{Partial residual plot}
+\begin{itemize}
+\item I když grafy $ \widehat{e}_i $ oproti $ \textbf{x}_j^c $ a $ \widehat{\textbf{y}} $ mohou indukovat nedostatky modelu, nemusí být zřejmé, jaké ty nedostatky jsou.
+\item V SLR graf $ \widehat{e}_i $ oproti $ x_i $ lze použít pro detekci nelinearity
+\item Ale v MLR tyto grafy, stejně jako scatterploty, mohou být zavádějící, protože $ \widehat{\textbf{e}} $ závisí na všech prediktorech, nemusí být tedy izolován efekt dané proměnné při odstranění efektů ostatních.
+\item Pro zkoumané efekty $ j $-té proměnné lze použít partial rezidual plots - lze je chápat jako jeho ekvivalent scatterplotu v SLR
+
+\begin{define}
+ $$
+   \widehat{e}_j^* = \widehat{\textbf{e}} + \widehat{\beta}_j \textbf{x}_j^c,
+ $$
+ kde $ \widehat{\textbf{e}} $ je vektor reziduí modelu, $ \widehat{\beta}_j $ je LSE parametru $ \beta_j $ , $ \textbf{x}_j^c $ je $ j $-tý sloupec $ \X $
+\end{define}
+\end{itemize}
+Partial residual plot (PRP): graf $ \widehat{\textbf{e}} $ oproti $ \textbf{x}_j^c $ , $ j = 1, \dots , m $ pokud je model správný, měly by být body náhodně rozmístěné kolem přímky se směrnicí $ \widehat{\beta}_j $.
