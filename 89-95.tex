@@ -1,14 +1,4 @@
-\begin{proof}
-	$$ S_2=\underbrace{\textbf{x}_i^T(\textbf{x}^T\textbf{x})^{-1}\textbf{x}_i}_{h_{ii}}\underbrace{\textbf{x}_i^T(\textbf{x}^T\textbf{x})^{-1}\textbf{x}\textbf{y}}_{\hyi}=y_i\underbrace{\textbf{x}_i^T(\textbf{x}^T\textbf{x})^{-1}\textbf{x}_i}_{h_{ii}}\underbrace{\textbf{x}_i^T(\textbf{x}^T\textbf{x})^{-1}\textbf{x}_i}_{h_{ii}}=h_{ii}\hyi-y_ih_{ii}^2 $$
-takže 
-$$ \hy_{(-i)}=\hyi-h_{ii}y_i+\frac{1}{1-h_{ii}}(h_{ii}\hyi-y_ih_{ii}^2).$$
-Celkem tedy 
-\[
-\begin{split}
-\he_{-i}&=y_i-\hy_{(-i)}=y_i(1+h_{ii})-\hyi-\frac{1}{1-h_{ii}}(h_{ii}\hyi-y_ih_{ii}^2)=\\&=\frac{1}{1-h_{ii}}\big(y_i(1-h_{ii}^2)-\hyi(1-h_{ii})-h_{ii}\hyi+y_ih_{ii}^2\big)=\frac{1}{1-h_{ii}}(y_i-\hyi)=\frac{\hei}{1-h_{ii}}
-\end{split}
-\]
-\end{proof}
+
 
 Budeme potřebovat podobné formule pro~$\wbetab-\wbetab_{(-1)}$ a~$\mini{\SSE}$.
 
@@ -67,7 +57,7 @@ Budeme potřebovat podobné formule pro~$\wbetab-\wbetab_{(-1)}$ a~$\mini{\SSE}$
 \begin{remark}
 	Dě se~ukázat, že $\mini{\SSE}$ a~$\hei$ jsou nezávislé náhodné veličiny. Protože $\frac{\mini{\SSE}}{\sigma^2}\sim\chi^2(n-m-2)$ a~$\frac{\hei}{\sigma\sqrt{1-\hii}}\sim\NN(0,1)$, dostaneme $\frac{\hei}{\mini{\widehat{{\sigma}^2}}\sqrt{1-\hii}}\sim t(n-m-2)$.
 \end{remark}
-¨\begin{corollary}
+\begin{corollary}
 	Uvažujme model (**), kde $h(X)=m+1$ a~$\textbf{e}\sim\NN_m(0,\sigma^2 I_m)$. Nechť pro~$i\in\hat{n}$ platí, že $\hii\neq1$. Potom $i$-té ??????????91dole? reziduum 
 	$$ \widehat{t}_i\sim t(n-m-2).$$
 \end{corollary}
