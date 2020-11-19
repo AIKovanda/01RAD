@@ -1,5 +1,6 @@
 \documentclass[oneside,intlimits,reqno]{scrbook}
 
+%% PACKAGES -------------------------------------------------------------------------------------
 \usepackage{array}
 \usepackage{enumerate}
 \usepackage{mathrsfs}
@@ -20,73 +21,193 @@
 \def\dotminus{\mathbin{\ooalign{\hss\raise1ex\hbox{.}\hss\cr
 			\mathsurround=0pt$-$}}}
 
+%% DEFINICE A REDEFINICE ZÁKLADNÍCH PŘÍKAZŮ ------------------------------------------------------
 %definice textu nad rovnítkem
 \newcommand{\equal}[1]{\mathop{\overset{#1}{\resizebox{\widthof{.{\ensuremath{\mathop{\overset{#1}{\mathop{=}}}}.}}}{\heightof{=}}{$\mathop{=}$}}}}
 
-%redefinice znaků
+% redefinice znaků
 \renewcommand{\epsilon}{\varepsilon}
 \let\crossedphi\phi
 \renewcommand{\phi}{\varphi}
 \renewcommand{\rho}{\varrho}
 \renewcommand{\emptyset}{\font\cmsy = cmsy10 at 12pt\hbox{\cmsy \char 59}}
 
-
-%definice českých uvozovek
+% definice českých uvozovek
 \def\bq{\mbox{\kern.1ex\protect\raisebox{-1.3ex}[0pt][0pt]{''}\kern-.1ex}}
 \def\eq{\mbox{\kern-.1ex``\kern.1ex}}
 \gdef\uv#1{\bq #1\eq}
 
-
+%% MATEMATIKA ----------------------------------------------------------------------------------
+% konstanty atd.
 \renewcommand{\d}{\mathrm{d}} % diferenciál
 \newcommand{\me}{\mathrm{e}} % eulerovo číslo
-\newcommand{\E}{\mathbb{E}} % střední hodnota
-\newcommand{\D}{\mathrm{D}} %  rozptyl
+\newcommand{\mi}{\mathrm{i}} % imaginární jednotka
 \newcommand{\LL}{\mathscr{L}}
 \newcommand{\Loss}{\mathscr{L}}
-\newcommand{\FF}{\mathrm{F}} % distribuční funkce
-\newcommand{\PP}{\mathbb{P}} % pravděpodobnost
-\newcommand{\NN}{\mathcal{N}}
-\newcommand{\MSE}{\mathrm{MSE}}
-\newcommand{\LSE}{\mathrm{LSE}}
-\newcommand{\MSR}{\mathrm{MSR}}
-\newcommand{\Exp}{\mathrm{Exp}}
-\newcommand{\NF}{\mathrm{F}}
-\newcommand{\AN}{\mathcal{AN}}
-\newcommand{\sgn}{\mathrm{sgn}}
-\newcommand{\A}{\mathrm{A}}
-\newcommand{\lomn}[1]{\frac{#1}{n}}
-\newcommand{\lm}{\frac{1}{m}}
-\newcommand{\jednab}{\mathbf{1}}
-\newcommand{\norm}[1]{\| #1 \|}
 
-\newcommand{\prostor}{(\Omega,\mathcal{A},\PP)} % prostor
-\newcommand{\mi}{\mathrm{i}} % imaginární jednotka
+% matematické výrazy
+\newcommand{\tg}{\mathop{\mathrm{tg}}}				% tangens
+\newcommand{\argmin}{\mathop{\mathrm{argmin}}}		% argmin	
+\newcommand{\argmax}{\mathop{\mathrm{argmax}}}		% argmax
+\newcommand{\argsup}{\mathop{\mathrm{argsup}}}		% argsup
+\newcommand{\sgn}{\mathrm{sgn}}						% signum
+\renewcommand{\Re}{\mathop{\mathrm{Re}}}
+\newcommand{\Ran}{\mathop{\mathrm{Ran}}}
+\newcommand{\supp}{\mathop{\mathrm{supp}}}			% support
+\renewcommand{\Im}{\mathop{\mathrm{Im}}}
+\newcommand{\trace}{\text{tr}} 						% stopa
+\newcommand{\inv}[1]{#1^{-1}}
+
+% množiny čísel
 \newcommand{\R}{\mathbb{R}} % množina reálných čísel
 \renewcommand{\C}{\mathbb{C}} % množina komplexních čísel
 \newcommand{\Z}{\mathbb{Z}} % množina celých čísel
 \newcommand{\N}{\mathbb{N}} % množina přirozených čísel
-\newcommand{\Cc}{\mathcal{C}} % funkce třídy C (spojité)
-\newcommand{\I}{\mathbb{I}} % identita
-\newcommand{\Identita}[1]{\mathbb{I}_{#1}} % identita
-\newcommand{\fisher}{\mathbb{I}} % Fisherova matice
-\newcommand{\RR}{\mathcal{R}}
-\newcommand{\Be}{\mathrm{Be}}
-\newcommand{\Bi}{\mathrm{Bi}}
-\newcommand{\X}{\textbf{X}}
-\newcommand{\lX}{\overline{\textbf{X}}}
-\newcommand{\Y}{\textbf{Y}}
-\newcommand{\x}{\textbf{x}}
-\newcommand{\y}{\textbf{y}}
-\newcommand{\betab}{\boldsymbol{\beta}} % vektorové beta
-\newcommand{\Am}{\mathbb{A}} % matice A
-\newcommand{\Hm}{\mathbb{H}}
-\newcommand{\Bm}{\mathbb{B}}
 
-\newcommand{\PEX}{\PP^\X}
-\newcommand{\fex}{f_\X}
+
+%% ZKRATKY ---------------------------------------------------------------------------
+\newcommand{\MSE}{\mathrm{MSE}}
+\newcommand{\LSE}{\mathrm{LSE}}
+\newcommand{\MSR}{\mathrm{MSR}}
+\newcommand{\NF}{\mathrm{F}}
+\newcommand{\A}{\mathrm{A}}
+\newcommand{\RMR}{\mathrm{R}}
+\newcommand{\SST}{\mathrm{SST}}
+\newcommand{\SSE}{\mathrm{SSE}}
+\newcommand{\SSR}{\mathrm{SSR}}
+
+
+% MATICE ------------------------------------------------------------------------------
+ % indentita
+\newcommand{\I}{\mathbb{I}} % identita
+\newcommand{\Identita}[1]{\mathbb{I}_{#1}} % identita s indexem velikosti
+% obecné matice A,B,H
+\newcommand{\Am}{\mathbb{A}} % matice A
+\newcommand{\Bm}{\mathbb{B}}
+\newcommand{\Hm}{\mathbb{H}}
+% Fisherova matice
+\newcommand{\fisher}{\mathbb{I}} % Fisherova matice
+
+
+
+
+
+\newcommand{\Cc}{\mathcal{C}} % funkce třídy C (spojité)
+\newcommand{\RR}{\mathcal{R}}
+
+
+
+% VEKTORY ----------------------------------------------------------------------------------------------
+% vektorová písmenka x,y,X,Y atd.
+% tučné X
+\newcommand{\X}{\textbf{X}} % klasické
+\newcommand{\lX}{\overline{\textbf{X}}} % s pruhem
+% tučné Y
+\newcommand{\Y}{\textbf{Y}} % klasické
+\newcommand{\lY}{\overline{Y}} % s pruhem
+% tučné x
+\newcommand{\x}{\textbf{x}}
+% tučné y
+\newcommand{\y}{\textbf{y}}
+
+% beta
+\newcommand{\betab}{\boldsymbol{\beta}} 			% vektorové beta
+\newcommand{\bbeta}{\boldsymbol{\beta}}				% také vektorové beta
+\newcommand{\wbetab}{\widehat{\boldsymbol{\beta}}}	% vektorové beta se stříškou
+% rezidua: e
+\newcommand{\eb}{\textbf{e}}
+\newcommand{\lei}{\overline{e}_i}
+\newcommand{\hei}{\widehat{e}_i}
+
+%% PROMĚNNÉ SE STŘÍŠKOU -----------------------------------------------------------------------------------
+% řecká abeceda
+\newcommand{\walpha}{\widehat{\alpha}}				% alpha se stříškou
+\newcommand{\wbeta}{\widehat{\beta}}				% beta se stříškou
+\newcommand{\wgamma}{\widehat{\gamma}}				% gamma se stříškou
+\newcommand{\wsigma}{\widehat{\sigma}}				% sigma se stříškou
+% x se stříškou
+\newcommand{\hxn}{\widehat{x}_n}	% xn se stříškou
+% y se stříškou
+% klasické
+\newcommand{\hy}{\widehat{y}}
+\newcommand{\hY}{\widehat{Y}}
+% s indexy
+\newcommand{\hyn}{\widehat{y}_n}
+\newcommand{\hyi}{\widehat{y}_i}
+\newcommand{\hYn}{\widehat{Y}_n}
+\newcommand{\hYi}{\widehat{Y}_i}
+% vektorové
+\newcommand{\hYb}{\widehat{\textbf{Y}}}
+\newcommand{\hyb}{\widehat{\textbf{y}}}
+% rezidua: e
+\newcommand{\he}{\widehat{e}}
+\newcommand{\heb}{\widehat{\textbf{e}}}
+% a nějaké další
+\newcommand{\hsn}{\widehat{\sigma}_n^2}				% sn se stříškou
+
+
+%% PROMĚNNÉ S PRUHEM --------------------------------------------------------------------------------------
+\newcommand{\overbar}[1]{\mkern 1mu\overline{\mkern-1mu#1\mkern-3mu}\mkern 3mu}
+\newcommand{\Oxn}{\overbar{\rule{0ex}{1.8ex}X_n}}
+\newcommand{\Oyn}{\overbar{\rule{0ex}{1.8ex}Y_n}}
+\newcommand{\Ox}[1]{\overbar{\rule{0ex}{1.8ex}X_{#1}}}
+\newcommand{\Oy}[1]{\overbar{\rule{0ex}{1.8ex}Y_{#1}}}
+\newcommand{\oxn}{\overbar{\rule{0ex}{1.33ex}X_n}}
+\newcommand{\ox}[1]{\overbar{\rule{0ex}{1.33ex}X_{#1}}}
+\newcommand{\oy}[1]{\overbar{\rule{0ex}{1.33ex}Y_{#1}}}
+\newcommand{\oyn}{\overbar{\rule{0ex}{1.33ex}Y_n}}
+\newcommand{\omn}{\overbar{\rule{0ex}{1.3ex}\mu_n}}
+\newcommand{\oxnn}{\overbar{\rule{0ex}{1.33ex}x_n}}
+\newcommand{\oynn}{\overbar{\rule{0ex}{1.33ex}y_n}}
+
+% další možnost
+\newcommand{\lyn}{\overline{y}_n}
+\newcommand{\ly}{\overline{y}}
+\newcommand{\lhyn}{\overline{\hy}_n}
+\newcommand{\lhy}{\overline{\hy}}
+\newcommand{\lyi}{\overline{y}_i}
+\newcommand{\lxn}{\overline{x}_n}
+\newcommand{\lx}{\overline{x}}
+
+
+%% PRAVDĚPODOBNOST ------------------------------------------------------------------------------
+% distribuční funkce
+\newcommand{\FF}{\mathrm{F}}
 \newcommand{\FEX}{\FF_\X}
 
+% hustota pravděpodobnosti
+\newcommand{\fex}{f_\X}
 
+% pravděpodobnost
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\PEX}{\PP^\X}
+
+% pravděpodobnostní prostor
+\newcommand{\prostor}{(\Omega,\mathcal{A},\PP)} 
+
+% charakteristiky
+\newcommand{\E}{\mathbb{E}} % střední hodnota
+\newcommand{\D}{\mathrm{D}} %  rozptyl
+\newcommand{\Cov}{\mathbb{C}\mathrm{ov}} % kovariance
+
+% rozdělení
+\newcommand{\NN}{\mathcal{N}} % normální
+\newcommand{\AN}{\mathcal{AN}} % asymptoticky normální
+\newcommand{\Exp}{\mathrm{Exp}} % exponenciální
+\newcommand{\Be}{\mathrm{Be}} % bernoulliho
+\newcommand{\Bi}{\mathrm{Bi}} % binomické
+
+% konvergence
+\newcommand{\sj}{\stackrel{s.j.}{\longrightarrow}}
+\newcommand{\Pto}{\stackrel{\PP}{\to}}
+\newcommand{\wto}{\stackrel{w}{\to}}
+\newcommand{\Dto}{\stackrel{\mathscr{D}}{\to}}
+\newcommand{\PSJ}{\stackrel{\PP,s.j.}{\longrightarrow}}
+\newcommand{\Lto}{\stackrel{(\mathscr{L})}{\to}}
+\newcommand{\sjP}{\stackrel{s.j.~\PP}{\longrightarrow}}
+\newcommand{\Lp}{\stackrel{L_p}{\longrightarrow}}
+
+% pár dalších...
 \newcommand{\Aa}{\mathcal{A}}
 \newcommand{\Bb}{\mathcal{B}}
 \renewcommand{\t}{\theta} % theta
@@ -104,86 +225,22 @@
 \newcommand{\RE}{\mathrm{RE}_{2,1}}
 \newcommand{\ARE}{\mathrm{ARE}_{2,1}}
 
-
-%matematické výrazy
-\newcommand{\tg}{\mathop{\mathrm{tg}}}
-\newcommand{\argmin}{\mathop{\mathrm{argmin}}}
-\newcommand{\argmax}{\mathop{\mathrm{argmax}}}
-\newcommand{\argsup}{\mathop{\mathrm{argsup}}}
-\renewcommand{\Re}{\mathop{\mathrm{Re}}}
-\newcommand{\Ran}{\mathop{\mathrm{Ran}}}
-\newcommand{\supp}{\mathop{\mathrm{supp}}}
-\renewcommand{\Im}{\mathop{\mathrm{Im}}}
-\newcommand{\Cov}{\mathbb{C}\mathrm{ov}}
-
-
-%konvergence
-\newcommand{\sj}{\stackrel{s.j.}{\longrightarrow}}
-\newcommand{\Pto}{\stackrel{\PP}{\to}}
-\newcommand{\wto}{\stackrel{w}{\to}}
-\newcommand{\Dto}{\stackrel{\mathscr{D}}{\to}}
-\newcommand{\PSJ}{\stackrel{\PP,s.j.}{\longrightarrow}}
-\newcommand{\Lto}{\stackrel{(\mathscr{L})}{\to}}
-\newcommand{\sjP}{\stackrel{s.j.~\PP}{\longrightarrow}}
-\newcommand{\Lp}{\stackrel{L_p}{\longrightarrow}}
-
-%nadtržítka
-\newcommand{\overbar}[1]{\mkern 1mu\overline{\mkern-1mu#1\mkern-3mu}\mkern 3mu}
-\newcommand{\Oxn}{\overbar{\rule{0ex}{1.8ex}X_n}}
-\newcommand{\Oyn}{\overbar{\rule{0ex}{1.8ex}Y_n}}
-\newcommand{\Ox}[1]{\overbar{\rule{0ex}{1.8ex}X_{#1}}}
-\newcommand{\Oy}[1]{\overbar{\rule{0ex}{1.8ex}Y_{#1}}}
-\newcommand{\oxn}{\overbar{\rule{0ex}{1.33ex}X_n}}
-\newcommand{\ox}[1]{\overbar{\rule{0ex}{1.33ex}X_{#1}}}
-\newcommand{\oy}[1]{\overbar{\rule{0ex}{1.33ex}Y_{#1}}}
-\newcommand{\oyn}{\overbar{\rule{0ex}{1.33ex}Y_n}}
-\newcommand{\omn}{\overbar{\rule{0ex}{1.3ex}\mu_n}}
-\newcommand{\walpha}{\widehat{\alpha}}
-\newcommand{\wbeta}{\widehat{\beta}}
-\newcommand{\wbetab}{\widehat{\boldsymbol{\beta}}} % vektorové beta se stříškou
-\newcommand{\wgamma}{\widehat{\gamma}}
-\newcommand{\wsigma}{\widehat{\sigma}}
-
-\newcommand{\hyn}{\widehat{y}_n}
-\newcommand{\hyi}{\widehat{y}_i}
-\newcommand{\hy}{\widehat{y}}
-\newcommand{\lyn}{\overline{y}_n}
-\newcommand{\ly}{\overline{y}}
-\newcommand{\lhyn}{\overline{\hy}_n}
-\newcommand{\lhy}{\overline{\hy}}
-\newcommand{\lyi}{\overline{y}_i}
-\newcommand{\lY}{\overline{Y}}
-\newcommand{\RMR}{\mathrm{R}}
-\newcommand{\SST}{\mathrm{SST}}
-\newcommand{\SSE}{\mathrm{SSE}}
-\newcommand{\SSR}{\mathrm{SSR}}
-\newcommand{\lei}{\overline{e}_i}
-\newcommand{\hei}{\widehat{e}_i}
+% proměnné s dolním složitějším indexem
 \newcommand{\hii}{h_{ii}}
+\newcommand{\Sxx}{ S_{xx} }
+
+% co moc nikam nepatří...
 \newcommand{\core}{\inv{(\textbf{X}^T\textbf{X})}}
-\newcommand{\he}{\widehat{e}}
-\newcommand{\heb}{\widehat{\textbf{e}}}
-\newcommand{\eb}{\textbf{e}}
-\newcommand{\lxn}{\overline{x}_n}
-\newcommand{\lx}{\overline{x}}
-\newcommand{\hxn}{\widehat{x}_n}
-\newcommand{\hY}{\widehat{Y}}
-\newcommand{\hYn}{\widehat{Y}_n}
-\newcommand{\hYi}{\widehat{Y}_i}
-\newcommand{\hYb}{\widehat{\textbf{Y}}}
-\newcommand{\hyb}{\widehat{\textbf{y}}}
+\newcommand{\lomn}[1]{\frac{#1}{n}}
+\newcommand{\lm}{\frac{1}{m}}
+\newcommand{\jednab}{\mathbf{1}}
+\newcommand{\norm}[1]{\| #1 \|}
 \newcommand{\In}{\mathrm{I}_n}
 \newcommand{\Q}{\textbf{Q}}
 
-\newcommand{\Sxx}{ S_{xx} }
-\newcommand{\trace}{\text{tr}}
-\newcommand{\bbeta}{\boldsymbol{\beta}}
-\newcommand{\oxnn}{\overbar{\rule{0ex}{1.33ex}x_n}}
-\newcommand{\oynn}{\overbar{\rule{0ex}{1.33ex}y_n}}
 
-%stříšky
-\newcommand{\hsn}{\widehat{\sigma}_n^2}
 
+%% POSLOUPNOSTI, SUMY ATD. -------------------------------------------------------------------------------------
 %posloupnosti
 \newcommand{\posl}{(X_j)_{j=1}^{+\infty}}
 \newcommand{\poslkon}{(X_j)_{j=1}^{n}}
@@ -201,6 +258,7 @@
 \newcommand{\sm}[2]{\sum\limits_{ #1 }^{ #2 }}
 
 
+%% NĚJAKÉ DALŠÍ PŘÍKAZY -----------------------------------------------------------------------------------------
 \newcommand{\dom}[1]{\mathop{\mathrm{Dom} (#1)}} % definiční obor
 \newcommand{\mat}[1]{\mathbf #1}
 \newcommand{\abs}[1]{\left|#1\right|}
@@ -209,7 +267,6 @@
 \newcommand{\Br}[1]{\Bigl(#1\Bigr)}
 \newcommand{\br}[1]{\bigl(#1\bigr)}
 \newcommand{\e}[1]{\me^{#1}}
-\newcommand{\inv}[1]{#1^{-1}}
 \newcommand{\mini}[1]{{#1_{(-1)}}}
 \newcommand{\ini}{\theta\in\Theta}
 \newcommand{\init}[1]{\theta\in\Theta\subset\R^#1}
@@ -229,7 +286,7 @@
 \renewcommand{\S}{\mathbb{S}}
 
 
-% Prostředí
+%% PROSTŘEDÍ -----------------------------------------------------------------------------------------------------
 \theoremstyle{definition}
 \newtheorem{define}{Definice}[chapter]
 \theoremstyle{plain}
