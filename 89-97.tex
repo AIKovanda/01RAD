@@ -190,9 +190,10 @@ Hledáme funkci $h(.)$ tak, aby model $Y_i^* = h(Y_i) = \beta_0 + \sumjm x_{ij} 
 	
 	Např. pro fyzikální veličinu s kladnými hodnotami se často stane, že rozptyl bude malý pro $\mu \approx 0$ a větší pro $\mu$ velké (už je z důvodu, že obor hodnot $y$ je omezen na kladné hodnoty). Říkáme tomu \textbf{positive mean-variance relationship}.
 	
-	Nepřesnost měření kladných veličin se také často vyjadřuje pomocí koeficientu variance
-	$$
-	\mathrm{CV} = \frac{\mathrm{s.d.} Y}{\E Y},
-	$$
-	často bývá více konstantní mzti případy než s.d. Variabilitu vyjadřujeme relativně spíše než absolutně. Matematicky to znamená, že $\D Y = \Phi \E (Y)^2 = \Phi \mu$ pro nějaké $\Phi$.
+  Nepřesnost měření kladných veličin se také často vyjadřuje pomocí koeficientu variace
+$$
+ \text{CV}(\text{Y}) = \frac{\text{s.d.} \text{Y}}{\E[\text{Y}]}.
+$$
+Často bývá více konstantní mezi případy než s.d. Variabilitu vyjadřuje relativně spíše než absolutně. Matematicky to znamená, že $ \D[\text{Y}] = \Phi \E[\text{Y}]^2 - \Phi \mu^2 $ pro nějaké $ \Phi $.
+\item Pro odstranění vztahu $ \E [\text{Y}] $ a $ \D[\text{Y}] $ se často používají mocninné transformace $ y^* = y^{\lambda} $ ( pro $ y > 0 $)
 \end{enumerate}
