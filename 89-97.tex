@@ -141,3 +141,58 @@ $$ \wbetab-\mini{\wbetab}=\core \textbf{x}_i\frac{\hei}{1-\hii}.$$
 \end{itemize}
 $$ \mathrm{DFFITS}_i=\frac{\hyi-\mini{\hy}}{\mini{\widehat{{\sigma}}}\sqrt{\hii}}=...=\widehat{t}_i\sqrt{\frac{\hii}{1-\hii}}.$$
 RULE OF THUMB: $i$-té pozorování je influenční, pokud $|\mathrm{DFFITS}|>3\sqrt{\frac{m+1}{n-m-1}}$.
+
+\begin{remark}[Míry influence v R]
+\begin{itemize}
+	\item DFBETAS -- \verb|dfbetas()|
+	\item DFFITS -- \verb|dffits()|
+	\item Cookova vzdálenost $D_i$ -- \verb|cooks.distance()|
+	\item Leverage $\hii$ -- \verb|hotvalues()|
+	\item a vše shrnuje funkce \verb|influence.measures()| (má navíc covariance ratio)
+\end{itemize}
+
+Používané pravidlo: $i$-té pozorování je influenční, pokud:
+\begin{align*}
+	& = | \mathrm{DFBETAS} | > 1, \quad |\mathrm{DFFITS}| > 3 \sqrt{\frac{m+1}{n-m-1}} \\
+	& D_i > F_{0,5}(m+1,n-m-1), \quad \hii > 3 \frac{m+1}{n}
+\end{align*}
+\end{remark}
+
+\section{Transformace}
+
+Pokud není splněný některý z předpokladů modelu: linearita, normalita chyb, homoskedasticita, jednou z možností je pokusit se transformovat nějaké proměnné, aby transformovaný model tyto předpoklady alespoň \uv{přibližně} splňoval.
+
+\subsection{Transformace vysvětlované proměnné $y$}
+
+Hledáme funkci $h(.)$ tak, aby model $Y_i^* = h(Y_i) = \beta_0 + \sumjm x_{ij} \beta_j + e_i$ splňoval předpoklady.
+
+\subsubsection*{3 hlavní důvody pro transformaci $Y$}
+\begin{enumerate}
+	\item Transformace škály měření tak, aby pokrývala celé $\R$, což může odstranit problémy s podmínkami na $\betab$.
+	
+	Např. studie kapacity plic (FEV data, FEV $>$ 0):
+	\begin{itemize}
+		\item Chtěli bychom, aby model nepredikoval záporné hodnoty ($\implies$ restrikční podmínky na parametr $\beta$).
+		\item Lze obejít modelování $y^* = \log \mathrm{FEV}$.
+	\end{itemize}
+
+	Pokud $y$ jsou počty a 0 je možná hodnota, často se používá $y^* = \log (y+1)$ nebo obecně $y^* = log(y + c)$
+	
+	\item Transformace $Y$, aby její rozdělení bylo \uv{více} normální.
+	
+	Typicky to znamená pokusit se udělat rozdělení hodnot $y$ více symetrické. Často se setkáváme s rozděleními vychýlenými vpravo (obvykle se to stává, pokud naměříme nějakou fyzikální veličinu, která může nabývat pouze kladných hodnot).
+	
+	Transformace $y^* = \log y$ nebo $y^* = y^{\lambda}, \lambda < 1$ budou redukovat toto vychýlení.
+	
+	Typický postup: Začít s hodnotou $\lambda$ blízko 1, pak snižovat hodnotu $\lambda$, doku není dosaženo \uv{přibližně} symetrie reziduí.
+	
+	\item Možná nejzásadnější motivace je pokusit se dosáhnout konstantního rozptylu přes všechna pozorování.
+	
+	Např. pro fyzikální veličinu s kladnými hodnotami se často stane, že rozptyl bude malý pro $\mu \approx 0$ a větší pro $\mu$ velké (už je z důvodu, že obor hodnot $y$ je omezen na kladné hodnoty). Říkáme tomu \textbf{positive mean-variance relationship}.
+	
+	Nepřesnost měření kladných veličin se také často vyjadřuje pomocí koeficientu variance
+	$$
+	\mathrm{CV} = \frac{\mathrm{s.d.} Y}{\E Y},
+	$$
+	často bývá více konstantní mzti případy než s.d. Variabilitu vyjadřujeme relativně spíše než absolutně. Matematicky to znamená, že $\D Y = \Phi \E (Y)^2 = \Phi \mu$ pro nějaké $\Phi$.
+\end{enumerate}
