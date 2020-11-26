@@ -1,0 +1,65 @@
+
+
+\begin{table}[h]
+\centering
+$\begin{array}{ *{13}{c} }
+\text{Transformace:} & \leftarrow & \dots &  y^3 &  y^2 &  y & \sqrt{y}  & \text{log}y & \dfrac{1}{\sqrt{y}}  & \dfrac{1}{y} & \dfrac{1}{y^2} & \dots  & \rightarrow \\
+\text{Box-Cox} \lambda : &\leftarrow  & dots & 3 & 2 & 1 & \dfrac{1}{2}  & 0 &  -\dfrac{1}{\sqrt{2}} & -1 & -2 & \dots & \rightarrow
+\end{array}$
+\end{table}
+
+\begin{itemize}
+\item Pokud $ \D[\text{Y}] $ klesá s rostoucí $ \E[\text{Y}] $
+\item Pokud $ \D[\text{Y}] $ roste s rostoucí $ \E[\text{Y}] $
+\end{itemize}
+
+OBECNĚ:
+
+Předpokládejme vztah $ \D[\Y] = \Psi \text{V}(\mu) $ a uvažujeme transformaci $ y^* = \text{h}(y) $. Taylorův rozvoj 1. řádu funkce $ \text{h}(y) $ v bodě $ \mu $
+$$  
+ y^* = \text{h}(y) \approx \text{h}(\mu) + \text{h}'(\mu)(y-\mu)
+$$
+z čehož plyne, že $ \D[\text{Y}^*] \simeq ( \text{h}'(\mu) )^2 \cdot \D[\text{Y}] $
+Transformace $  y^* = \text{h}(y) $ tedy bude přibližně stabilizovat rozptyl, pokud $ \text{h}'(y) $ je úměrné $ (\D[\text{Y}]^{-\dfrac{1}{2}} = \text{V}^{-\dfrac{1}{2}}(\mu) $
+
+\begin{itemize}
+\item Pokud $ \text{V}(\mu) = \mu^2 \quad \Rightarrow \quad $ stabilizující transformace je $ \text{log}(y) = \text{h}(y) $ protože $ \text{h}'(y) = \dfrac{1}{\mu} $
+\item Pokud $ \text{V}(\mu) = \mu \quad \Rightarrow \quad $ stabilizující transformace je $ \text{h}(y) = \sqrt{y} $ protože $ \text{h}'(y) = \dfrac{1}{2 \sqrt{\mu}} $
+$$  
+ \left( \text{h}(\mu) =  \int \frac{\d \mu}{\sqrt{\text{V}(\mu)}} \right)
+$$
+\item Asi nejvíce užívanou transformací je $ y^* = \text{log}(y) $, jedním z důvodů je i dobrá interpretovatelnost parametru $ \beta $
+\end{itemize}
+
+Interpretace parametrů LM
+
+\begin{enumerate}
+\item Klasický LM: 
+$$
+ \E [ \text{Y} ] = \beta_0 + \beta_1 x_1 + \dots + \beta_m x_m
+$$
+jednorozměrná změna proměnné $ x_j \, \Rightarrow $ změnu $ \E [ \text{Y} ] $ o $ \beta_j $ jednotek (při ostatních proměnných stálých).
+
+$ 
+\left( \begin{matrix}
+\X = (1,x_1,\dots,x_m) & \X_{\text{new}} = (1,x_1,\dots,x_j+1,\dots,x_m) \\
+\downarrow &  \downarrow \\
+\E [ \text{Y} ] & \E [ \text{Y}_{\text{new}} ] \\
+ & \\
+ \E [ \text{Y}_{\text{new}} ] - \E [ \text{Y} ]  = \beta_j &
+\end{matrix} \right)
+$
+\item LM pro logY:
+$$
+ \text{logY} = \beta_0 + \beta_1 x_1 + \dots + \beta_m x_m + e \quad \text{kde} \quad e \sim \NN(0,\sigma^2)
+$$
+Pokud je to správný model, znamená to, že $ \text{logY} \sim \NN(\mu,\sigma^2) \, \Rightarrow \, \text{Y} \sim \mathcal{LN}(\mu,\sigma^2) $ a tedy $ \E[\text{Y}] = e^{\mu + \frac{\sigma^2}{2}} $. \\
+Predikce pro $ \E [\text{logY}] $ je $ \widehat{\mu} = \wbeta_0 + \wbeta_1 x_1 + \dots + \wbeta_m x_m $. \\
+Predikce pro $ \E [\text{Y}] $ bude $ e^{\wbeta_0 + \wbeta_1 x_1 + \dots + \wbeta_m x_m + \frac{\sigma^2}{2}} $. \\
+Uvazujme opět jednotkovou změnu p. $ x_j $ ( $ x_j \rightarrow x_j + 1 $ )
+$$
+\dfrac{ \E [ \text{Y}_{\text{new}} ]}{\E [ \text{Y} ]} = \dfrac{e^{\wbeta_0 + \wbeta_1 x_1 + \dots + \wbeta_j x_j + \wbeta_j + \dots + \wbeta_m x_m + \frac{\sigma^2}{2}}}{e^{\wbeta_0 + \wbeta_1 x_1 + \dots + \wbeta_m x_m + \frac{\sigma^2}{2}}} = e^{\wbeta_j}
+$$
+jednotková změna proměnné $ x_j \, \Rightarrow  $ multiplikativní změna $ \E [ \text{Y} ] \, e^{\wbeta_j}\text{-krát} $.\\
+Jinak zapsáno: $ 100(e^{\wbeta_j}-1) $ je procentní změna $ \E [ \text{Y} ]  $ spojená s jednotkovou změnou $ x_j $
+\end{enumerate}
