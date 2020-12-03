@@ -91,10 +91,10 @@ $$
  \textbf{e} ( \text{I}_n - \textbf{H} ) \textbf{e} = \textbf{e} \textbf{Q} \Lambda \textbf{Q}^{T} \textbf{e} = \textbf{q}^{T} \Lambda \textbf{q} \quad \text{kde} \quad \textbf{q} = \textbf{Q}^{T} \textbf{e}
 $$
 \begin{theorem}
-	$ \textbf{V} \sim \textbf{N}_n ( \textbf{0} , \textbf{I}_n )  $ a $ \textbf{Q} $ je ortogonální matice, potom $ \textbf{QV} \sim \textbf{N}_n ( \textbf{0} , \textbf{I}_n ) $
+	$ \textbf{V} \sim \textbf{N}_n ( \textbf{0} , \textbf{I}_n )  $ a $ \textbf{Q} $ je ortogonální matice, potom $ \textbf{QV} \sim \textbf{N}_n ( \textbf{0} , \textbf{I}_n ). $
 \end{theorem}
-tzn. $ \textbf{q} $ je vektor nezávislých $ \text{N}(0,\sigma^{2}) $ veličin $ ( \textbf{q} \sim \textbf{N}_n ( \textbf{0} , \sigma^{2} \textbf{I}_n )) $ \\
-a $ \frac{1}{\sigma^{2}} \textbf{e}^{T} ( \text{I}_n - \textbf{H} ) \textbf{e} = \frac{1}{\sigma^{2}} \textbf{q}^{T} \Lambda \textbf{q} = \sum_{i = 1}^{n-m-1}\frac{q_i^{2}}{\sigma^{2}} \quad \sim \chi^{2} (n - m - 1 ) $ \\
+Tzn. $ \textbf{q} $ je vektor nezávislých $ \text{N}(0,\sigma^{2}) $ veličin $ ( \textbf{q} \sim \textbf{N}_n ( \textbf{0} , \sigma^{2} \textbf{I}_n )) $ a
+$$ \frac{1}{\sigma^{2}} \textbf{e}^{T} ( \text{I}_n - \textbf{H} ) \textbf{e} = \frac{1}{\sigma^{2}} \textbf{q}^{T} \Lambda \textbf{q} = \sum_{i = 1}^{n-m-1}\frac{q_i^{2}}{\sigma^{2}} \quad \sim \chi^{2} (n - m - 1 ) $$
 je suma druhých mocnin $ n-m-1 $ nezávislých $ \text{N}(0,1) $ veličin.
 \item Z předchozí věty:
 $$
@@ -105,15 +105,15 @@ $$
   \text{T}_i = \frac{\widehat{\beta}_i - \beta_i}{s_n \sqrt{v_i}} = \dfrac{\frac{\widehat{\beta}_i - \beta_i}{\sigma \sqrt{v_i}}}{\dfrac{s_n}{\sigma}} \sim \text{t}(n-m-1)
 $$
 \item
-$ \textbf{C} \widehat{\beta} \sim \textbf{N}_r ( \textbf{C} \beta , \sigma^{2} \textbf{C} ( \X ^{T} \X )^{-1} \textbf{C}^{T} $ a tedy \\
-$ \textbf{C} ( \widehat{\beta} - \beta ) = \textbf{C}\widehat{\beta} - \textbf{C} \beta \sim \textbf{N}_r ( \textbf{0} , \sigma^{2} \textbf{C} ( \X ^{T} \X )^{-1} \textbf{C}^{T} $ \\
-stačí tedy ukázat, že pokud $ \textbf{Z} \sim \textbf{N}_r ( \textbf{0}, \Sigma ) $ , potom $ \textbf{Z}^{T} \Sigma \textbf{Z} \sim \chi^{2}(r) $ \\
-protože $ \Sigma $ je pozitivně definitní, existuje regulární matice \textbf{R} taková, že $ \Sigma = \textbf{RR}^{T} $ \\
-protože $ \textbf{U} = \textbf{R}^{-1} \textbf{Z} $ , potom $ \E \textbf{U} = \textbf{R}^{-1} \E [ \textbf{Z} ] = 0 $ \\
-$ \text{Cov}(\textbf{U}) = \textbf{R}^{-1} \Sigma (\textbf{R}^{-1} )^{T} = \textbf{R}^{-1} \textbf{RR}^{T} ( \textbf{R}^{T})^{-1} = \textbf{I}_r $ tedy $ \textbf{U} \sim \textbf{N}_r ( \textbf{0}, \textbf{I}_r ) $ \\
-takže složky \textbf{U} jsou nezávislé N(0,1) rozdělené náhodné veličiny. \\
-$ \textbf{R}^{T} \Sigma ^{-1} \textbf{R} = \textbf{U}^{T} \textbf{R}^{T} ( \textbf{R}^{T} )^{-1} \textbf{R}^{-1} \textbf{R} \textbf{U} = \textbf{U}^{T} \textbf{U} = \sum_i^{r} \text{U}_i^{2} \sim \chi^{2}(r) $ \\
-za $ \textbf{R} = \textbf{C} ( \widehat{\beta} - \beta ) $ a $ \Sigma^{-1} = \dfrac{1}{\sigma^{2}} [ \textbf{C} ( \X ^{T} \X )^{-1} \textbf{C}^{T} ]^{-1} \quad $ Q. E. D. 
+$ \textbf{C} \widehat{\beta} \sim \textbf{N}_r ( \textbf{C} \beta , \sigma^{2} \textbf{C} ( \X ^{T} \X )^{-1} \textbf{C}^{T} $ a tedy
+$$ \textbf{C} ( \widehat{\beta} - \beta ) = \textbf{C}\widehat{\beta} - \textbf{C} \beta \sim \textbf{N}_r ( \textbf{0} , \sigma^{2} \textbf{C} ( \X ^{T} \X )^{-1} \textbf{C}^{T}. $$
+Stačí tedy ukázat, že pokud $ \textbf{Z} \sim \textbf{N}_r ( \textbf{0}, \Sigma ) $ , potom $ \textbf{Z}^{T} \Sigma \textbf{Z} \sim \chi^{2}(r) $.
+
+Protože $ \Sigma $ je pozitivně definitní, existuje regulární matice \textbf{R} taková, že $ \Sigma = \textbf{RR}^{T} $. Protože $ \textbf{U} = \textbf{R}^{-1} \textbf{Z} $ , potom $ \E \textbf{U} = \textbf{R}^{-1} \E [ \textbf{Z} ] = 0 $.
+
+Dále $ \text{Cov}(\textbf{U}) = \textbf{R}^{-1} \Sigma (\textbf{R}^{-1} )^{T} = \textbf{R}^{-1} \textbf{RR}^{T} ( \textbf{R}^{T})^{-1} = \textbf{I}_r $ tedy $ \textbf{U} \sim \textbf{N}_r ( \textbf{0}, \textbf{I}_r ) $, takže složky \textbf{U} jsou nezávislé $\NN(0,1)$ rozdělené náhodné veličiny. Pak
+$$ \textbf{R}^{T} \Sigma ^{-1} \textbf{R} = \textbf{U}^{T} \textbf{R}^{T} ( \textbf{R}^{T} )^{-1} \textbf{R}^{-1} \textbf{R} \textbf{U} = \textbf{U}^{T} \textbf{U} = \sum_i^{r} \text{U}_i^{2} \sim \chi^{2}(r) $$
+za $ \textbf{R} = \textbf{C} ( \widehat{\beta} - \beta ) $ a $ \Sigma^{-1} = \dfrac{1}{\sigma^{2}} [ \textbf{C} ( \X ^{T} \X )^{-1} \textbf{C}^{T} ]^{-1}$.
 
 \end{enumerate}
 \end{proof}

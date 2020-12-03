@@ -48,7 +48,7 @@ $$ \begin{array}{l|cccc}
 &  & \RR^2 & \overline{\RR}^2 & 
 \end{array}
  $$
- \subsection*{Koeficient (vícenásobná) determinace $\RR^2$}
+ \subsection*{Koeficient (vícenásobné) determinace $\RR^2$}
  Podobně jako u~jednorozměrné regrese, lze F-test chápat jako test významnosti $\RR^2$, definovaného jako
  $$ \RR^2\equiv \frac{\SSR}{\SST}=1-\frac{\SSE}{\SST},$$
  protože 
@@ -57,7 +57,7 @@ $$ \begin{array}{l|cccc}
  \begin{remark}
  	$\RR^2$ je možno zvětšovat přidáváním nových proměnných $x$, i~když jsou statisticky nevýznamné. (Pro $n$ LN proměnných $x$ a~$n$ pozorování dostaneme "perfect fit", tedy přeučení.) Vysvětlení:
  	$$ \RR^2=1-\frac{\SSE}{\SST},$$
- 	kde $\SST$ je pevně dáno daty $y$, ale $\SSE$ může být snížena přidáním proměnných $x$. Minimalizujeme totiž $(\textbf{y}-\textbf{X}\boldsymbol{\beta})^T(\textbf{y}-\textbf{X}\wbeta)$ přes větší množinu $\boldsymbol{\beta}$. To znamená, že $\frac{\SSE}{\SST}$ je nerostoucí funkce počtu proměnných, a~tedy $\RR^2$ je neklesající funkce počtu proměnných. Z~tohoto důvodu se~někdy definuje \textbf{upravený koeficient determinace} (adjusted coefficient of determination)
+ 	kde $\SST$ je pevně dáno daty $y$, ale $\SSE$ může být snížena přidáním proměnných $x$. Minimalizujeme totiž $(\textbf{y}-\textbf{X}\betab)^T(\textbf{y}-\textbf{X}\wbeta)$ přes větší množinu $\betab$. To znamená, že $\frac{\SSE}{\SST}$ je nerostoucí funkce počtu proměnných, a~tedy $\RR^2$ je neklesající funkce počtu proměnných. Z~tohoto důvodu se~někdy definuje \textbf{upravený koeficient determinace} (adjusted coefficient of determination)
  	$$ \overline{\RR}^2=\RR_{adj}^2=1-\frac{\frac{\SSE}{n-m-1}}{\frac{\SST}{n-1}}=1-\frac{n-1}{n-m-1}\frac{\SSE}{\SST}.$$
  	(S rostoucím $m$ klesá $\SSE$, ale i~$n-m-1$.)
  \end{remark}
@@ -95,8 +95,8 @@ $$ \frac{|\wbeta_j|}{s_n\sqrt{v_j}}>t_{1-\frac{\alpha}{2}}(n-m-1).$$
 
 \section{Obecná lineární hypotéza}
 F-test a~t-testy jsou speciálním případem \textbf{obecné lineární hypotézy}
-$$ \hypothesiswide{\textbf{C}\boldsymbol{\beta}=\textbf{b}}{\textbf{C}\boldsymbol{\beta}\neq\textbf{b}},$$
-kde $\textbf{C}\in\R^{r\times(m+1)}$ a~$h(\textbf{C})=r$, tzn. $r\leq m+1$. Rovnice $\textbf{C}\boldsymbol{\beta}=\textbf{b}$ reprezentuje $r$ lineárně nezávislých podmínek 
+$$ \hypothesiswide{\textbf{C}\betab=\textbf{b}}{\textbf{C}\betab\neq\textbf{b}},$$
+kde $\textbf{C}\in\R^{r\times(m+1)}$ a~$h(\textbf{C})=r$, tzn. $r\leq m+1$. Rovnice $\textbf{C}\betab=\textbf{b}$ reprezentuje $r$ lineárně nezávislých podmínek 
 $$ \sum_{j=0}^m c_{ij}\beta_j=b_i,\qquad i=1,...,r.$$
 \begin{remark}
 	\begin{enumerate}[a)]
@@ -107,7 +107,7 @@ $$ \sum_{j=0}^m c_{ij}\beta_j=b_i,\qquad i=1,...,r.$$
 		0 & 0 & \dots & 0 & 1
 		\end{array}
 		\right)_{m\times(m+1)}$ vede na~test 
-		$$ H_0:~\textbf{C}\boldsymbol{\beta}=\textbf{0}\qquad\Leftrightarrow\qquad H_0:~\beta_1=\beta_2=...=\beta_m=0.$$
+		$$ H_0:~\textbf{C}\betab=\textbf{0}\qquad\Leftrightarrow\qquad H_0:~\beta_1=\beta_2=...=\beta_m=0.$$
 		\item Volba $\textbf{b}=\textbf{0}$ a~$\textbf{C}=(0,...,0,1,0,...,0)$ vede na~test 
 		$$ H_0:~\beta_j=0.$$
 		\item V~modelu $Y=\beta_0+\beta_1x_1+\beta_2x_2+\beta_3x_3+\beta_4x_4+e$ chceme testovat zároveň ,že $\beta_2=0$ a~$\beta_3=\beta_4$. To lze udělat volbou $\textbf{C}=\left(\begin{array}{ccccc}
@@ -119,8 +119,8 @@ $$ \sum_{j=0}^m c_{ij}\beta_j=b_i,\qquad i=1,...,r.$$
 \end{remark} 
 
 Pro test $H_0$ naladíme 2 modely:\begin{description}
-\item[plný model (full model)] bez~podmínek na~$\textbf{C}\boldsymbol{\beta}$,
-\item[redukovaný model (reduced model)] za~předpokladu, že platí $H_0:~\textbf{C}\boldsymbol{\beta}=b$. 
+\item[plný model (full model)] bez~podmínek na~$\textbf{C}\betab$,
+\item[redukovaný model (reduced model)] za~předpokladu, že platí $H_0:~\textbf{C}\betab=b$. 
 \end{description}
 
 Označme příslušné reziduální součty čtverců $\SSE_F$ a~$\SSE_R$ (bude platit $\SSE_F\leq\SSE_R$).
@@ -136,6 +136,6 @@ Označme příslušné reziduální součty čtverců $\SSE_F$ a~$\SSE_R$ (bude 
 	 a~statistiku $F=\frac{\frac{\SSR}{m}}{s_n^2}=F_{overall}\sim\FF(m,n-m-1)$, jak jsme již ukázali.
 \end{example}
 \begin{theorem}
-	Nechť v~modelu (**) platí, že $e_1,...,e_n$ jsou nezávislé a~$e_i\sim\NN(0,\sigma^2)$. Označme $\SSE_F$ reziuální s.č. plného modelu a~$\SSE_R$ reziduální s.č. modelu, kde platí $H_0:~\textbf{C}\boldsymbol{\beta}=\textbf{b}$. Potom, za platnosti $H_0$ je splněno
+	Nechť v~modelu (**) platí, že $e_1,...,e_n$ jsou nezávislé a~$e_i\sim\NN(0,\sigma^2)$. Označme $\SSE_F$ reziuální s.č. plného modelu a~$\SSE_R$ reziduální s.č. modelu, kde platí $H_0:~\textbf{C}\betab=\textbf{b}$. Potom, za platnosti $H_0$ je splněno
 	$$ F=\frac{\frac{\Delta\SSE}{r}}{s_n^2}\sim\FF(r,n-m-1).$$
 \end{theorem}
