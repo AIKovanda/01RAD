@@ -1,4 +1,4 @@
-\subsection{Gauss - Markov theorem}
+\section{Gauss - Markov theorem}
 
 
 $ e_i $ i.i.d. $ N(0,\sigma^{2}) \Rightarrow $ OLS $ \widehat{\beta} $ je MLE, tzn. je eficientní MVVE parametr $ \beta $
@@ -57,8 +57,8 @@ $$
 $$
 protože $ v_i \geq 0 $ a $ \sumjn d_{ij}^{2} \geq 0 \quad \Rightarrow \quad \D [ \widehat{\beta}_i ] $ je minimalizován volnou $ \sumjn d_{ij}^{2} = 0 $, tj. $ d_{ij} = 0 \quad j = 1, \dots , n $ platí $ \forall i = 0, \dots , m \Rightarrow \textbf{D} = \textbf{0} $ tzn. lineárně nestranný odhad $ \widehat{\beta} $, který minimalizuje $ \D [ \widehat{\beta}_i ] $, $ i = 0, \dots , m $ je $ \widehat{\beta} = ( \X ^{T} \X )^{-1} \X ^{T} \textbf{Y} $
 \end{proof}
-\subsection{Testování modelu - tabulka ANOVA}
-\textbf{Celkový F-test ( overall F-test )}
+\section{Testování modelu - tabulka ANOVA}
+\subsection{Celkový F-test ( overall F-test )}
 
 \begin{itemize}
 \item Zajímá nás, zda je model statisticky signifikantní, tj. zda alespoň jeden z koeficientů $ \beta_1 , \dots , \beta_m $ je nulový.

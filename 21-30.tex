@@ -4,7 +4,7 @@
 	$\hypothesis{\beta_1=b_1}{\beta_1\neq b_1}$. Test bude zamítnut $H_0$, pokud 
 	$$ \abs{\beta_1-b_1}\cdot \frac{\sqrt{S_{xx}}}{s_n}> t_{1-\frac{\alpha}{2}}(n-2). $$
 \end{remark}
-\subsection{Test významnosti interceptu}
+\subsubsection*{Test významnosti interceptu}
 Otázka je, zda přímka prochází počátkem $(0,0)$, tedy $\hypothesis{\beta_0=0}{\beta_0\neq0}$. Nezamítnutí $H_0$ znamená, že jednodušší model $y=\beta_1 x+e$ lépe popisuje datta, než $y=\beta_0+\beta_1 x+e$. $H_0$ potom zamítneme, pokud
 $$ T_n=\frac{|\widehat{\beta}_0|}{\widehat{\sigma}(\widehat{\beta}_0)}=|\widehat{\beta}_0|\frac{1}{s_n\sqrt{\frac{1}{n}+\frac{\overline{x}^2}{S_{xx}}}}>t_{1-\frac{\alpha}{2}}(n-2). $$
 

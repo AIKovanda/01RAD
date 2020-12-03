@@ -61,7 +61,7 @@ $$ \begin{array}{l|cccc}
  	$$ \overline{\RR}^2=\RR_{adj}^2=1-\frac{\frac{\SSE}{n-m-1}}{\frac{\SST}{n-1}}=1-\frac{n-1}{n-m-1}\frac{\SSE}{\SST}.$$
  	(S rostoucím $m$ klesá $\SSE$, ale i~$n-m-1$.)
  \end{remark}
-\chapter{IS a~$t$-testy pro~parametry}
+\section{IS a~$t$-testy pro~parametry}
 \begin{itemize}
 	\item Pokud se~model ukáže jako významný, bude nás zajímat, které koeficienty přispívají.
 	\item Lze použít IS a~TH stejně, jako u~jednorozměrné regrese.
@@ -92,7 +92,8 @@ $$ \frac{|\wbeta_j|}{s_n\sqrt{v_j}}>t_{1-\frac{\alpha}{2}}(n-m-1).$$
 \begin{remark}
 	Statistiky $\FF,\RR^2$ a~$t$ jsou užitečné pro~rozkrytí efektů jednoduchých proměnných, nemohou být ale používány úplně automaticky.
 \end{remark}
-\subsection{Obecná lineární hypotéza}
+
+\section{Obecná lineární hypotéza}
 F-test a~t-testy jsou speciálním případem \textbf{obecné lineární hypotézy}
 $$ \hypothesiswide{\textbf{C}\boldsymbol{\beta}=\textbf{b}}{\textbf{C}\boldsymbol{\beta}\neq\textbf{b}},$$
 kde $\textbf{C}\in\R^{r\times(m+1)}$ a~$h(\textbf{C})=r$, tzn. $r\leq m+1$. Rovnice $\textbf{C}\boldsymbol{\beta}=\textbf{b}$ reprezentuje $r$ lineárně nezávislých podmínek 

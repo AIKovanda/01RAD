@@ -1,3 +1,5 @@
+\chapter{Vícerozměrná lineární regrese}
+
 Předpokládejme, že kromě $y_i$ máme pro~každé $i\in\hat{n}$k dispozici také $m$ nezávislých proměnných $x_{i1},x_{i2},...,x_{im}$. Pak získáme model
 $$ Y_i=\beta_0+\sum_{j=1}^m \beta_j x_{ij}+e_i,\quad i\in\hat{n},$$
 kde $e_1,...,e_n$ jsou \textbf{nezávislé (nekorelované)} chyby a~$e_i\sim\NN(0,\sigma^2)$. Na~základě pozorování $(x_{i1},...,x_{im},y_i),~i\in\hat{n}$ chceme odhadnout parametr $\boldsymbol{\beta}=(\beta_0,\beta_1,...,\beta_m)^T$ (proložení dat $m+1$ dimenzionální nadrovinou). Předpokládejme, že $n>m+1$, tj. že máme více dat, než parametrů. Maticově můžeme tento stav zapsat jako

@@ -5,7 +5,8 @@
 	\end{itemize}
 \end{remark}
 
-\subsubsection{Odhad parametru $\sigma^2$}
+\section{Odhady parametrů}
+\subsection{Odhad parametru $\sigma^2$}
 Pro normální chyby získáme MLE $\sigma^2$ derivací $\ln L(\beta, \sigma^2)$, z čehož plyne:
 \begin{align*}
 	\hsn & = \frac{1}{n} SSE = \frac{1}{n}(\y - \X \wbetab)^T(\y - \X \wbetab) = \frac{1}{n} \sumin(y_i - \hyi)^2, \\
@@ -23,7 +24,7 @@ Pro $e_i \sim \Nn$ se také pooužívají statistiky $s_n^2, s_n$.
 
 \textit{Ex. 5.15, str. 203}
 
-\subsubsection{Vlastnosti odhadů $\wbeta, s_n^2$}
+\subsection{Vlastnosti odhadů $\wbeta, s_n^2$}
 \begin{theorem}
 	Nechť $\wbetab$ je OLS odhad parametru $\betab$ v modelu $(**)$, kde $h(\X) = m-1$ a $e_1, \dots, e_n$ nezávislé, $e_i \sim \Nn$. Potom platí:
 	\begin{enumerate}

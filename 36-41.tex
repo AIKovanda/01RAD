@@ -11,7 +11,7 @@
 \caption{Tabulka ANOVA pro~$\beta_0=0$.}
 \end{table}
 
-\subsection*{Predikce}
+\subsection{Predikce}
 Jakmile máme model, často bývá cílem odhadnout hodnoty veličiny $Y_0$ pro~nové $x_0$, které není v~původních datech. Budeme uvažovat dva typy predikce:\begin{enumerate}
 	\item predikce střední hodnoty $\mu_0=\EE{Y_0}$ v~bodě $x_0$,
 	\item predikce hodnoty nového pozorování $Y_0$ v~bodě $x_0$.
@@ -20,7 +20,7 @@ Pro oba typy použijeme bodový odhad
 $$ \widehat{Y}_0=\wbeta_0+\wbeta_1 x_0.$$
 Intervalové odhady se~ale budou lišit.
 
-\subsection{Ad 1}
+\subsubsection*{Ad 1}
 	Protože je $\mu_0=\beta_0+\beta_1 x_0$ vlastně parametr, lze pro~něj odvodit IS (za předpokladu normality chyb). 
 	
 	Spočteme tedy $\D(\widehat{Y}_0)$. Dosazením odhadů $\wbeta_0$ a~$\wbeta_1$ dostaneme $\widehat{Y}_0=\overline{y}+\wbeta_1(x_0-\overline{x})$ a
@@ -41,7 +41,8 @@ Intervalové odhady se~ale budou lišit.
 			\item Je třeba opatrnosti při~predikci hodnot $Y$ mimo interval $(\min x_i,\max x_i)$.
 		\end{itemize}
 \end{remark}
-\subsection{Ad 2}
+
+\subsubsection*{Ad 2}
 Intervalové odhady pro~$Y_0$ nejsou IS, protože $Y_0$ není parametr. Říká se~jim \textbf{intervaly predikce}. Potřebujeme rozptyl $Y_0-\hY_0$, pokud je nené pozorování $Y_0$ nezávislé na~$Y_i,i\in\hat{n}$, potom 
 $$ \D(Y_0-\hY_0)=\underbrace{\D Y_0}_{\sigma^2}+\D \hY_0+0=\sigma^2\Big[ 1+\frac{1}{n}+\frac{(x_0-\lx)^2}{\Sxx} \Big].$$ Odhad tohto rozptylu bude $s_p^2$, kde 
 $$ s_p=s_n\sqrt{1+\frac{1}{n}+\frac{(x_0-\lx)^2}{\Sxx}}.$$
@@ -72,7 +73,8 @@ To je \textbf{základní rozpor v~regresní analýze}:\begin{itemize}
 	
 	Bylo by tedy dobré mít testy ověřující linearitu.
 
-Základní procedury jsou následující:\begin{enumerate}[1)]
+Základní procedury jsou následující:
+\begin{enumerate}[1)]
 	\item Prozkoumání \textbf{scatter plotu} dvojic $(x_i,y_i)$. Příklad lze vidět na~obrázku \ref{SCATTER}. Takový scatter plot může indikovat, že lepší model bude 
 	$$ y_i=\beta_0+\beta_1 x_i+\beta_2 x_i^2+e_i.$$
 	\begin{figure}[h]
@@ -114,5 +116,5 @@ Základní procedury jsou následující:\begin{enumerate}[1)]
 	Jinak je tomu u~navržených experimentů typu industriálních nebo klinických studií, kde existuje doporučený analytický test, tzv. \textit{lack of fit} test (LOFT). Ten předpokládá, že máme více pozorování pro~jednu $x_i$.
 \end{example}
 
-\subsection{Ad 3 - Analýza reziduí}
+\subsubsection*{Ad 3 - Analýza reziduí}
 Intuitivně, pokud je náš model správný, měla by se~rezidua chovat jako náhodný výběr z~$\N(0,\sigma^2)$. Pokud se~bude zdát, že se tak nechovají, bude to znamenat neadekvátnost modelu. Později ukážeme grafický nástroj. Nejprve ale začneme vlastnostmi reziduí.
