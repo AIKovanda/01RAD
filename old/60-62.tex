@@ -1,0 +1,77 @@
+\section{Gauss - Markov theorem}
+
+
+$ e_i $ i.i.d. $ N(0,\sigma^{2}) \Rightarrow $ OLS $ \widehat{\beta} $ je MLE, tzn. je eficientní MVVE parametr $ \beta $
+
+Chyby nenormální:
+\begin{itemize}
+	\item ukážeme, že OLS $ \widehat{\beta} $ je BLUE (best linear unbiased estimation) parametru $ \beta $ (za jistých podmínek)
+	\item mohou ale existovat lepší lineární vychýlené odhady nebo nelineární odhady.
+\end{itemize}
+
+\begin{define}
+	Nechť $ \beta $ je vektor regresních parametrů v lineárním modelu (LM). Řekněme, že $ \widehat{\beta} $ je lineární odhad $ \beta $, jestliže každé $ \beta_i $ je LK pozorování $ Y_i, \, i = 1, \dots , n $, tedy
+	$$
+		\widehat{\beta}_i = \sumjn a_{ij} Y_j \quad i = 0, \dots ,m
+	$$
+V maticovém zápisu
+	$$
+		\beta = \textbf{AY} \quad \text{kde} \quad \textbf{A} = (a_{ij}) 
+	$$
+pro $ i = 0, \dots , m $ a $ j = 1, \dots , n $
+\end{define}
+\begin{remark}
+ Pokud v modelu $ \textbf{Y} = \X \beta + \textbf{e} $ platí $ h(\X) = m+1 $, potom OLS $ \widehat{\beta} $ je lineární, neboť $ \widehat{\beta} = ( \X^{T} \X )^{-1} \X ^{T} \textbf{Y} $, kde $ \textbf{A} = ( \X^{T} \X )^{-1} \X ^{T}  $
+\end{remark}
+\begin{theorem}[Gauss-Markov]
+	Uvažujeme model $ \textbf{Y} = \X \beta + \textbf{e} $, kde matice $ \X $ má plnou hodnost, $ e_i \, , \, i = 1, \dots , n $ jsou nekorelované a $ e_i \sim (0, \sigma^{2}) $. Potom OLS odhad $ \widehat{\beta} $ je BLUE parametru $ \beta $ (best linear unbiased estimation)
+\end{theorem}
+\begin{proof}
+	Nechť $ \widehat{\beta} = \textbf{AY} $ je lineární odhad $ \beta $. Aby byl nestranný musí platit $ \E [ \widehat{\beta} ] = \beta $, tzn. $$ \E [ \textbf{AY} ] = \textbf{A} \E [ \textbf{Y} ] = \textbf{A} \X \beta = \beta, $$
+	tedy $ ( \textbf{A} \X - \textbf{I}_{m+1} ) \beta = 0 $. Protože to musí platit $ \forall \beta \in \R ^{m+1} $, dostáváme $ \textbf{A} \X - \textbf{I}_{m+1} = 0 $, nebo ekvivalentně $ \textbf{A} \X = \textbf{I}_{m+1} $.
+	
+	Spočteme kovarianční matici $ \widehat{\beta} $
+$$
+	\Cov( \widehat{\beta} ) = \Cov( \textbf{AY} ) = \textbf{A} \Cov \textbf{YA}^{T} = \sigma^{2}\textbf{AA}^{T} = \sigma^{2} \textbf{I}_n.
+$$
+Zapišme \textbf{A}ve tvaru $ \textbf{A} = ( \X^{T} \X )^{-1} \X ^{T} + \textbf{D} $, kde \textbf{D} je rozdíl mezi \textbf{A} a maticí pro OLS odhad.
+Pokud ukážeme, že pro nestranný lineární odhad $ \widehat{\beta} = \textbf{AY} $, který minimalizuje rozptyl, musí platit $ \textbf{D} = 0 $, bude věta dokázána.
+
+Dosazením dostaneme:
+\begin{align*}
+	\Cov( \widehat{\beta} ) & = \sigma^{2} ( ( \X^{T} \X )^{-1} \X ^{T} + \textbf{D} ) ( ( \X^{T} \X )^{-1} \X ^{T} + \textbf{D} ) = \\
+& = \sigma^{2} \left[ ( \X^{T} \X )^{-1} + \textbf{D} \X ( \X^{T} \X )^{-1} + ( \X^{T} \X )^{-1} \X ^{T} \textbf{D}^{T} + \textbf{DD}^{T} \right]
+\end{align*}
+a z podmínek nerovnosti
+$$
+\textbf{A} \X = [ ( \X^{T} \X )^{-1} \X ^{T} + \textbf{D} ] \X = \textbf{I}_{m+1} + \textbf{D} \X = \textbf{I}_{m+1}  \Rightarrow  \textbf{D} \X = 0 \text{ a tedy i } \textbf{D}^{T} \X ^{T} = \textbf{0}.
+$$
+Tzn. 
+$$
+\Cov( \widehat{\beta} ) = \sigma^{2} [ ( \X ^{T} \X )^{-1} + \textbf{DD}^{T}  ]
+$$
+a pro diagonální prvky platí
+$$
+\D [ \widehat{\beta}_i ] = \sigma^{2} [ v_i + \sumjn d_{ij}^{2}  ] \quad i = 0, \dots , m.
+$$
+Protože $ v_i \geq 0 $ a $ \sumjn d_{ij}^{2} \geq 0 \quad \Rightarrow \quad \D [ \widehat{\beta}_i ] $ je minimalizován volbou $ \sumjn d_{ij}^{2} = 0 $, tj. $ d_{ij} = 0 \quad j = 1, \dots , n $ platí $ \forall i = 0, \dots , m \Rightarrow \textbf{D} = \textbf{0} $ tzn. lineárně nestranný odhad $ \widehat{\beta} $, který minimalizuje $ \D [ \widehat{\beta}_i ] $, $ i = 0, \dots , m $ je $ \widehat{\beta} = ( \X ^{T} \X )^{-1} \X ^{T} \textbf{Y} $.
+\end{proof}
+\section{Testování modelu - tabulka ANOVA}
+\subsection{Celkový F-test ( overall F-test )}
+
+\begin{itemize}
+\item Zajímá nás, zda je model statisticky signifikantní, tj. zda alespoň jeden z koeficientů $ \beta_1 , \dots , \beta_m $ je nulový.
+\item Mohli bychom testovat jednotlivé koeficienty $ \text{H}_0 \, : \, \beta_j = 0 $ pomocí alternativy t-testu.
+\item Celková chyba I. druhu by takto ale mohla být velká, pokud máme hodně proměnných. Museli bychom hodně snížit $ \alpha $ pro jednotlivé testy, což zvýší pravděpodobnost chyby II.~druhu (tzn. riziko akceptování nenulových koeficientů jako nulových a tedy vynechání významných proměnných z modelu)
+\item Navíc je zde problém multikolinearity (viz později) jejíž jedním efektem jsou velké stand. chyby dohadů. To může vést k akceptování všech koeficientů jeho 0, i když je model celkově významný (uvidíme na příkladu) .
+\end{itemize}
+
+Bylo by dobré mít jednu statistiku pro test
+$$
+\text{H}_0 \, : \, \beta_1 = \beta_2 = \dots = \beta_m = 0 \quad \times \quad \text{H}_1 \, : \, ( \exists i \in \widehat{m} \, , \, \beta_i \neq 0 ).
+$$
+ANOVA přístup pro jedn. regresi naznačuje, že statistika 
+$$
+\text{F} = \dfrac{\frac{\SSR}{m}}{s_m^{2}}
+$$
+by mohla být užitečná (vyplyne i z obecnějších přístupů k testování později).

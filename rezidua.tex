@@ -1,0 +1,1047 @@
+\chapter{Rezidua, diagnostika a~transformace}
+\begin{itemize}
+ \item Je třeba ověřit adekvátnost modelu. Máme $\RMR^2, \mathrm{t}, \text{F}$ statistiky, ty ale byly odvozeny za~předpokladu linearity modelu a~dalších podmínek na~náhodné chyby. Pro~ověření je důležitý nástroj analýza reziduí
+ \item Je také třeba ověřit vliv jednotlivých pozorování na~model - analýza odlehlých (outliers) a~influenčních pozorování. (Velké reziduum pro~$i~$-té pozorování naznačuje problém s~modelem, ale může to být i~naopak, vlivné pozorování nemusí mít velké reziduum)
+ \item Pokud detekujeme nějaké problémy s~modelem, mohou pomoci transformace proměnných nebo metoda na~korekci nekonstantního rozptylu.
+\end{itemize}
+\section{Rezidua}
+připomenutí:
+ $$
+ \widehat{\textbf{y}} = \X \widehat{\beta} = \textbf{Hy}, \quad \text{kde} \quad \textbf{H} = \X (\X^T \X)^{-1} \X^T
+ $$
+ $$
+ \widehat{\textbf{e}} = \textbf{y} - \widehat{\textbf{y}} = (\textbf{I}_n - \textbf{H}) \textbf{y} = (\textbf{I}_n - \textbf{H}) \textbf{e}
+ $$
+Dále jsme ukázali:
+ $$
+\E [\widehat{\textbf{e}}] = 0 \quad \text{Cov}(\widehat{\textbf{e}}) = \sigma^2 (\textbf{I}_n - \textbf{H})
+ $$
+Pokud navíc
+ $
+\textbf{e} \sim \text{N}_n (0,\sigma^2 \textbf{I}) $potom$ \widehat{\textbf{e}} \sim \text{N}_n (0,\sigma^2 (\textbf{I}_n - \textbf{H}))
+ $. \\ Pokud označíme$ h_{ii} = \textbf{H}_{ii} $,$ \widehat{\textbf{e}}_i \sim \text{N} (0, \sigma^2 (1 - h_{ii}) $,$ \text{Cov}(\widehat{\textbf{e}}_i, \widehat{\textbf{e}}_j) = -\sigma^2 h_{ij} $. \\
+Obecně bývá vhodnější pracovat se~standardizovanými rezidui, protože $\D [\widehat{\textbf{e}}_i] = \sigma^2 (1 - h_{ii})$, pro~$r_i = \frac{\widehat{\textbf{e}}_i}{\sigma \sqrt{1-h_{ii}}}$ platí $\D [r_i] = 1$.
+ $\sigma$ odhadneme pomocí $s_n = \sqrt{\frac{1}{n-m-1} \SSE}$, dostaneme
+ $$
+  \widehat{r}_i = \frac{\widehat{\textbf{e}}_i}{s_n \sqrt{1 - h_{ii}}} \quad \text{kde} \quad i\in\widehat{n} \quad \text{(Interně studentizované reziduum)}
+ $$
+(Někdy také standardizovaná rezidua) \\
+R : rstandard(.) \\
+Pokud $\sigma^2$ odhadneme na~základě modelu, ve~kterém bylo vynecháno $i$-té pozorování, označíme tento odhad $\sigma^2_{(-i)}$, potom
+ $$
+ \widehat{\mathrm{t}}_i = \frac{\widehat{\textbf{e}}_i}{  \sigma^2_{(-i)} \sqrt{1 - h_{ii}}} \quad \text{kde} \quad i\in\widehat{n} \quad \text{(Externě studentizované reziduum)}
+ $$
+(Někdy také studentizované rezidua) \\
+R : rstudent(.) \\
+Například $\sigma^2_{(-i)} = \frac{\SSE_{(-i)}}{n-m-1}$ je nestranný odhad $\sigma^2$ v~modelu $(-i)$.
+
+\begin{remark}
+Platí:
+\begin{itemize}
+\item Pokud $h_{ii}$ je malé, pro~velké $n$ by se~mělo $\widehat{\text{e}}_i, \widehat{\text{r}}_i, \widehat{\mathrm{t}}_i$ chovat přibližně stejně a~$\widehat{\text{r}}_i,\widehat{\mathrm{t}}_i \approx \text{N} (0, 1)$.
+\item Pro~malé $n$$ (n < 20) $a~/ nebo$ h_{ii} \approx 1 $je preferováno použít$ \widehat{\text{r}}_i $nebo$ \widehat{\mathrm{t}}_i $a~aktuálně bývá častěji doporučována$ \widehat{\mathrm{t}}_i $($ i~$-té pozorování s~velkými$ h_{ii} $může zvyšovat odhad$ \sigma^2 $ a~tím snižuje velikost svého rezidua).
+\item $h_{ii}$ hraje zásadní roli v~diagnostice modelu, probereme teď jeho základní vlastnosti.
+\end{itemize}
+\end{remark}
+
+\textbf{Leverage} $h_{ii}$ - potenciál $i$-tého pozorování (leverage point - píkový bod / vzdálený bod)
+
+\begin{itemize}
+\item $\D [\widehat{\text{e}}_i] = \sigma^2 (1 - h_{ii}) \geq 0 \Rightarrow h_{ii} \leq 1$.
+\item $\textbf{H}^2 = \textbf{H} \Rightarrow h_{ii} = \sumjn h_{ij} h_{ji} = \sumjn (h_{ij})^2$ tedy $h_{ii} > 0$ (Dá se~ukázat silnější tvrzení: $h_{ii} \geq \frac{1}{n}$).
+\item $\textbf{H}^2 = \textbf{H} \Rightarrow \textbf{A}_{i1} = \sumjn h_{ij} x_{j1} = \sumjn h_{ij} = x_{i1} = 1$ tedy
+ $$ \sumjn h_{ij} = 1 \quad \forall j \in \widehat{n} $$.
+\item Význam $h_{ii}$ vyplyne z~následujících úvahy:
+ $$
+ \widehat{\textbf{y}} = \textbf{Hy} \Rightarrow \widehat{y}_i = \sumjn h_{ij}y_j = h_{ii} y_i + \sum\limits_{\substack{j = 1 \\ i\neq j}}^n h_{ij} y_j
+ $$
+, pokud $h_{ii} \approx 1$, potom $\widehat{y}_i \approx y_i$ a~model je nucen proložit přímku bodem ($\textbf{x}_i, y_i$), i~když když tam neplatí body s~"velkým $h_{ii}$ " - body s~velkým potenciálem (high leverage points). Tyto body by měly být detekovány pro~další zkoumání.
+ \item Otázka je, jaká hodnota $h_{ii}$ je "velká".
+\end{itemize}
+\textbf{Heuristické pravidlo:}
+ $\sum_{i = 1}^n h_{ii} = \text{tr}(\textbf{H}) = m + 1$, tzn. $\frac{m+1}{n}$ je průměrná hodnota $h_{ii}$. $i$-té pozorování má velký potenciál jestliže $h_{ii} > \frac{3(m+1)}{n}$. (Stejně postupuje i~jazyk R)
+
+\section{Grafy reziduí}
+\begin{enumerate}
+\item Ověření normality - histogramy, Q-Q plots \\
+tyto obrázky nezávisí na~počtu nezávislých proměnných $x$, vše stejné jako v~jednoduché LR.
+\item Pro~ověření funkční formy pro~$\E [Y_x]$ a~/ nebo konstantního rozptylu se~nejčastěji používají:
+\begin{enumerate}
+\item Grafy $\widehat{e}_i, \widehat{r}_i$ nebo $\widehat{t}_i$ oproti~$\textbf{x}_j^c$, $j = 1,..., m$, kde $\textbf{x}_j^c$ je $j$-tý sloupec $\X$
+\item  Grafy $\widehat{e}_i, \widehat{r}_i$ nebo $\widehat{t}_i$ oproti~$\widehat{y}_i$
+\item Partial residual plots
+\end{enumerate}
+\end{enumerate}
+
+\begin{remark}
+Zdůvodnění:
+\begin{enumerate}
+\item Normální rovnice $\X^T (\textbf{y} - \X \widehat{\beta}) = 0$ implikují $\X^T (\textbf{y} - \widehat{\textbf{y}}) = \X^T \widehat{\textbf{e}}$.
+ $$
+ \text{Připomenutí:} \quad \text{Y}_i = \beta_1 x_i + e_i, \quad \widehat{\beta}_1 = \frac{\sum_{i = 1}^n x_i y_i}{\sum_{i = 1}^n x_i^2} = \frac{\textbf{x}^T\textbf{y}}{| \textbf{x} |^2 }
+ $$
+Pokud tedy naladíme LR model bez~interceptu pro~$\widehat{\textbf{e}}$ v~závislosti na~$\textbf{x}_j^c$, směrnice přímky bude
+ $$
+  \widehat{\beta}_j^* = \frac{(\textbf{x}_j^c)^T \widehat{\textbf{e}}}{| \textbf{x}_j^c |^2} = 0
+ $$
+Graf $\widehat{e}_i, \widehat{r}_i, \widehat{t}_i$ oproti~$\textbf{x}_j^c$ by měl dávat náhodně rozptýlené body kolem~osy $x$. (bez trendů, $\widehat{r}_i, \widehat{t}_i$ uvnitř ???? $\pm 2$)
+Pokud tomu tak není, může to naznačovat nelinearitu v~$\textbf{x}_j$ nebo nekonstantní rozptyl.
+\item Ukázali jsme $\sum_{i = 1}^n \widehat{y}_i \widehat{e}_i = 0$ pro~LM bez~interceptu pro~$\widehat{e}_i$ oproti~$\widehat{y}_i$ tedy platí
+ $$
+  \widehat{\beta} = \frac{\widehat{\textbf{e}}^T \widehat{\textbf{y}}}{| \widehat{\textbf{y}} |^2} = 0
+ $$
+Body by opět měly být náhodně rozptýlené kolem~osy $x$
+\begin{itemize}
+\item Trychtýřovitý tvar indikuje nekonstantní rozptyl.
+\item Trendy indikují nelinearitu.
+\end{itemize}
+\end{enumerate}	
+\end{remark}
+
+\subsection{Partial residual plot}
+\begin{itemize}
+\item, i~když grafy $\widehat{e}_i$ oproti~$\textbf{x}_j^c$ a~$\widehat{\textbf{y}}$ mohou indukovat nedostatky modelu, nemusí být zřejmé, jaké ty nedostatky jsou.
+\item V~SLR graf $\widehat{e}_i$ oproti~$x_i$ lze použít pro~detekci nelinearity
+\item Ale v~MLR tyto grafy, stejně jako scatterploty, mohou být zavádějící, protože $\widehat{\textbf{e}}$ závisí na~všech prediktorech, nemusí být tedy izolován efekt dané proměnné při~odstranění efektů ostatních.
+\item Pro~zkoumané efekty $j$-té proměnné lze použít partial rezidual plots - lze je chápat jako jeho ekvivalent scatterplotu v~SLR
+
+\begin{define}
+ $$
+   \widehat{e}_j^* = \widehat{\textbf{e}} + \widehat{\beta}_j \textbf{x}_j^c,
+ $$
+ kde $\widehat{\textbf{e}}$ je vektor reziduí modelu, $\widehat{\beta}_j$ je LSE parametru $\beta_j$, $\textbf{x}_j^c$ je $j$-tý sloupec $\X$
+\end{define}
+\end{itemize}
+Partial residual plot (PRP): graf $\widehat{\textbf{e}}$ oproti~$\textbf{x}_j^c$, $j = 1,..., m$, pokud je model správný, měly by být body náhodně rozmístěné kolem~přímky se~směrnicí $\widehat{\beta}_j$.
+
+\textbf{Zdůvodnění}: Vztah mezi~$\heb_j^*$ a~$\x_j^c$ má formu SLR bez~interceptu, pokud je model správný, $\hei, i\in\widehat{n} $, splňují podmínku $\E \hei = 0$ a~$\D \hei = \sigma^2(1 - h_{neco})$. Má tedy smysl uvažovat RM pro~$\heb_j^*$ oproti~$\x_j^c$ ($\he_j^* = \gamma_j \x_j^c + \eb$).
+
+\newcommand{\hg}{\widehat{\gamma}}
+
+Pro odhad koeficientů platí, že
+ $$
+\hg_j = \frac{(\heb_j^* \x_j^c)}{\norm{\x_j^c}^2} = \frac{(\heb + \wbeta_j \x_j^c)^T \x_j^c}{\norm{\x_j^c}^2} = \frac{\heb^T \x_j^c + \wbeta_j \norm{\x_j^c}^2}{\norm{\x_j^c}^2} = \wbeta_j,
+ $$
+protože $\heb^T \x_j^c = 0$.
+
+(2 příklady - pdf 79-93 uprostřed str 6)
+
+\newcommand{\wb}{\mathbf{w}}
+\newcommand{\identita}{\mathbb{I}}
+\newcommand{\Xmj}{\X_{(-j)}}
+\newcommand{\Xmi}{\X_{(-i)}}
+
+\begin{remark}
+	PRPs jsou někdy kritizovány za~nadhodnocování efektu $\x_j^c$. \linebreak
+	Alternativa: \textbf{partial regression plot (added variable plot)}. \linebreak
+	Motivace: Ptáme se, zda přidat novou proměnnou do~modelu a~chtěli bychom dohadnout její efekt.
+	
+	Budeme tedy uvažovat rozšířený model
+	 $$
+	\Y = \X \betab + \gamma \wb + \eb,
+	 $$
+	kde $\wb$ je nový vektor regresorů. Model lze rozepsat jako
+	 $$
+	\Y = \begin{bmatrix}
+	\X \wb
+	\end{bmatrix} \begin{pmatrix}
+	\betab \\ \gamma
+	\end{pmatrix} + \eb = \X_w + \betab_w + \eb.
+	 $$
+	Použitím normálních rovnic pro~$\X_w$ lze odvodit formuli pro~$\hg$
+	\begin{equation*}
+		\hg = \frac{\heb^T (\identita - \Hm) \wb}{\norm{(\identita - \Hm)\wb}^2}.
+		\tag{\#}
+		\label{Eq: hat gamma}
+	\end{equation*}
+	 $\hg$ je směrnice RM pro~$\heb$ v~závislosti na~$\wb_{res} = (\identita - \Hm)\wb$ (rezidua modelu pro~$\wb$ v~závislosti na~$\X$).
+	
+	Teď naopak uvažujme, že $\wb$ je sloupec původní $\X$, řekněme $\x_j^c$ a~ozn. $\Xmj$ matici $\X$ bez~sloupce $j$. V~předchozím modelu pomožme $\X = \Xmj$ a~$\wb = \x_j^c$. Potom  LSE $\wbeta_j$ parametru $\beta_j$ je
+	 $$
+	\wbeta_j = \frac{\heb_{(-j)}^T \x_{j, res}^c}{\norm{\x_{j,res}^c}^2},
+	 $$
+	kde $\heb_{(-j)}$ jsou rezidua modelu bez~$\x_j^c$, $\x_{j,res}^c = (\identita - \Hm) \x_j^c$, tedy jsou to rezidua modelu pro~$\x_j^c$ v~závislosti na~ostatních proměnných, tedy $\Xmj$ (v $\x_{j,res}^c$ je tedy odstraněn efekt ostatních regresorů).
+	
+	 $\wbeta_j$ je směrnice RM pro~$\heb_{(-j)}$ v~závislosti na~$\x_{j, res} \Rightarrow$ \linebreak
+	\textbf{added variable plot}: graf $\heb_{(-j)}$ proti~$\x_{j, res}, j = 1,..., m$.
+	
+	Pokud je model správný, body by měly být náhodně rozptýlené kolem~přímky se~směrnicí $\wbeta_j$ procházející počátkem. Pokud závislost na~$\x_j^c$ není lineární, projeví se~to odklonem bodů od~přímky.
+\end{remark}
+
+\begin{remark}
+Ze vztahu \eqref{Eq: hat gamma} je vidět, že MLR může být chápána jako posloupnost SLR, kde postupně vytváříme modely pro~novou proměnnou s~použitím reziduí modelu pro~předcházející proměnné.
+\end{remark}
+
+\section{PRESS rezidua (PRESS residuals, deleted residuals)}
+\begin{itemize}
+	\item, pokud budeme chtít model použít nejen k~vysvětlení vztahu mezi~proměnnými, ale také pro~predikci, hodila by se~míra vyjadřující jak dobře model predikuje (doposud jsme zkoumali jen jak dobře popisuje)
+	\item šlo by použít IS nebo IP, to bychom ale předem museli znát body, ve~kterých chceme predikovat
+	\item nejjednodušší přístup, jak měřit prediktivní přesnost modelu by byl analýza reziduí pro~predikce hodnot v~nových bodech $\x$, obecně ale nemáme data $y$ v~těchto bodech
+	\item jedna možnost je použít data, která máme k~dispozici
+\end{itemize}
+
+\textbf{Postup}: Vynecháme jedno pozorování, naladíme model bez~tohoto pozorování a~porovnáme predikovanou a~pozorovanou hodnotu pro~vynechané pozorování.
+
+Předpokládáme, že vynecháme $i$-té pozorování. Ozn. $\wbetab_{(-i)}$ odhad $\betab$ v~modelu s~vynechaným $i$-tým pozorováním (M $_{-i}$) a~$\hy_{(-i)}$ predikovanou hodnotu modelem M $_{(-i)}$ v~bodě $\x_i^T$, tzn. $\hy_{(-i)} = \x_i^T \wbetab_{(-i)}$.
+
+Potom
+ $$
+\heb_{(-i)} = y_i - \hy_{(-i)}, \quad i\in\widehat{n}
+ $$
+nazýváme $i$-té \textbf{PRESS reziduum}.
+
+ $\mathrm{PRESS} = \sum_{i = 1}^n \he_{-i}^2$ je užitečná míra přesnosti predikce.
+
+\begin{remark}
+	Otázka je, jak počítat $\he_{(-i)}, i\in\widehat{n} $.
+	\begin{itemize}
+		\item pro~velké $n$ se~zdá, že to bude náročný problém, protože pro~každé $i \in \widehat{n}$ musíme naladit nový model
+		\item naštěstí to není nutné, ukážeme totiž, že
+		 $$
+		\he_{(-i)} = \frac{\he_i}{1 - \hii},
+		 $$
+		tzn. všechna $\he_{(-i)}$ lze snadno spočítat pomocí reziduí a~hodnot $\hii$ z~původního (plného) modelu.
+	\end{itemize}
+\end{remark}
+
+Označme
+\begin{align*}
+	\x_i^T & \text{ - $i$-tý řádek matice } \X \\
+	\Xmi & \text{ - matici $\X$ bez~$i$-tého řádku}
+\end{align*}
+
+\newcommand{\XtX}{\left(\X^T \X \right)^{-1}}
+
+\begin{theorem}
+Jestliže $\hii \neq 1$, potom
+ $$
+\left[\Xmi^T \Xmi \right] = \X^T \inv{\X} + \frac{\XtX \x_i \x_i^T \XtX}{1 - \hii},
+ $$
+kde $\hii$ je $i$-tý diagonální prvek matice $\Hm$.
+\end{theorem}
+
+\begin{proof}
+Nejdříve ukážeme
+\begin{equation*}
+	\X^T \X = \Xmi^T \Xmi + \x_i \x_i^T \tag{+} \label{Eq: plus}
+	%(m+1) \times (m+1) & (m+1) \times (m+1) & (m+1) \times (m+1)
+\end{equation*}
+
+\newcommand{\sumkn}{\sum_{k = 1}^n}
+\newcommand{\sumknn}{\sum_{k = 1}^{n-1}}
+
+Kvůli značení předpokládáme $i = n$ (toho se~dá vždy dosáhnout permutací řádků $\X$). Potom
+ $$
+\left(\X^T \X \right)_{ij} = \sumkn x_{ki} x_{kj} = \sumknn x_{ki} x_{kj} + x_{ni} x_{nj}.
+ $$
+ $i,j$-tý prvek $\X_{(-k)}^T \X_{(-k)}$ je $\sumknn x_{ki} x_{kj}$ \\
+ $i,j$-tý prvek $\x_n \x_n^T$ je $x_{ni} x_{nj}$, tzn. \eqref{Eq: plus} platí.
+
+
+
+\begin{theorem}[Sherman-Morrison-Woodburry (z LA)]
+Nechť $\Am$ je $n \times n$ invertibilní matice a~nechť $\z$ je $n \times 1$ sloupcový vektor. Jestliže $\z^T \inv{\Am} \z \neq 1$, potom matice $\Bm = \Am - \z^T \z$ je invertibilní a~platí
+ $$
+\inv{\Bm} = \inv{\Am} + \frac{\inv{\Am} \z^T \z \inv{\Am}}{1 - \z^T \inv{\Am} \z}.
+ $$
+\end{theorem}
+
+Položme $\Am = \X^T \X$, $\z = \x_i$, $\Bm = \X_{(-i)}^T \X_{(-i)}$. Pak $\Bm = \Am - \z \z^T$, $\Am$ je invertibilní a
+ $$
+\z^T \inv{\Am} \z = \x_i^T \XtX \x_i = \left(\X \XtX \X^T \right)_{ii} = \hii \neq 1.
+ $$
+Užitím věty dostaneme
+ $$
+\left(\X_{(-i)}^T \X_{(-i)} \right)^{-1} = \XtX + \frac{\XtX \x_i \x_i^T \XtX}{1 - \hii}.
+ $$
+
+\end{proof}
+
+\begin{theorem}
+	Nechť $\he_{(-i)}$ je $i$-té PRESS reziduum. Potom
+	 $$
+	\he_{(-i)} = \frac{\he_i}{1 - \hii}, \quad i\in\widehat{n}.
+	 $$
+\end{theorem}
+
+\begin{proof}
+	
+	Nechť $\wbetab_{(-i)}$ je odhad $\betab$ v~modelu M $_{-i}$, tzn.
+	 $$
+	\wbetab_{(-i)} = \left(\X_{(-i)}^T \X_{(-i)} \right)^{-1} \X_{(-i)}^T \y_{(-i)},
+	 $$
+	tedy $\y_{(-i)}$ je $\y$ bez~$i$-té složky $y_i$. To znamená, že
+	\begin{align*}
+	\hy_{(-i)} & = \x_i^T \wbetab_{(-i)} = \x_i^T \inv{\left(\X_{(-i)}^T \X_{(-i)} \right)} \X_{(-i)}^T \y_{(-i)} = \\
+	 & = \left[\left(\X_{(-i)}^T \X_{(-i)} \right)^{-1} = \XtX + \frac{\XtX \x_i \x_i^T \XtX}{1 - \hii}. \right] = \\
+	 & = \x_i^T \XtX \X_{(-i)}^T \y_{(-i)} + \frac{1}{1 - \hii} \x_i^T \XtX \x_i \x_i^T \XtX \X_{(-i)}^T \y_{(-i)} = \\
+	 & = S_1 + \frac{1}{1-\hii} S_2.
+	\end{align*}
+	
+	Protože $\X_{(-i)}^T \y_{(-i)} = \X^T \y - y_i \x_i$, dostaneme
+	\begin{align*}
+	S_1 & = \x_i \XtX \left(\X^T \y - y_i \x_i \right) = \x_i^T \underbrace{\XtX \X^T \y}_{\wbetab} - y_i \underbrace{\x_i^T \XtX \x_i}_{\hii} = \\
+	& = \x_i^T \wbetab - \hii y_i = \hy_i - \hii y_i.
+	\end{align*}
+	Podobně	
+	 $$ S_2 = \underbrace{\textbf{x}_i^T(\textbf{x}^T\textbf{x})^{-1}\textbf{x}_i}_{h_{ii}}\underbrace{\textbf{x}_i^T(\textbf{x}^T\textbf{x})^{-1}\textbf{x}\textbf{y}}_{\hyi} = y_i\underbrace{\textbf{x}_i^T(\textbf{x}^T\textbf{x})^{-1}\textbf{x}_i}_{h_{ii}}\underbrace{\textbf{x}_i^T(\textbf{x}^T\textbf{x})^{-1}\textbf{x}_i}_{h_{ii}} = h_{ii}\hyi-y_ih_{ii}^2 $$
+	takže
+	 $$ \hy_{(-i)} = \hyi-h_{ii}y_i+\frac{1}{1-h_{ii}}(h_{ii}\hyi-y_ih_{ii}^2). $$
+	Celkem tedy
+	\begin{align*}
+	\he_{-i} & = y_i-\hy_{(-i)} = y_i(1+h_{ii})-\hyi-\frac{1}{1-h_{ii}}(h_{ii}\hyi-y_ih_{ii}^2) = \\
+	& = \frac{1}{1-h_{ii}}\big(y_i(1-h_{ii}^2)-\hyi(1-h_{ii})-h_{ii}\hyi+y_ih_{ii}^2\big) = \frac{1}{1-h_{ii}}(y_i-\hyi) = \frac{\hei}{1-h_{ii}}
+	\end{align*}
+\end{proof}Budeme potřebovat podobné formule pro~$\wbetab-\wbetab_{(-1)}$ a~$\mini{\SSE}$.
+
+\begin{theorem}
+	\begin{enumerate}[1)]
+		\item Nechť $\mini{\wbetab}$ značí $\LSE$ parametru $\wbetab$ v~modelu bez~$i$-tého pozorování. Potom platí
+	 $$ \wbetab-\mini{\wbetab} = \frac{(\textbf{X}^T\textbf{X})^{-1}\textbf{x}_i\hei}{1-\hii} = (\textbf{X}^T\textbf{X})^{-1}\textbf{x}_i\mini{\he}. $$
+	\item Pro~součet residuálních čtverců $\mini{\SSE}$ v~modelu bez~$i$-tého pozorování platí
+	 $$ \mini{\SSE} = \sumjn \he_j^2-\frac{\he_i^2}{1-\hii}. $$
+	\end{enumerate}
+
+\begin{proof}
+	\begin{enumerate}[1)]
+		\item Stejně jako v~důkazu předchozí věty platí, že
+		 $$ \mini{\wbetab} = S_1+\frac{1}{1-\hii}S_2, $$
+		kde $S_1 = \wbetab-y_i\inv{(\textbf{X}^T\textbf{X})}\textbf{x}_i$ a~$S_2 = \inv{\textbf{X}^T\textbf{X}}\textbf{x}_i\hyi-y_i\core \textbf{x}_i\hii$, tedy
+		\[
+		\begin{split}
+		\wbetab-\mini{\wbetab}& = y_i\core\textbf{x}_i-\frac{1}{1-\hii}\big(\core x_i\hyi-y_i\core \textbf{x}_i\hii\big) = \\& = \core \textbf{x}_i\Big(y_i-\frac{\hyi-y_i\hii}{1-\hii}\Big) = \core \textbf{x}_i\Big(\frac{y_i-y_i\hii-\hyi+y_i\hii}{1-\hii}\Big) = \\& = \core \textbf{x}_i\Big(\frac{y_i-\hyi}{1-\hii}\Big),
+		\end{split}
+		\]
+		kde $\Big(\frac{y_i-\hyi}{1-\hii}\Big) = \frac{\hei}{1-\hii} = \mini{\he}$.
+		\item \[
+		\begin{split}
+		\mini{\SSE}& = \big(\mini{\textbf{y}}-\mini{\textbf{x}}^T\mini{\wbetab}\big)^T\big(\mini{\textbf{y}}-\mini{\textbf{x}}^T\mini{\wbetab}\big) = \sum_{\substack{j = 1\\j\neq i}}^n(y_j-\textbf{x}_j^T\mini{\wbetab})^2 = \\& = \sumjn (y_j-\textbf{x}_j^T\mini{\wbetab})^2-(y_i-\textbf{x}_i^T\mini{\wbetab})^2.
+		\end{split}
+		\]
+		Z bodu 1) víme, že $\mini{\wbetab} = \wbetab-\frac{\core \textbf{x}_i\hei}{1-\hii}$, tzn.
+		 $$ \mini{\SSE} = \sumjn\Big(y_j-\textbf{x}_j^T\wbetab+\frac{\textbf{x}_j^T\core \textbf{x}_i\hei}{1-\hii}\Big)^2-\Big(y_i-\textbf{x}_i^T\wbetab+\frac{\textbf{x}_i^T\core \textbf{x}_i\hei}{1-\hii}\Big)^2. $$
+		Protože $\textbf{x}_j^T\core \textbf{x}_i = h_{ij}$, dostaneme
+		\[
+	\begin{split}
+	\mini{\SSE}& = \sumjn \Big(\he_j+\frac{h_{ij}\hei}{1-\hii}\Big)^2-\Big(\he_i+\frac{h_{ii}\hei}{1-\hii}\Big)^2 = \underbrace{\sumjn\Big(\he_j+\frac{h_{ij}\hei}{1-\hii}\Big)^2}_A-\frac{\hei^2}{(1-\hii)^2},\\
+	A& = \sumjn \he_j^2+\frac{2\hei}{1-\hii}\underbrace{\sumjn h_{ij}\he_j}_0+\frac{\hei^2}{(1-\hii)^2}\underbrace{\sumjn h_{ij}^2}_{\hii}.
+	\end{split}
+	\]
+		Protože pak $\hyb = \textbf{H}\textbf{y}$, tak $\textbf{H}\hyb = \textbf{H}^2\textbf{y} = \textbf{H}\textbf{y}$, a~tedy $\textbf{H}\heb = \textbf{H}(\textbf{y}-\hyb) = \textbf{H}\textbf{y}-\textbf{H}\hyb = 0$, a~tedy
+		 $$ \mini{\SSE} = \sumjn\he_j^2+\frac{\hei^2}{(1-\hii)^2}(\hii-1) = \sumjn\he_j^2-\frac{\hei^2}{1-\hii}. $$
+	\end{enumerate}
+\end{proof}
+\end{theorem}
+
+\begin{dusl}
+	V modelu (**) s~$m+1$ parametry $\beta$ a~bez~$i$-tého pozorování platí, že $$ \EE{\mini{\SSE}} = (n-m-2)\sigma^2, $$
+	takže
+	 $$ \mini{\widehat{{\sigma}^2}} = \frac{\mini{\SSE}}{n-m-2} $$ je nestranný odhad $\sigma^2$. Dále pak
+	 $$ \mini{\widehat{{\sigma}^2}} = \frac{(1-\hii)(n-m-1)s_n^2-\hei^2}{(1-\hii)(n-m-2)} = \frac{1}{n-m-2}\Big(\SSE -\frac{\hei^2}{1-\hii}\Big), $$ kde $s_n^2 = \frac{1}{n-m-1}\SSE$ (pro plný model).
+	\begin{proof}
+		Protože $\EE{\hei^2} = \D \hei = \sigma^2(1-\hii)$, dostaneme dle předchozí věty
+		\[
+		\begin{split}
+		&\EE{\mini{\SSE}} = \sumjn\sigma^2(1-h_{jj})-\sigma^2 = \sigma^2\big[(n-1)-\underbrace{\sumjn h_{jj}}_{h\textbf{H = m+1}}\big] = \sigma^2(n-m-2)\\
+		&\mini{\widehat{{\sigma}^2}} = \frac{1}{n-m-2}\mini{\SSE} = \frac{1}{n-m-2}\Big(\underbrace{\sumjn\he_j^2}_{\SSE = (n-m-1)s_n^2}-\frac{\hei^2}{1-\hii}\Big) = \frac{1}{n-m-2}\frac{(1-\hii)\SSE-\hei^2}{1-\hii}.
+		\end{split}
+		\]
+	\end{proof}
+\end{dusl}
+
+\begin{remark}
+	Dě se~ukázat, že $\mini{\SSE}$ a~$\hei$ jsou nezávislé náhodné veličiny. Protože $\frac{\mini{\SSE}}{\sigma^2}\sim\chi^2(n-m-2)$ a~$\frac{\hei}{\sigma\sqrt{1-\hii}}\sim\NN(0,1)$, dostaneme $\frac{\hei}{\mini{\widehat{{\sigma}^2}}\sqrt{1-\hii}}\sim t(n-m-2)$.
+\end{remark}
+
+\begin{corollary}
+	Uvažujme model (**), kde $h(X) = m+1$ a~$\textbf{e}\sim\NN_m(0,\sigma^2 I_m)$. Nechť pro~$i\in\widehat{n}$ platí, že $\hii\neq1$. Potom $i$-té ??????????91dole? reziduum
+	 $$ \widehat{t}_i\sim t(n-m-2). $$
+\end{corollary}
+\begin{remark}
+	 $\widehat{t}_i$ lze použít pro~test hypotézy, zda je $i$-té pozorování odlehlé (outlier), tedy
+	\[
+	\begin{split}
+	&H_0:~i\text{-té pozorování není odlehlé v~modelu }M\\
+	&H_1:~i\text{-té pozorování je odlehlé v~}M,
+	\end{split}
+	\] kde odlehlé značí odlehlé vzhledem k~$M:~\textbf{Y}\sim\NN_m(\textbf{X}\beta,\sigma^2 I_m)$ :\begin{enumerate}[a)]
+		\item střední hodnota $i$-tého pozorování se~nerovná té dané modelem,
+		\item pozorovaná hodnota $Y_i$ je neobvyklá za~platnosti $M$.
+	\end{enumerate}
+ $H_0$ zamítneme, pokud $$ |\widehat{t}_i|>t_{1-\frac{\alpha}{2}}(n-m-2)\approx u_{1-\frac{\lparen}{2}}\doteq 2\text{ pro~}\alpha = 0.05\text{ a~}n\text{ velká}. $$
+Pokud test použijeme na~všechna pozorování, je potřeba aplikovat nějakou korekci na~vícenásobné testování, např. Bonferroni.
+\end{remark}
+\begin{remark}
+	Vztah $\mini{\he}$ a~$\widehat{t}_i$ :
+	 $$ \mini{\he} = \frac{\hei}{1-\hii}\quad\Rightarrow\quad\E\mini{\he} = 0\quad\wedge\quad \D \mini{\he} = \frac{\sigma^2}{1-\hii}. $$
+	Standardizované PRESS reziduum $$ \frac{\mini{\he}}{\sqrt{D\mini{\he}}} = \frac{\frac{\hei}{1-\hii}}{\frac{\sigma}{\sqrt{1-\hii}}} = \frac{\hei}{\sigma\sqrt{1-\hii}} = r_i. $$
+	Pokud použijeme $\mini{\widehat{{\sigma}^2}}$ jako odhad $\sigma^2$, pak \textbf{studentizovaná PRESS rezidua} $$ \frac{\hei}{\mini{\widehat{{\sigma}}}\sqrt{1-\hii}} = \widehat{t}_i. $$
+\end{remark}
+\begin{remark}
+	 $\mini{\he} = \frac{\hei}{1-\hii}$, a~proto, pokud $i$-té pozorování má velký potenciál $\hii$, bude $\mini{\he}$ mnohem větší, než $\hei$, pozorování s~velkým $\hii$ jsou dobře modelována, ale měřeno $\mini{\he}$ mohou špatně predikovat. To je další ukázka fit/prediction dilema.
+	
+	Stejný efekt nastává také pro~
+	 $$ \wbetab_i-\mini{\wbetab} = \core\textbf{x}_i\mini{\he}. $$
+	Rozdíl může být "malý", pokud je "fit" dobrý, ale může být také "velký", pokud je $\hii$ velké.
+\end{remark}
+
+\section{Míry influence}
+\begin{itemize}
+	\item I~pro~perfektní model mohou dva různé vzorky $(\textbf{x},\textbf{y})$ a~$(\textbf{x}',\textbf{y}')$ vést k~různým závěrům,
+	\item většinou máme k~dispozici jen originální data,
+	\item bude nás zajímat vliv $i$-tého řádku $\textbf{x}$ na~model,
+	\item už víme, že velké $\hii$ indikuje, že $i$-té pozorování má velký vliv a~velká rezidua naznačují možnou neadekvátnost modelu,
+	\item míry, které zavedeme, budou kombinovat tyto dva faktory,
+	\item použijeme přístup z~PRESS residní, tzn. budeme sledovat jak velký vliv má vynechání $i$-tého pozorování na~$\wbetab$ a~$\widehat{\textbf{y}}$.
+\end{itemize}
+\subsection*{DFBETAS}
+ $\wbetab-\mini{\wbetab}$ měří vliv vynechání $i$-tého pozorování na~odhad $\wbeta$ (bude základem pro~naši analýzu). Připomeňme nyní vztah
+ $$ \wbetab-\mini{\wbetab} = \core \textbf{x}_i\frac{\hei}{1-\hii}. $$
+
+\begin{description}
+	\item[a) vliv $i$-tého pozorování na~$\beta_j$ :]
+	 $$ \beta_j-\mini{\beta}{}_j = \frac{r_{ij}\hei}{1-\hii},\quad\text{ kde }r_{ji}\text{ je }(j,i)\text{tý prvek matice }\R = \core\textbf{x}^T. $$
+	
+	 $i$-té pozorování budeme považovat za~influenční na~$\beta_j$, pokud $\wbeta_j-\mini{\wbeta}{}_j$ bude velká. Protože $\wbeta _j$ je náhodná veličina, "velké" bychom měli měřit relativně vzhledem k~s.f. $(\wbeta _j$, což je $\sigma\sqrt{v_j}$, $v_j = \core _{jj})$. Pokud ji odhadneme pomocí $\mini{\widehat{{\sigma}}}\sqrt{v_j}$, dostaneme definici
+	 $$ \mathrm{DFBETAS}_{j,i} = \frac{\wbeta_j-\mini{\wbeta}{}_j}{\mini{\widehat{{\sigma}}}\sqrt{v_j}} = \frac{r_{ji}\hei}{\sqrt{v_j}\mini{\widehat{{\sigma}}}(1-\hii)} = \frac{r_{ji}}{\sqrt{v_j}}\frac{\widehat{t}_i}{\sqrt{1-\hii}}, $$
+	kde $\widehat{t}_i$ je ext. studentizované reziduum. Kombinuje efekt velkého rezidua $\widehat{t}_i$ a~velkého $\hii$. Jedna možnost pro~limitní hodnoty: $i$-té pozorování je považováno za~influenční na~oblasti $\beta_j$, pokud
+	 $$ |\mathrm{DFBETAS}_{j,i}|>\frac{2}{\sqrt{n}}. $$ Máme $(m+1)\times n$ hodnot pro~srovnání, zjednodušíme to.
+	\item[b) Vliv $i$-tého pozorování na~celý vektor $\wbetab$ :]
+	spočívá v~použití nejaké normy na~vektor $\wbetab-\mini{\wbetab}$. Cook navrhnul
+	 $$ D_i = \frac{(\wbetab-\mini{\wbetab})^T\textbf{M}(\wbetab-\mini{\wbetab})}{(m+1)c}, $$
+	kde $\textbf{M}$ je PD matice a~$c$ normalizační konstanta. Nejužívanější volba je $\textbf{M} = \textbf{X}^T\textbf{X}$ a~$x = s_n^2$. Cookova vzdálenost se~potom spočítá jako
+	 $$ D_i = \frac{(\wbetab-\mini{\wbetab})^T\textbf{X}^T\textbf{X}(\wbetab-\mini{\wbetab})}{(m+1)s_n^2}. $$
+	
+	 $$ D_i = \frac{1}{(m+1)s_n^2}\Big(\frac{\hei}{1-\hii}\Big)^2 \underbrace{\textbf{x}_i^T\core \underbrace{\textbf{x}^T\textbf{x}\core}_I\textbf{x}_i}_{\hii} = \frac{1}{m+1}\frac{\hii}{1-\hii}\frac{\hei^2}{s_n^2(1-\hii)}. $$
+	Výpočetní formule je potom ve~tvaru
+	 $$ D_i = \frac{\widehat{r}_i^2}{m+1}\Big(\frac{\hii}{1-\hii}\Big). $$
+\end{description}
+
+\begin{remark}
+	 $100(1-\alpha)\%$ simultání IS pro~$\betab$ je $$ C(\alpha) = \Big\{ ~\betab~\Big|\frac{(\wbeta-\beta)^T\textbf{x}^T\textbf{x}(\wbeta-\beta)}{(m+1)s_n^2}\leq \FF_{1-\alpha}(m+1,n-m-1) \Big\}, $$
+	tzn. $$ \mini{\betab}\in C(\alpha)\quad \Leftrightarrow\quad D_i\leq \FF_{1-\alpha}(m+1,n-m-1). $$
+	To je motivace pro~\textbf{RULE OF THUMB}: $$ \text{ $i$-té pozorování je influenční, jestliže $D_i>\FF_{\frac{1}{2}}(m+1,n-m-1)$ } $$ (pro většinu $m,n$ je $\FF_{\frac{1}{2}}\approx1$, zjednodušení pravidla $D_i>1$).
+\end{remark}
+
+\begin{remark}
+	Také platí, že
+	 $$ D_i = \frac{(\widehat{\textbf{y}}-\mini{\widehat{\textbf{y}}})^T(\widehat{\textbf{y}}-\mini{\widehat{\textbf{y}}})}{(m+1)s_n^2}, $$
+	tzn. dá se~chápat jako míra influence na~celkovou predikci.
+\end{remark}
+
+\subsection*{DFFITS}
+\begin{itemize}
+	\item vliv $i$-tého pozorování na~$\hy_i$
+\end{itemize}
+ $$ \mathrm{DFFITS}_i = \frac{\hyi-\mini{\hy}}{\mini{\widehat{{\sigma}}}\sqrt{\hii}} = ... = \widehat{t}_i\sqrt{\frac{\hii}{1-\hii}}. $$
+RULE OF THUMB: $i$-té pozorování je influenční, pokud $|\mathrm{DFFITS}|>3\sqrt{\frac{m+1}{n-m-1}}$.
+
+\begin{remark}[Míry influence v~R]
+\begin{itemize}
+	\item DFBETAS - \verb|dfbetas()|
+	\item DFFITS - \verb|dffits()|
+	\item Cookova vzdálenost $D_i$ - \verb|cooks.distance()|
+	\item Leverage $\hii$ - \verb|hotvalues()|
+	\item a~vše shrnuje funkce \verb|influence.measures()| (má navíc covariance ratio)
+\end{itemize}
+
+Používané pravidlo: $i$-té pozorování je influenční, pokud:
+\begin{align*}
+	& = | \mathrm{DFBETAS} | > 1, \quad |\mathrm{DFFITS}| > 3 \sqrt{\frac{m+1}{n-m-1}} \\
+	& D_i > F_{0,5}(m+1,n-m-1), \quad \hii > 3 \frac{m+1}{n}
+\end{align*}
+\end{remark}
+
+\section{Transformace}
+
+Pokud není splněný ně, který z~předpokladů modelu: linearita, normalita chyb, homoskedasticita, jednou z~možností je pokusit se~transformovat nějaké proměnné, aby transformovaný model tyto předpoklady alespoň \uv{přibližně} splňoval.
+
+\subsection{Transformace vysvětlované proměnné $y$ }
+
+Hledáme funkci $h(.)$ tak, aby model $Y_i^* = h(Y_i) = \beta_0 + \sumjm x_{ij} \beta_j + e_i$ splňoval předpoklady.
+
+\subsubsection*{3 hlavní důvody pro~transformaci $Y$ }
+\begin{enumerate}
+	\item Transformace škály měření tak, aby pokrývala celé $\R$, což může odstranit problémy s~podmínkami na~$\betab$.
+	
+	Např. studie kapacity plic (FEV data, FEV $>$ 0):
+	\begin{itemize}
+		\item Chtěli bychom, aby model nepredikoval záporné hodnoty ($\Rightarrow$ restrikční podmínky na~parametr $\beta$).
+		\item Lze obejít modelování $y^* = \log \mathrm{FEV}$.
+	\end{itemize}
+
+	Pokud $y$ jsou počty a~0 je možná hodnota, často se~používá $y^* = \log (y+1)$ nebo obecně $y^* = log(y + c)$
+	
+	\item Transformace $Y$, aby její rozdělení bylo \uv{více} normální.
+	
+	Typicky to znamená pokusit se~udělat rozdělení hodnot $y$ více symetrické. Často se~setkáváme s~rozděleními vychýlenými vpravo (obvykle se~to stává, pokud naměříme nějakou fyzikální veličinu, která může nabývat pouze kladných hodnot).
+	
+	Transformace $y^* = \log y$ nebo $y^* = y^{\lambda}, \lambda < 1$ budou redukovat toto vychýlení.
+	
+	Typický postup: Začít s~hodnotou $\lambda$ blízko 1, pak snižovat hodnotu $\lambda$, doku není dosaženo \uv{přibližně} symetrie reziduí.
+	
+	\item Možná nejzásadnější motivace je pokusit se~dosáhnout konstantního rozptylu přes všechna pozorování.
+	
+	Např. pro~fyzikální veličinu s~kladnými hodnotami se~často stane, že rozptyl bude malý pro~$\mu \approx 0$ a~větší pro~$\mu$ velké (už je z~důvodu, že obor hodnot $y$ je omezen na~kladné hodnoty). Říkáme tomu \textbf{positive mean-variance relationship}.
+	
+  Nepřesnost měření kladných veličin se~také často vyjadřuje pomocí koeficientu variace
+ $$
+ \text{CV}(\text{Y}) = \frac{\text{s.d.} \text{Y}}{\E[\text{Y}]}.
+ $$
+Často bývá více konstantní mezi~případy, než s.d. Variabilitu vyjadřuje relativně spíše, než absolutně. Matematicky to znamená, že $\D[\text{Y}] = \phi \E[\text{Y}]^2 - \phi \mu^2$ pro~nějaké $\phi$.
+
+\end{enumerate}Pro odstranění vztahu $\E [\text{Y}]$ a~$\D[\text{Y}]$ se~často používají mocninné transformace $y^* = y^{\lambda}$ (pro $y > 0$).
+
+\begin{table}[h]
+\centering
+ $ \begin{array}{ *{13}{c} }
+\text{Transformace:} & \leftarrow &... &  y^3 &  y^2 &  y & \sqrt{y}  & \text{log}y & \frac{1}{\sqrt{y}}  & \frac{1}{y} & \frac{1}{y^2} &...  & \rightarrow \\
+\text{Box-Cox} \lambda : &\leftarrow  &... & 3 & 2 & 1 & \frac{1}{2}  & 0 &  -\frac{1}{\sqrt{2}} & -1 & -2 &... & \rightarrow
+\end{array} $
+\end{table}
+
+\begin{itemize}
+\item Pokud $\D[\text{Y}]$ klesá s~rostoucí $\E[\text{Y}]$, budeme klesat s~mocninou $\lambda$.
+\item Pokud $\D[\text{Y}]$ roste s~rostoucí $\E[\text{Y}]$, budeme $\lambda$ snižovat.
+\end{itemize}
+
+OBECNĚ: Předpokládejme vztah $\D[\Y] = \phi \text{V}(\mu)$ a~uvažujeme transformaci $y^* = \text{h}(y)$. Taylorův rozvoj 1. řádu funkce $\text{h}(y)$ v~bodě $\mu$
+ $$
+ y^* = \text{h}(y) \approx \text{h}(\mu) + \text{h}'(\mu)(y-\mu)
+ $$
+z čehož plyne, že $\D[\text{Y}^*] \simeq \big(\text{h}'(\mu)\big)^2 \cdot \D[\text{Y}]$
+Transformace $y^* = \text{h}(y)$ tedy bude přibližně stabilizovat rozptyl, pokud $\text{h}'(y)$ je úměrné $\left(\D[\text{Y}]^{-1/2} = \text{V}^{-1/2}(\mu) \right)$.
+
+\begin{itemize}
+\item Pokud $\text{V}(\mu) = \mu^2 \quad \Rightarrow \quad$ stabilizující transformace je $\text{log}(y) = \text{h}(y)$, protože $\text{h}'(y) = \frac{1}{\mu}$.
+\item Pokud $\text{V}(\mu) = \mu \quad \Rightarrow \quad$ stabilizující transformace je $\text{h}(y) = \sqrt{y}$, protože $\text{h}'(y) = \frac{1}{2 \sqrt{\mu}}$.
+ $$
+ \left(\text{h}(\mu) = \int \frac{\d \mu}{\sqrt{\text{V}(\mu)}} \right)
+ $$
+\item Asi nejvíce užívanou transformací je $y^* = \text{log}(y)$. Jedním z~důvodů je i~dobrá interpretovatelnost parametru $\beta$.
+\end{itemize}
+
+Interpretace parametrů LM
+
+\begin{enumerate}
+\item Klasický LM:
+ $$
+ \E [Y] = \beta_0 + \beta_1 x_1 +... + \beta_m x_m.
+ $$
+Jednorozměrná změna proměnné $x_j \Rightarrow$ změnu $\E [Y]$ o~$\beta_j$ jednotek (při ostatních proměnných stálých).
+
+ $$
+\left(\begin{matrix}
+\X = (1,x_1,...,x_m) & \X_{\text{new}} = (1,x_1,...,x_j+1,...,x_m) \\
+\downarrow &  \downarrow \\
+\E [Y] & \E [Y_{\text{new}}] \\
+ & \\
+ \E [Y_{\text{new}}] - \E [Y] = \beta_j &
+\end{matrix} \right)
+ $$
+\item LM pro~$\log Y$ :
+ $$
+ \log Y = \beta_0 + \beta_1 x_1 +... + \beta_m x_m + e, \text{kde} \quad e \sim \NN(0,\sigma^2).
+ $$
+Pokud je to správný model, znamená to, že $\log Y \sim \NN(\mu,\sigma^2) \Rightarrow Y \sim \mathcal{LN}(\mu,\sigma^2)$, a~tedy $\E[Y] = \e{\mu + \frac{\sigma^2}{2}}$. \\
+- Predikce pro~$\E [\log Y]$ je $\widehat{\mu} = \wbeta_0 + \wbeta_1 x_1 +... + \wbeta_m x_m$. \\
+- Predikce pro~$\E [Y]$ bude $\e{\wbeta_0 + \wbeta_1 x_1 +... + \wbeta_m x_m + \frac{\wsigma^2}{2}}$.
+
+Uvazujme opět jednotkovou změnu p. $x_j$ ($x_j \rightarrow x_j + 1$):
+ $$
+\frac{ \E [Y_{\text{new}}]}{\E [Y]} = \frac{\e{\wbeta_0 + \wbeta_1 x_1 +... + \wbeta_j x_j + \wbeta_j +... + \wbeta_m x_m + \frac{\sigma^2}{2}}}{\e{\wbeta_0 + \wbeta_1 x_1 +... + \wbeta_m x_m + \frac{\sigma^2}{2}}} = \e{\wbeta_j}
+ $$
+Pak jednotková změna proměnné $x_j \Rightarrow$ multiplikativní změna $\E [Y] \e{\wbeta_j}\text{-krát}$. Jinak zapsáno: $100(\e{\wbeta_j}-1)$ je procentní změna $\E [Y]$ spojená s~jednotkovou změnou $x_j$
+\end{enumerate}\subsection{Box-Cox transformace}
+\begin{itemize}
+\item Pokud chyby nemají normální rozdělení, hledáme transformaci $Y$, která by nejenom linearizovala model, ale také transformovala chyby, aby byly přibližně normální.
+\item Jako užitečná se~ukazuje následující třída transformací (power family):
+ $$
+ y^{(\lambda)} = \begin{cases}
+      \frac{y^{\lambda}-1}{\lambda}, & \text{pokud}\ \lambda \neq 0 \\
+      \text{log}y, & \text{pokud}\ \lambda = 0
+    \end{cases},
+ $$
+, které předpokládají, že data $y$ jsou pouze kladná. (Pokud ne, můžeme přičíst konstantu ke~všem pozorováním a~analyzovat takto posunutá data.)
+\begin{remark}
+ $\lim_{\lambda \rightarrow 0}  \frac{y^{\lambda}-1}{\lambda} = \text{log}y$
+\end{remark}
+\item Pro~nalezení vlastního $\lambda$ budeme předpokládat, že transformované veličiny \\ $Y_i^{(\lambda)}, i\in\widehat{n},$ splňují postačující podmínky RM, tj.
+ $$
+ Y_i^{(\lambda)} = \x_i^T \bbeta + \eb \quad \text{kde} \quad \eb \sim \NN_n (0,\sigma^2 \Identita{n}) \quad \quad \quad \left(Y_i^{(\lambda)} \sim \NN (\X_i^T \bbeta, \sigma^2) \right)
+ $$
+\end{itemize}
+Úkol je odhadnout zároveň $\lambda, \bbeta, \sigma^2$, použijeme MLE. Pomocí transformace získáme hustotu
+ $$
+  f_{Y_i}(y_i) = f_{Y_i^{(\lambda)}}(y_i^{(\lambda)}) \cdot \frac{\d y_i^{(\lambda)}}{\d y_i} = \frac{1}{\sqrt{2 \pi \sigma^2}} \e{-\frac{1}{2 \sigma^2}(y_i^{(\lambda)} - \mu_i)^2} \cdot y_i^{\lambda - 1}, \quad \text{kde} \; \mu_i = \E[Y_i^{(\lambda)}] = \x_i^T \bbeta.
+ $$
+Věrohodnostní funkce pro~pozorování $y_1,...,y_n$ bude mít tvar
+ $$
+  L = \prod_{i = 1}^nf_{Y_i}(y_i) = \left(\frac{1}{\sqrt{2 \pi \sigma^2}} \right)^2 \e{-\frac{1}{2 \sigma^2}(\sum_{i = 1}^n (y_i^{(\lambda)} - \mu_i)^2} \cdot \mathrm{J}(\lambda), \quad \text{kde} \quad \mathrm{J}(\lambda) = \prod_{i = 1}^n y_i^{\lambda - 1} = \left(\prod_{i = 1}^n y_i \right)^{\lambda - 1}
+ $$
+
+Dále vyjádříme log-likelihood:
+ $$
+ l = \ln L = -\frac{n}{2}\ln 2 \pi - \frac{n}{2}\ln \sigma^2 - \frac{1}{2 \sigma^2} \sum_{i = 1}^n (y_i^{(\lambda)} - \mu_i)^2 + \ln\text{J}(\lambda).
+ $$
+Věrohodnostní rovnice nemají explicitní analytické řešení. Pro~nalezení MLE si všimneme, že pro~pevné $\lambda$ je $l$ proporcionální logaritmus věrohodnosti pro~odhad ($\bbeta, \sigma^2$) na~základě $\y^{(\lambda)} = (y_1^{(\lambda)},..., y_n^{(\lambda)})^T$, tedy
+ $$
+ \wbetab (\lambda) = \core \X^T \y^{(\lambda)}
+ $$
+ $$
+ \wsigma^2 (\lambda) = \frac{1}{n} \sum_{i = 1}^n (y_i^{(\lambda)} - \hy _i^{(\lambda)})^2 = \frac{1}{n} (\y^{(\lambda)})^T (\I _n - \Hm) \y^{(\lambda)}, \quad \text{kde} \; \hy_i^{(\lambda)} = \x_i^T \bbeta^{(\lambda)}.
+ $$
+Dosazením do~$l$ dostaneme její hodnotu maximalizovanou vzhledem k~($\bbeta, \sigma^2$), tzv. profite log-likelihood
+ $$
+  l_p^{(\lambda)} = -\frac{n}{2} \ln 2 \pi - \frac{n}{2} \ln \wsigma^2 (\lambda) - \frac{n}{2} + \ln \text{J}(\lambda)
+ = C - \frac{n}{2} \ln \wsigma^2 (\lambda) + (\lambda - 1)  \sum_{i = 1}^n \ln y_i.
+ $$
+\begin{remark}
+Kvůli komplikované závislosti $l_p$ na~$\lambda$ bude třeba numerická metoda pro~maximalizaci. Lze přepsat do~tvaru, kde bude možné využít metody LR:
+\begin{align*}
+ l_p (\lambda) & = C - \frac{n}{2} \ln \wsigma^2 (\lambda)  - \frac{n}{2} \ln\text{J}(\lambda)^{2/n} = C - \frac{n}{2} \ln \frac{ \wsigma^2 (\lambda)}{(\text{J}^{\frac{1}{n}}(\lambda))^2} \\
+ \text{J}^{\frac{1}{n}}(\lambda) & = \left[\left(\prod_{i = 1}^n y_i \right)^{\frac{1}{n}} \right]^{\lambda - 1} = (\dot{y})^{\lambda - 1}, \quad \text{kde} \dot{y} \text{je geometrický průměr.}
+\end{align*}
+Dosazením zpátky do~$l_p(\lambda)$ dostáváme
+\begin{align*}
+\quad  l_p(\lambda) & = C - \frac{n}{2} \ln \frac{ \wsigma^2 (\lambda)}{(\dot{y})^{\lambda - 1}} = C - \frac{n}{2}\ln s_{\lambda}^2, \\
+\text{kde} \quad s_{\lambda}^2 & = \frac{ \wsigma^2 (\lambda)}{(\dot{y})^{\lambda - 1}} = \frac{1}{n} \sum_{i = 1}^n \left(\frac{y_i^{(\lambda)}}{(\dot{y})^{\lambda-1}} - \frac{\hy_i^{(\lambda)}}{(\dot{y})^{\lambda-1}} \right)^2.
+\end{align*}
+Tedy $s_{\lambda}^2$ je reziduální součet čtverců ($\SSE$) v~modelu $\frac{y_i^{(\lambda)}}{(\dot{y})^{\lambda-1}}$ v~závislosti na~$\x_i^T$ (tzn. $s_{\lambda}^2$ lze snadno získat pomocí funkce $\ln()$). Celkem: max $l_p(\lambda) \quad \Leftrightarrow \quad$ min $s_{\lambda}^2$.
+\end{remark}
+
+\textbf{Algoritmus pro~hledání vhodného $\lambda$ :}
+\begin{enumerate}
+\item Zvolit oblast hodnot $\lambda$, I~ = $[\lambda_{min}, \lambda_{max}]$, a~body $\lambda \in$ I~\\
+(typicky I~ = $[-2,2]$ a~10-20 rovnoměrně rozdělených bodů).
+
+\item Naladit model $\frac{y^{(\lambda)}}{(\dot{y})^{\lambda-1}} \sim \chi$ a~spočítat $\frac{1}{n}\SSE = s_{\lambda}^2$.
+
+\item Z~grafu ($\lambda, s_{\lambda}^2$) vybrat $\widehat{\lambda}$, které minimalizuje $s_{\lambda}^2$.
+
+\item Pro~zvolené $\widehat{\lambda}$ naladit model $y^{(\widehat{\lambda})} \sim \chi$ a~pokračovat standardní analýzou.
+\end{enumerate}
+\subsubsection*{IS pro~$\lambda$ }
+Snadno lze odvodit LRT test pro~test $\text{H}_0 : \lambda = \lambda_0$. ($\text{H}_0 : \lambda = 1$ zde je třeba transformace, pokud zamítneme $\text{H}_0 \Rightarrow$ transformace pomocí $\widehat{\lambda}$).
+
+LRT statistika: $\Lambda = -2 \ln \frac{L(\lambda_0}{L(\widehat{\lambda}} = 2 (l_p(\widehat{\lambda}) - l_p(\lambda_0))$. Víme, že $\Lambda \Lp \chi^2(1)$. Invertováním příslušné oblasti LRT testu, dostaneme as. $100(1-\alpha)\%$ IS pro~$\lambda$ :
+\begin{align*}
+ \chi^2_{1-\alpha} & \geq \Lambda \\
+\chi^2_{1-\alpha} & \geq 2(\frac{n}{n}\ln s^2_{\lambda_0} - \frac{n}{n}\ln s^2_{\widehat{\lambda}}) \\
+\chi^2_{1-\alpha} & \geq n \ln\frac{s^2_{\lambda_0}}{s^2_{\widehat{\lambda}}}
+\end{align*}
+
+Pokud $\widehat{\lambda}$ je MLE $\lambda$, as. $100(1-\alpha)\%$ IS  pro~$\lambda$ je:
+ $$
+ \left\{ \lambda \in \R | n \cdot \ln\frac{s^2_{\lambda_0}}{s^2_{\widehat{\lambda}}} \leq \chi^2_{1-\alpha}(1) \right\}.
+ $$
+\begin{remark}
+ Kvůli~jednoduchosti interpretace se~často doporučuje zaokrouhlit $\widehat{\lambda}$ na~nejbližší $\frac{1}{4}$ nebo $\frac{1}{3}$.
+\end{remark}
+Příklad data TREES
+
+\subsection{Transformace vysvětlujících proměnných x}
+
+\begin{itemize}
+\item Pokud diagnostika modelu naznačuje, že vztah mezi~$\y$ a~$\X$ není lineární pro~jeden nebo více regresorů, může být vhodné přeformovat model pomocí transformací proměnných $\x$.
+
+\item Předpokládejme, že v~modelu $Y = \beta_0 + \sumjm \beta_j x_j + e$ máme podezření na~nelinearitu v~j-té proměnné $x_j$.
+
+\item Jednou z~možností jak postupovat jr nahrazení $x_j$ proměnnou $z_j = f(x_j)$, model tedy bude $Y = \beta_0 + \beta_1 x_1 +... + \beta_j z_j +... + \beta_m x_m + e$.
+
+\item Pokud je $f$ známé, jedná se~o~model LR a~lze ho analyzovat standardně. Pokud je tato transformace vhodná, mělo by se~to projevit ve~zlepšení statistik $\RMR^2, \mathrm{t}, \text{F}$ a~zlepšení grafu reziduí pro~$z_j$ oproti~těm pro~$x_j$.
+
+\item Bohužel $f$ většinou známá není, možný přístup je parametrizovat nějak tuto funkci a~pak odhadnout tyto parametry společně s~$\bbeta$.
+
+\begin{itemize}
+
+\item Typická parametrizace:
+ $$
+  z_j = x_j^{\lambda}, \quad \text{kde} \quad \lambda \in \R \quad \text{vhodné}.
+ $$
+($x_j >$ potom $\lambda \in \R$, pokud $x_j$ může být záporné, množina hodnot $\lambda$ je omezená)
+\item Aproximace $f$ pomocí polynomu vhodného stupně, tzn.
+ $$
+  z_j = \sum_{k = 1}^l r_k x_j^k, \quad \text{kde} r_k \text{musí být odhadnuty,}
+ $$
+\item další možností je použití trigonometrických funkcí nebo splines (piecewice polynomials).
+
+\end{itemize}
+
+Výsledný model ale v~tomto případě nebude lineární v~parametrech $\beta_j$$ j = 0,...,m $a~$ r_k $,$ k~ = 1,...,l $.
+\end{itemize}\textbf{Zaměříme se~na~$z_j = x_j^\lambda$ :}
+\begin{itemize}
+	\item možnost je opět zvolit jistou množinu hodnot $\lambda$, naladit modely pro~všechna $\lambda$ a~vybrat model s~nejlepší shodou s~daty, např. s~nejmenší $\SSE$ nebo největší $\RR^2$ nebo $F$
+	\item může být časově náročné, můžeme minout vhodnou hodnotu $\lambda$, pokud nebyla v~původní množině (nevíme jak $\RR^2,F,\SSE$ závisí na~$\lambda$)
+\end{itemize}
+
+\subsubsection*{Box-Tidwell metoda}
+Předpokládejme, že $\lambda$ se~příliš neliší od~$\lambda = 1$. Taylorův rozvoj 1. řádu kolem~$\lambda = 1$ dává
+ $$
+x^\lambda\approx x^1+(\lambda-1)\frac{\d x^\lambda}{\d \lambda}\Big|_{\lambda = 1},\qquad \frac{\d x^\lambda}{\d \lambda} = x^\lambda\ln x c \frac{\d x^\lambda}{\d \lambda}\Big|_{\lambda = 1} = x\ln x,\qquad x^\lambda\approx x+(\lambda-1)x\ln x.
+ $$
+Dosazením do~modelu
+\begin{align*}
+	Y & = \beta_0+\beta_1 x_1+...+\beta_{j-1}x_{j-1}+\beta_j\big(x_j+(\lambda-1)x_j\ln x_j\big)+...+\beta_m x_m+e \\
+	& = \beta_0+\sum_{k = 1}^m \beta_k x_k+\underbrace{\beta_j(\lambda-1)}_{\beta_{m+1}(\lambda)}x_j\ln x_j+e
+\end{align*}
+máme lineární model pro~parametry $\beta_k$, $0\leq k\leq m+1$, protože $\beta_{m+1}(\lambda-1)\beta_j$ můžeme $(\lambda,\beta_j)$ odhadnout následovně:
+\begin{enumerate}[1)]
+	\item naladíme původní model a~spočteme $\LSE$$ \wbeta_j $parametru$ \beta_j $,
+	\item naladíme rozšířený model s~$x_{m+1} = x_j\ln x_j$ a~spočteme $\wbeta_{m+1}$,
+	\item z~rovnosti $\wbeta_{m+1} = (\widehat{\lambda}-1)\wbeta_j$ dostaneme $\widehat{\lambda} = \frac{\wbeta_{m+1}}{\wbeta_j}+1$.
+\end{enumerate}
+Tento postup umožňuje testovat potřebu transformace
+ $$ \hypothesis{\lambda = 1}{\lambda\neq1} $$
+pomocí t-testu pro~$H_0:~\beta_{m+1} = 0$.
+
+\begin{remark}
+Pokud model s~$\widehat{\lambda}$ vypadá neadekvátně, lze postupovat iterativně a~získat posloupnost $\widehat{\lambda}(l),~l\geq1$, $\widehat{\lambda}(0) = \widehat{\lambda}$ a~rozvineme $x_j^\lambda$ kolem~$\widehat{\lambda}(0)$, tzn. \\ $x_j^\lambda\approx x_j^{\widehat{\lambda}(0)}+\big(\lambda-\widehat{\lambda}(0)\big)x_j^{\widehat{\lambda}(0)}\ln x_j$ dosazením do~rovnice modelu
+ $$
+Y = \beta_0 = \sum_{\substack{k = 1 \\ k\neq j}}^m \beta_k x_k+\beta_j x_j^{\widehat{\lambda}(0)}+\underbrace{\beta_j\big(\lambda-\widehat{\lambda}(0)\big)}_{\beta_{m+1}}x_j^{\widehat{\lambda}(0)}\ln x_j+e
+ $$
+naladíme tento model s~a~bez~přidané proměnné $x_{m+1} = x_j^{\widehat{\lambda}(0)}\ln x_j$. Označíme $\wbeta_j(1)$ a~$\wbeta_{m+1}(1)$ příslušné odhady. Potom
+ $$
+\widehat{\lambda}(1) = \widehat{\lambda}(0)+\frac{\wbeta_{m+1}(1)}{\wbeta_j(1)}.
+ $$
+Můžeme dále iterovat do~konvergence nebo skončit po~pevném počtu iterací.
+\end{remark}
+
+\begin{remark}
+	Další užívané transformace v~$\x,~\Y$ :\begin{description}
+	\item[a) centrované proměnné:] $\X_C$ tak, že $(\X_C)_{ij} = x_{ij}-\overline{x}_j,~i\in\widehat{n},~j\in\widehat{m}$, kde $\overline{x}_j = \frac{1}{n}\sum_{i = 1}^n x_{ij}$ je průměr $j$-tého sloupce matice $\X$. $\Y_C$, $(\Y_C)_i = y_i-\overline{y}$... nevím
+	\item[b) centrované a~škálované proměnné:] škálování sloupců tak, aby jejich norma byla 1, tzn. každý prvek $j$-tého sloupce matice $\X$ podělíme $s_j = \Big(\sum_{i = 1}^n (x_{ij}-\overline{x}_j)^2\Big)^{\frac{1}{2}}$. Centrované a~škálované matice $\X_\mathrm{SC}$ pak bude
+	 $$
+	\X_\mathrm{SC} = \X_C\textbf{S},\qquad \textbf{S} = \mathrm{diag}\Big(\frac{1}{s_1},...,\frac{1}{s_m}\Big).
+	 $$
+	Model pak bude
+	 $$
+	\Y_C = \X_\mathrm{SC}\betab_s+e. $$ Lze použít i~$\Y_\mathrm{SC}$, tedy centrované a~škálované $\Y$.
+	\end{description}
+\end{remark}
+
+\subsection*{Vážené nejmenší čtverce (weight least squares WLS)}
+Budeme nyní předpokládat, že chyby $e_i$ jsou normální, nezávislé, ale $\D(e_i) = \sigma_i^2$ závisí na~$i$. Konkrétně tedy $\sigma_i^2 = \frac{\sigma^2}{w_i}$, kde $w_i>0,~i\in\widehat{n}$ se~nazývají váhy.
+
+Uvažujeme tedy model
+\begin{equation}\label{rovnickaW}
+\Y = \X\betab+\eb,\text{ kde }\eb\sim\NN_n(0,\sigma^2\textbf{W})\text{ a~}\textbf{W} = \mathrm{diag}\Big(\frac{1}{w_1},...,\frac{1}{w_n}\Big).
+\end{equation}
+Pokud jsou váhy $w_i$ známé, lze MLE odhady parametru $\betab$ a~$\boldsymbol{\sigma}^2$ nalézt následovně:
+ $$
+\textbf{W} = \textbf{K} \textbf{K}^T,\text{ kde }\textbf{K} = \textbf{W}^{\frac{1}{2}} = \mathrm{diag}\Big(\frac{1}{\sqrt{w_1}},...,\frac{1}{\sqrt{w_n}}\Big).
+ $$
+Definujeme $\textbf{Z} = \inv{\textbf{K}}\Y,~\textbf{M} = \inv{\textbf{K}}\X$ a~$\boldsymbol{\epsilon} = \inv{\textbf{K}}\eb$. Potom dostaneme model
+\begin{equation}\label{rovnickaW2}
+\textbf{Z} = \textbf{M}\betab+\boldsymbol{\epsilon},\text{ kde }\boldsymbol{\epsilon}\sim\NN_n(0,\sigma^2 I_n),
+\end{equation}
+protože
+ $$
+\Cov(\boldsymbol{\epsilon}) = \inv{\textbf{K}}\sigma^2\textbf{W}\big(\inv{\textbf{K}}\big)^T = \sigma^2 \inv{\textbf{K}}\textbf{K}\textbf{K}^T\big(\textbf{K}^T\big)^{-1} = \sigma^2 I_n.
+ $$
+
+Transformační vektor je tedy ve~tvaru $\textbf{Z} = (\sqrt{w_1}Y_1,...,\sqrt{w_n}Y_n)^T$. To už je standardní model LR, na~kterém platí
+ $$ \wbetab_w = \inv{(\textbf{M}^T\textbf{M})}\textbf{M}^T\textbf{z} = \inv{\big(\X^T\underbrace{(\textbf{K}^{-1})^T \inv{\textbf{K}}}_{ = \inv{{(\textbf{K}\textbf{K}^T)}} = \inv{\textbf{W}}}\X\big)}\X^T(\inv{\textbf{K}})^T\inv{\textbf{K}}\Y = \inv{(\X^T\inv{\textbf{W}}\X)}\X^T\inv{\textbf{W}}\Y. $$
+Dále pak
+ $$ \widehat{{\sigma}^2}_w = \frac{1}{n}\sum_{i = 1}^n (z_i-\widehat{z}_i)^2 = \frac{1}{n}\sum_{i = 1}^n w_i(y_i-\hyi)^2 = \frac{1}{n}\SSE_w, $$ kde $\SSE_w$ je vážený součet čtverců, $z_i = \sqrt{w_i}y_i$ a~$\widehat{z}_i = \sqrt{w_i}\x_i^T\wbetab = \sqrt{w_i}\hyi$.
+Dále platí, že
+\begin{enumerate}[a)]
+	\item $\E\wbetab_w = \inv{(\X^T\inv{\textbf{W}}\X)}\X^T\inv{\textbf{W}}\underbrace{\E \Y}_{\X\betab} = \wbeta$, kde $\wbetab_w$ je nestranný odhad $\wbeta$,
+	\item $\E\Big(\frac{\SSE_W}{n-m-1}\Big) = \sigma^2$, tedy $s_w^2 = \frac{\SSE_w}{n-m-1}$ je nestranný odhad $\sigma^2$.
+\end{enumerate}
+
+\begin{theorem}
+Nechť $\wbetab_w$ je WLS odhad $\wbeta$, jestliže $\Cov(\eb) = \sigma^2\textbf{W} = \sigma^2\mathrm{diag}\Big(\frac{1}{w_1},...,\frac{1}{w_n}\Big)$. Potom platí, že
+\begin{enumerate}[1)]
+	\item $\Cov(\wbetab_w) = \sigma^2\inv{(\X\inv{\textbf{W}}\X)}$,
+	\item nechť $\delta_i$ je $i$-tý diagonální prvek $\inv{(\X^T\inv{\textbf{W}}\X)}$. Jestliže $e_i\sim \NN\Big(0,\frac{\sigma^2}{w_i}\Big)$, $i\in\widehat{n}$, potom
+	 $$ T_i = \frac{\wbeta_{w,i}-\beta_i}{s_w\sqrt{\delta_i}}\sim t(n-m-1), $$
+	\item pro~$\widehat{\Y} = \X\wbeta_w$ platí, že $\E \widehat{\Y}_m = \X\textbf{B}$ a~$\Cov(\widehat{\Y}_w) = \sigma^2\X\inv{(\X^T\inv{\textbf{W}}\X)}\X^T$,
+\item nechť $\he_w = \Y-\widehat{\Y}_m$ jsou rezidua v~modelu \ref{rovnickaW} a~$\widehat{\boldsymbol{\epsilon}}_w = \textbf{Z}-\widehat{\textbf{Z}} = \textbf{Z}-\mathbb{M}\wbetab_w$ jsou rezidua v~transformovaném modelu \ref{rovnickaW2}. Potom
+ $$ \widehat{\boldsymbol{\epsilon}}_w = \sqrt{\inv{\textbf{W}}}\he_w = \textbf{W}^{-\frac{1}{2}}\he_w\quad\text{a}\quad \E(he_w) = \E(\widehat{\epsilon_w}) = 0, $$
+\item nechť $\textbf{H}_w = \X\inv{(\X^T\inv{\textbf{W}\X})}\X^T\inv{\textbf{W}}$ je vážená projekční matice. Potom
+ $$ \heb_w = (I-\textbf{H}_w)\eb\quad\text{a}\quad \Cov(\heb_w) = \sigma^2(I-\textbf{H}_w)\textbf{W}. $$
+To znamená, že $$ \Cov(\widehat{\boldsymbol{\epsilon}_w}) = \sigma^2\textbf{W}^{-\frac{1}{2}}(I-\textbf{H}_w)\textbf{W}^{\frac{1}{2}}. $$
+\end{enumerate}
+
+\begin{proof}
+	\begin{enumerate}[1)]
+		\item $$ \Cov (\wbetab_w) = \inv{(\X^T\inv{\textbf{W}}\X)}\X^T\inv{\textbf{W}}\underbrace{\Cov \Y}_{ = \sigma^2\textbf{W}}\inv{\textbf{W}}\X\inv{(\X^T\inv{\textbf{W}}\X)} = \sigma^2\inv{(\X^T\inv{\textbf{W}}\X)}, $$
+		\item $\D \wbeta_{w,i} = \sigma^2\delta_i$, tzn. $\frac{\wbeta_{w,i}-\beta_i}{\sigma\sqrt{\delta_i}}\sim\NN(0,1)$ a~víme, že $\wbeta_{w,i}$ a~$s_w^2$ jsou nezávislé, $\frac{s_w^2(n-m-1)}{\sigma^2}\sim\chi^2(n-m-1)$. Z~toho vyplývá, že
+		 $$ \frac{\wbeta_{w,i}-\beta_i}{s_w\sqrt{\delta_i}}\sim t(n-m-1). $$
+		\item $\E \widehat{\Y}_w = \X\E \wbetab_w = \X\wbeta$, $\Cov(\widehat{\Y}_w) = \X\Cov\wbetab_w \X^T = \sigma^2\X\inv{(\X^T\inv{\textbf{W}}\X)}\X^T$.
+		\item Protože $\textbf{Z} = \textbf{W}^{-\frac{1}{2}}\Y$ a~$\textbf{M} = \textbf{W}^{-\frac{1}{2}}\X$, dostaneme
+		\[
+		\begin{split}
+		& \widehat{\boldsymbol{\epsilon}}_w = \textbf{Z}-\widehat{\textbf{Z}} = \textbf{W}^{-\frac{1}{2}}\Y-\textbf{W}^{-\frac{1}{2}}(\Y-\X\wbetab_w) = \textbf{W}^{-\frac{1}{2}\he_w},\\
+		& \E \heb_w = \E(\Y-\widehat{\Y}_w) = \X\betab-\X\betab = \textbf{0}\quad\Rightarrow\quad \E \widehat{\boldsymbol{\epsilon}} = 0.
+		\end{split}
+		\]
+		\item \[
+		\begin{split}
+		\heb_w& = \Y-\widehat{\Y}_w = \Y-\X\wbetab_w = \X\betab+\eb-\X\inv{(\X^T\inv{\textbf{W}}\X)}\X^T\inv{\textbf{W}}\underbrace{(\X\betab+\textbf{e})}_{\Y} = \\& = \X\betab-\X\betab+\textbf{e}-\underbrace{\X\inv{(\X^T\inv{\textbf{W}}\X)}\X^T\inv{\textbf{W}}}_{\textbf{H}_w}\textbf{e} = (I-\textbf{H}_w)\textbf{e},\\
+		\Cov(\heb_w)& = (I-\textbf{H}_w)\Cov~\eb(I-\textbf{H}_w)^T = \\& = \sigma^2(I-\X\inv{(\X^T\inv{\textbf{W}}\X)}\X^T\inv{\textbf{W}})\textbf{W}\big(I-\inv{\textbf{W}}\X\inv{(\X^T\inv{\textbf{W}}\X)}\X^T\big) = \\& = \sigma^2\textbf{W}-\sigma^2\X\inv{(\X^T\inv{\textbf{W}}\X)}\X^T-\sigma^2\X\inv{(\X^T\inv{\textbf{W}}\X)}\X^T
++\sigma^2\X\inv{(\X^T\inv{\textbf{W}}\X)}\X^T = \\& = \sigma^2(I-\textbf{H}_w)\textbf{W}.	\end{split}
+		\]
+		 $\Cov(\widehat{\boldsymbol{\epsilon}}) = \textbf{W}^{-\frac{1}{2}}\Cov(\widehat{\boldsymbol{\epsilon}})\textbf{W}^{-\frac{1}{2}} = \sigma^2\textbf{W}^{-\frac{1}{2}}(I-\textbf{H}_w)\textbf{W}^{\frac{1}{2}}$.
+	\end{enumerate}
+\end{proof}
+\end{theorem}
+\begin{itemize}
+	\item z~dosazení vyplývá, že odhady parametru $\betab$ a~$\sigma^2$ lze získat použitím transformovaného modelu (2)
+	\item Protože ale transformovaný model neobsahuje intercept (první sloupec M je $(\sqrt{w_1},..., \sqrt{w_n})^T)$), nefunguje klasický rozklad součtu čtverců a~F statistika nelze definovat obvyklým způsobem, stejně jako $R^2$ (viz. regrese skrz~počátek)
+	\item nicméně princip \uv{extra sum of squares} funguje, ať má model intercept nebo ne:
+	např. celkový F-test lze provést pomocí statistiky
+	 $$
+	F_w = \frac{\SSE_R - \SSE_F}{\frac{m}{s_w^2}},
+	 $$
+	kde $\SSE_F$ je reziduální součet čtverců $s_w^2$ plného modelu a~$\SSE_R$ je reziduální součet čtverců redukovaného transformovaného modelu $\Z = \Mm_0 \betab_0 + \eb$, $\Mm_0 = (\sqrt{w_1},..., \sqrt{w_n})^T)$.
+	
+	Pokud mají chyby normální rozdělení, platí za~$H_0: \beta_1 = \cdots = \beta_m = 0$, že $F_w \sim F(m, n-m-1)$ a~$H_0$ zamítáme, pokud $F_w > F_{1-\alpha}(m,n-m)$.
+	\item str. 110 (*)
+	\item pro~analýzu reziduí je třeba uvažovat vhodné grafy reziduí:
+	\begin{itemize}
+		\item máme dva vektory reziduí:
+		\begin{align*}
+			& \hei \text{ v~původním modelu (1)} \\
+			& \heps_i \text{ v~transformovaném modelu (2)}
+		\end{align*}
+		a tedy dvě možnosti
+		\item pro~kontrolu konstantního rozptylu lze uvažovat i~standardizovaná nebo studentizovaná rezidua (pomocí bodu 4) a~5) věty lze ukázat, že jsou v~obou modelech stejná)
+		\item je třeba být opatrný oproti~jakým hodnotám budeme rezidua zobrazovat
+		\item grafy $\heps_i$ proti~sloupcům $\Mm$ a~predikovaným hodnotám $\hz$ jsou OK, neboť např.
+		 $$
+		\sum_{i = 1}^n \hz_i \heps_i = 0
+		 $$
+		(jsou OG, měl by být vidět roztýlený oblak kolem~osy x).
+		\item dosazením $\heps_i = \sqrt{w_i}  \cdot \hei$ a~$\hz_i = \sqrt{w_i} \cdot \hy_i$ dostaneme $\sum_{i = 1}^n w_i \hei \hy_i = 0$, tzn. graf $\hei$ proti~$\hy_i$ bude zavádějící
+		\item graf $\sqrt{w_i}  \cdot \hei$ proti~$\sqrt{w_i}  \cdot \hy_i$ je ale v~pořádku
+		\item podobné závěry platí i~pro~grafy $\hei$ proti~$\x_j^c, i~ = 1,..., m$.
+ 	\end{itemize}
+ 	\item (*): přirozené je definovat $R^2 = \rho^2(\hzb, \z)$, kde $\rho(\hzb, \z)$ je výběrový korelační koeficient, pro~$\mathbb{W} = \I$ dostaneme standardní $R^2$
+\end{itemize}
+
+\begin{remark}
+\begin{itemize}
+	\item, pokud jsou váhy neznámé, bylo by třeba je odhadnou společně s~$\betab$ a~$\sigma^2$ z~dat
+	\item to ale není obecně možné, protože máme více parametrů, než dat
+	\item někdy to možné je, pokud máme další informace o~rozdělení chyb (tvar kovarianční matice atd.)
+\end{itemize}
+\end{remark}
+
+\begin{remark}
+	Celý postup WLS lze použít i~na~případ $\eb \sim \NN_m(0,\sigma^2 \Wm)$, kde $\Wm$ je známá, ale není diagonální. Protože $\Wm$ je symetrická, ex. regulární $\Km$ tak, že $\Wm = \Km \Km^T$. Stejná transformace jako u~WLS opět vede na~transformovaný model, kde $\epsb \sim \NN_m(0,\sigma^2 \Identita{m})$.
+\end{remark}
+
+\section{Korelované chyby}
+\begin{itemize}
+\item Zejména v~časových nebo ekonomických datech se~často objevuje korelace jednotlivých hodnot.
+\item potom není splněn předpoklad nezávislosti chyb
+\item tento stav je třeba detekovat (někdy pomohou grafy reziduí)
+\item modely pro~korelovaná data: \textbf{Analýza časových řad}
+\end{itemize}
+
+Pokud je přítomna autokorelace a~chyby mají konstantní rozptyl, platí, že
+\begin{enumerate}
+\item OLS odhad $\wbeta$ je nestranný, ale neplatí Gauss-Markovova věta, tzn. $\wbeta$ nemá nejmenší rozptyl.
+\item MSE = $\frac{1}{n-m-1}\SSE$ (odhad $\sigma^2$) může být podstatně menší, než skutečná hodnota $\sigma^2$, což může dávat falešný pocit přesnosti.
+\item V~důsledku bodu 2) mohou být zvětšeny hodnoty T statistik, takže testy o~parametrech a~IS nefungují.
+\item Protože jsou chyby nezávislé, F-testy a~t-testy nejsou přesně platné ani když jsou chyby normální.
+\end{enumerate}
+
+\subsection{Durbin-Watson statistika}
+Omezíme se~na~pozorování získaná v~čase $t = 1,2,..., n$ a~případ, že chyby $e_t$ splňují podmínky autoregresního procesu 1. řádu (AR1), tj.
+ $$
+e_t = \rho e_{t-1}+ u_t, \quad |\rho| < 1,
+ $$
+kde $\rho$ je autokorelační koeficient, $u_t \sim \NN (0, \sigma_n^2)$ jsou nezávislé v~$t  \in\widehat{n} $ a~$u_t$ je nezávislá na~$e_t, t \geq 1$. Častěji pro~data časových řad platí $\rho > 0$ (pozitivní autokorelace).
+
+Pro test $\hypothesis{\rho = 0}{\rho > 0}$ se~užívá \textbf{Durbin-Watsonova statistika}
+ $$
+d = \frac{\sum_{t = 2}^n(\he_t - \he_{t-1})^2}{\sum_{t = 1}^n \he_t^2},
+ $$
+kde $\he_t$ jsou rezidua modelu LR. Pokud zamítneme $H_0$, odhadne se~$\rho$ pomocí
+ $$
+\widehat{\rho} = \frac{\sum_{t = 2}^n \he_t \he_{t-1}}{\sum_{t = 2}^n \he_t^2}.
+ $$
+
+\newcommand{\sumtn}{\sum_{t = 2}^n}
+\begin{remark}
+Dá se~ukázat, že $d \approx 2(1-\hrho)$ :
+ $$
+\sum_{t = 2}^n(\he_t - \he_{t-1})^2 = \sumtn \he_t^2 + \sumtn \he_{t-1}^2 - 2 \sumtn \he_t \he_{t-1} \approx 2 \left(\sumtn \he_t^2 - \sumtn \he_t \he_{t-1} \right),
+ $$
+Z Cauchy-Schwartzovy nerovnosti $\Rightarrow \frac{\sumtn \he_t \he_{t-1}}{\sum_{t = 1}^n \he_t^2}$ leží přibližně v~$(-1,1)$, tzn. $d$ leží přibližně v~$(0,4)$. Dále
+ $$
+\hrho \approx 1 \Rightarrow d \approx 0 \quad \text{a} \quad \hrho \approx 0 \Rightarrow d \approx 2,
+ $$
+tzn. pro~malé hodnoty $d$ budeme zamítat $H_0$, pro~velké hodnoty nebudeme zamítat. Kritické hodnoty určené Durbinem a~Watsonem jsou tabelované.
+\end{remark}
+
+\noindent \textbf{Test:}
+\begin{enumerate}
+	\item spočítat hodnotu $d$
+	\item nalézt kritické hodnoty $(d_L,d_U)$ pro~dané $n$ a~$m+1$
+	\item \begin{enumerate}
+		\item zamítnout $H_0$, pokud $d < d_L$
+		\item nezamítnout $H_0$, pokud $d > d_U$
+		\item pro~$d_L < d < d_U$ test nerozhodne
+	\end{enumerate}
+\end{enumerate}
+
+\begin{remark}
+	Pro test $\hypothesis{\rho = 0}{\rho < 0}$ lze použít popsaný test pro~$d' = 4 - d$. Metody pro~korekci autokorelace: \textbf{Cochrane-Orcutt}.
+\end{remark}\begin{enumerate}[A)]
+
+\item
+Mallows $C_p$, AIC, BIC
+
+Kritéria beroucí více v~poraz počet použitých regresorů. Lze je použít i~pro~\textbf{nevnořené modely}!
+\begin{itemize}
+\item Mallows $C_p$
+ $$
+C_p = \frac{\SSE_p}{\wsigma^2} - n + 2p, \quad \wsigma^2 = \frac{\SSE_T}{n-T}
+ $$
+\textbf{Vlastnosti $C_p$ }:
+\begin{enumerate}[1)]
+\item Snadno se~počítá, $\SSE_p$ a~$\wsigma^2$ jsou implementované.
+\item Pokud je $\wsigma^2$ konzistentní odhad $\sigma^2$ (nazávisející na~$p$), má $C_p$ následující interpretaci: Porovnává, co zbývá vysvětlit pomocí modelů s~$p$ a~$T$ parametry, zvýhodňuje počet dostuoných dat a~penalizuje počet parametrů, které je třeba odhadnout.
+\item Při~zvyšování počtu regresorů: $q|sigma^2$ je konst., $\SSE_p$ klesá, $p$ roste ($C_p$ se~snaží sladit dvě protichůdná kritéria).
+\item $C_T = T$.
+\item Pokud je správný model s~$p$ parametry, dá se~ukázat, že $C_p \approx p$ pro~$n >> T$.
+\item V~praxi se~volí model s~nejmenším $C_p$ ve~skupině modelů. (Obrázek)
+\end{enumerate}
+
+\begin{remark}
+Pro dobrou interpretaci je třeba spočítat $C_p$ pro~všechny nebo většinu podmnožin regresorů.
+\end{remark}
+
+\item
+Akaikeho informační kritérium AIC
+
+\newcommand{\AIC}{\mathrm{AIC}}
+Obecná definice je
+ $$
+\AIC = -2l(\wtheta) + 2p^*,
+ $$
+kde $\wtheta$ je MLE odhad v~modelu, $l$ je log-věrohodnostní funkce a~$p^*$ je počet parametrů, které je třeba odhadnout ($p^* = p + 1$, jelikož počítáme i~$\sigma^2$).
+
+Pro náš model LR:
+\begin{align*}
+L(\betab,\sigma^2) & = \frac{1}{\left(2\pi \sigma^2\right)^{n/2}} \exp \left[- \frac{1}{2\sigma^2} \left(\y - \X \betab \right)^T \left(\y - \X \betab \right) \right] \\
+l(\betab, \sigma^2) & = - \frac{n}{2} \ln 2\pi - \frac{n}{2} \ln \sigma^2 - \frac{1}{2} \frac{\left(\y - \X \betab \right)^T \left(\y - \X \betab \right)}{\sigma^2} \\
+\AIC & = -2l(\wbetab, \wsigma^2) + 2p^* = n \ln 2\pi + \ln \wsigma^2 + \frac{\left(\y - \X \betab \right)^T \left(\y - \X \betab \right)}{\wsigma^2} + 2p^*,
+\end{align*}
+ale $\wsigma^2 = \frac{1}{n} \left(\y - \X \betab \right)^T \left(\y - \X \betab \right) = \frac{\SSE}{n}$, tedy
+ $$
+\AIC = \underbrace{n \ln 2 \pi + n}_C + n \ln \frac{\SSE}{n} + 2p^*
+ $$
+nebo alternativně $\AIC = n \ln \frac{\SSE}{n} + 2p^*$.
+
+\begin{remark}
+\begin{itemize}
+\item hledáme model s~minimální hodnotou AIC
+\item AIC není mírou kvality modelu, je užitečná pro~porovnávání modelů
+\end{itemize}
+\end{remark}
+
+\textbf{AIC v~R:}
+
+- \verb|AIC(.)| počítá $\AIC = n \ln 2 \pi + n + n \ln \frac{\SSE}{n} + 2p^*$, kde $p^*$ je počet parametrů $\betab, \sigma^2$ (včetně interceptu) \\
+- \verb|extractAIC(.)| počítá $\AIC = + n \ln \frac{\SSE}{n} + 2p^*$, kde $p^*$ je jen počet parametrů $\betab$ (včetně interceptu)
+
+\item
+(Schwarzovo) bayesovské informační kritérium BIC
+
+\newcommand{\BIC}{\mathrm{BIC}}
+
+Z definice
+ $$
+\BIC = -2 l(\wtheta) + p^* \ln n.
+ $$
+Více penalizuje počet parametrů $\Rightarrow$ vybírá jednodušší modely s~jednodušší interpretací, než AIC. BIC vyžaduje významnější příspěvek proměnné, aby byla zařazena do~modelu. (AIC se~zanořuje za~predikci, BIC je kompromis mezi~interpretovatelností a~predikcí.)
+
+\textbf{BIC v~R:}
+
+- \verb|BIC(.)| nebo \verb|AIC(.), extractAIC(.)| s~volbou \verb|k = log(nobs(fit))|.
+
+Příklad - data HALD.
+\end{itemize}
+
+\item
+PRESS statistika
+
+\newcommand{\PRESS}{\mathrm{PRESS}}
+
+Pokud je pro~nás důležitá kvalita predikve, lze použít pro~srovnání modelů statistiku
+ $$
+\PRESS = \sum_{i = 1}^n \he_{(-i)}^2 = \sum_{i = 1}^n \left(\frac{\hei}{1 - \hii} \right)^2.
+ $$
+Vybírá se~model s~minimální hodnotou této statistiky.
+\end{enumerate}
+
+\section{Metody výběru modelu}
+
+\begin{enumerate}[1)]
+
+\item
+\textbf{Vyhodnocení všech možných modelů}
+
+Pro $T$ dostupných regresorů tzn. naladit $2^T$ modelů. Pak je porovnat pomocí nějakého kritéria. Náročné pro~velká $T$ (například $T = 20$ znamená $1024$ modelů).
+
+\item
+\textbf{Zpětná eliminace (backward elimination)}
+
+Začneme s~plným modelem a~v~každém kroku odstraníme jednu proměnnou, která nejméně přispívá modelu (měřeno F stat) nebo jejíž odstranění znamená největší zlepšení modelu (měřeno AIC).
+
+\textbf{algoritmus:}
+\begin{enumerate}[	1)]
+	\item Naladíme model se~všemi proměnnými.
+	\item Pro~každou proměnnou spočteme částečnou $\FF$ statistiku (nebo $t$ -statistiku) jako by právě byla přidána do~modelu, tzn. za~předpokladu, že ostatní proměnné tam už jsou.
+	\item Pokud je nějaká $\FF$ -statistika menší, než kritická hodnota $\FF_\mathrm{OUT}$, vynecháme z~modelu proměnnou s~nejnižší hodnotou $\FF$. $\FF_\mathrm{OUT} = \FF_{1-\alpha_\mathrm{OUT}}(1,n-p)$, kde $p$ je aktuální počet regresorů v~modelu, včetně interceptu, $\alpha_\text{OUT} = 0.05,0.1,...$
+	\item Opakujeme kroky 2) a~3), dokud všechny částečné $\FF$ statistiky nejsou větší, než příslušná kritická hodnota $\FF_\mathrm{OUT}$, tzn. nelze už vyřadit žádnou proměnnou.
+\end{enumerate}
+\begin{remark}
+	Místo $\FF$ lze foužívat AIC.
+\end{remark}
+
+\item
+\textbf{Dopředná regrese (forward regression)}
+
+Začneme pouze s~interceptem (nebo nutným minimálním modelem) a~v~každém kroku přidáme jednu proměnnou, která má za~následek největší zlepšení modelu (největší nárůst $\FF$ nebo největší pokles AIC).
+
+Tato metoda neumožňuje odstranit proměnnou, která už do~modelu byla přidána.
+
+\textbf{algoritmus:}\begin{enumerate}[	1)]
+	\item Naladíme minimální model.
+	\item Pro~každou dostupnou proměnnou spošteme $\FF$ statistiku pro~test významnosti jijího přidání do~modelu.
+	\item Pokud ně, která z~těchto $\FF$ statistik překračuje kritickou hodnotu $\FF_\mathrm{in}$, přidáme do~modelu proměnnou s~nejvyšší hodnotou $\FF$ statistiky.
+	\item Opakujeme kroky 2) a~3), dokud všechny $\FF$ -statistiky pro~zbývající proměnné nebudou menší, než $\FF_\mathrm{in}$ nebo dokud nezbyde žádná proměnná na~přidání do~modelu.
+\end{enumerate}
+\begin{remark}
+	I když tento postup zjednodušuje výběr modelu, často bohužel vede na~zařazení proměnných, které nemají významný příspěvek, jakmile jsou zařazeny další proměnné.
+\end{remark}
+
+\item
+\textbf{Postupná regrese (stepwise regression)}
+
+Kombinace dvou předchozích metod. V~každém kroku algoritmu přidáváme jednu proměnnou a~poté zkontrolujeme, zda není možné nějakou odebrat. Budeme potřebovat  dvě kritické hodnoty $\FF_\mathrm{in}$, $\FF_\mathrm{OUT}$ (pro použití $\FF$ statistiky).
+
+\textbf{algoritmus:}\begin{enumerate}[	1)]
+	\item Naladíme minimální model.
+	\item Zjistíme, zda přidání nějaké další proměnné může zlepšit model ($\FF$ nebo AIC). Pokud ano, přidáme do~modelu proměnnou, která má za~následek největší zlepšení modelu (nebo největší pokles AIC).
+	\item V~novém modelu zjistíme, zda nelze některou proměnnou vynechat (opět pomocí AIC nebo $\FF$). Pokud ano, vynecháme proměnnou, jejíž vyřazení má za~následek největší zlepšení modelu (nebo největší pokles AIC).
+	\item Opakujeme kroky 2) a~3) do~té doby, až nebude možné přidat ani ubrat žádnou proměnnou.
+\end{enumerate}
+
+\textbf{Princip marginality:}
+\begin{enumerate}[	1)]
+	\item Pokud jsou v~modelu vyšší mocniny nějakého regressoru, měly by tam být obsaženy i~všechny jeho nižší mocniny (i když jsou případně nevýznamné).
+	\item Pokud je v~modelu obsažena interakce dvou regressorů, měly by tam být i~oba individuální regresory.
+	\item S~každou interakcí vyššího řádu by měl model obsahovat i~všechny interakce řádu nižšího. ($a:b:c~\to~a:b,a:c,b:c$).
+\end{enumerate}
+\end{enumerate}
+
+\begin{remark}
+	Jakmile nalezneme optimální model, je třeba řádně ověřit adekvátnost.
+\end{remark}

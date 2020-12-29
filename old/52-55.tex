@@ -1,0 +1,104 @@
+\begin{remark}
+	\begin{itemize}
+		\item pokud jsou sloupce $\X$ LZ, je $\x^T\x$ singulární, což je většinou detekováno numerickou metodou výpočtu $\wbeta$
+		\item horší situace je, pokud jsou sloupce $\X$ "téměř" LZ $\rightarrow$ tzv. \textbf{multikolinearita} -- způsobuje problémy při výpočtu $\wbeta$, protože je $\x^T\x$ "téměř" singulární, jak ji detekovat probereme na konci přednášky
+	\end{itemize}
+\end{remark}
+
+\section{Odhady parametrů}
+\subsection{Odhad parametru $\sigma^2$}
+Pro normální chyby získáme MLE $\sigma^2$ derivací $\ln L(\beta, \sigma^2)$, z čehož plyne:
+\begin{align*}
+	\hsn & = \frac{1}{n} SSE = \frac{1}{n}(\y - \X \wbetab)^T(\y - \X \wbetab) = \frac{1}{n} \sumin(y_i - \hyi)^2, \\
+	& \text{kde \;} \hyi = (\X \wbetab)_i = \x_i^T \wbetab, \quad i = 1, \dots, n \\
+\end{align*}
+a $\x_i^T$ značí i-tý řádek matice $\X$. Protože se jedná o vychýlený odhad, používá se obecně odhad
+$$
+	s_n^2 = \frac{1}{n-(m+1)} SSE = \frac{1}{n - m - 1} \sumin(y_i - \hyi)^2
+$$
+a $s_n = \sqrt{s_n^2}$ jako odhad $\sigma$ (už není nestranný).
+
+Pro $e_i \sim \Nn$ se také pooužívají statistiky $s_n^2, s_n$.
+
+\textit{Př. Ex. 5.13, str. 158 (nebo 138? jinak?)}
+
+\textit{Ex. 5.15, str. 203}
+
+\subsection{Vlastnosti odhadů $\wbeta, s_n^2$}
+\begin{theorem}
+	Nechť $\wbetab$ je OLS odhad parametru $\betab$ v modelu $(**)$, kde $h(\X) = m-1$ a $e_1, \dots, e_n$ nezávislé, $e_i \sim \Nn$. Potom platí:
+	\begin{enumerate}
+		\item $\E(\wbetab) = \betab$ (tj. $\wbetab$ je nestranný)
+		\item $\Cov(\wbetab) = \sigma^2 (\X^T \X)^{-1}$
+		\item $\E(s_n^2) = \sigma^2$
+		\item Pokud navíc $e_i \sim \Nn, i = 1, \dots, n$, potom $\wbetab \sim \NN_{m-1}(\betab, \sigma^2(\X^T \X)^{-1})$. Speciálně $\wbeta_i \sim \NN(\beta_i, \sigma^2 \nu_i)$, kde $\nu_i$ je i-tý diagonání prvek matice $(\X^T \X)^{-1}$.
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\begin{enumerate}
+\item 
+\begin{align*}
+	h(\X) & = m - 1 \implies \wbetab = (\X^T \X)^{-1} \X^T \Y \\
+	\E \wbetab & = \E \left[ (\X^T \X)^{-1} \X^T \Y \right] = (\X^T \X)^{-1} \X^T \E\Y = (\X^T \X)^{-1} \X^T \X \betab = \betab
+\end{align*}
+
+\item 
+Značení: $\Y$ velikosti $(n \times 1)$ nádoný vektor, $\Cov(\Y) = \Sigma$, $\Am_{m, n}$ matice, potom $\Cov(\Am \X) = \Am \Sigma \Am^T$.
+
+Protože $\wbetab = \Am \Y$, kde $\Am = (\X^T \X)^{-1} \X^T$, $\wbetab$ je LK $Y_1, Y_m$ a $\Cov(\Y) = \sigma^2 \In$
+$$
+	\Cov \wbetab = (\X^T \X)^{-1} \X^T \sigma^2 \In \X (\X^T \X)^{-1} = \sigma^2 (\X^T \X)^{-1}.
+$$
+
+\item
+Nejdříve přepíšeme vektor reziduí $\he = \Y - \X \wbetab = \Y - \hYb$ a \\
+$\hYb = \X \wbetab = \X (\X^T \X)^{-1} \X^T \Y = \Hm \Y$, kde $\Hm = \X (\X^T \X)^{-1} \X^T$ je tzv. \textbf{projekční matice}. Pak $\heb = \Y - \Hm \Y = (\In - \Hm) \Y$.
+
+Dále platí $(\In - \Hm) \X = \X - \X (\X^T \X)^{-1} \X^T \X = \X - \X = \boldsymbol{0}$, takže
+$$
+	\heb = (\In - \Hm) \Y = (\In - \Hm)(\Y \betab + \eb) = \underbrace{(\In - \Hm) \X}_{ = \boldsymbol{0}} \betab + (\In - \Hm) \eb = (\In - \Hm) \eb
+$$
+
+Zřejmě $\Hm^T = \Hm$ a $\Hm^2 = \left[ \X - \X (\X^T \X)^{-1} \X^T \right] \left[ \X - \X (\X^T \X)^{-1} \X^T \right] = \X - \X (\X^T \X)^{-1} \X^T = \Hm$ a $(\In - \Hm)^2 = \In - \Hm$ (neboli $\Hm$ je symetrická a idempotentní?).
+
+$$
+	SSE = (\Y - \hYb)^T(\Y - \hYb) = \heb^T \heb = \heb^T (\In - \Hm)(\In - \Hm) \eb = \eb^T (\In - \Hm) \eb = \sumin \sumjn g_{ij} e_i e_j,
+$$
+kde $g_{ij}$ je (i,j)-prvek matice $(\In - \Hm)$.
+
+\begin{align*}
+	\E(SSE) & = \sumin \sumjn g_{ij} \underbrace{\E( e_i e_j)}_{\Cov(e_i, e_j)} = \left[ \text{nekorelované: \;} \E e_i = 0 \right] = \sumin g_{ii} \D e_i = \sigma^2 \sumin g_{ii} \\
+	\sumin g_{ii} & = \trace(\In - \Hm) = \trace(\In) - \trace(\Hm) = n - \trace(\X (\X^T \X)^{-1} \X^T) = \\
+	& = n - \trace(\X^T \X (\X^T \X)^{-1} ) = n - \trace(\Identita{m+1}) = n - (m + 1)
+\end{align*}
+
+Celkem pak dostáváme $\E s_n^2 = \frac{1}{n - (m + 1)} \E (SSE) = \frac{1}{n - (m + 1)} \sigma^2(n - (m + 1)) = \sigma^2$.
+
+\item 
+$\wbeta$ e LK $Y_1, \dots, Y_n$, nezávislé, normálně rozdělené $\rightarrow \wbetab \sim \NN_{m+1} (\betab, \sigma^2(\X^T \X)^{-1})$.
+\end{enumerate}
+\end{proof}
+
+\begin{remark}
+	Vlastnosti projekční matice:
+	\begin{itemize}
+		\item $\Hm = \X (\X^T \X)^{-1} \X^T, \quad \hYb = \Hm \Y, \quad \Hm^T = \Hm, \quad (\Identita{n} - \Hm)^T = (\Identita{n} - \Hm)$ -- symetrie
+		\item $\Hm^2 = \Hm, \quad (\Identita{n} - \Hm)^2 = \Identita{n} - \Hm$ -- idempotentnost
+		\item $\Hm \X = \X, \quad \trace(\Hm) = \sumin h_{ii} = m + 1$
+		\item $\Hm(\Identita{n} - \Hm) = (\Identita{n} - \Hm) \Hm = \boldsymbol{0}$.
+	\end{itemize}
+\end{remark}
+
+\begin{theorem}
+	Nechť $\Y = \X \betab + \eb$ je LM $(**)$, kde $h(\X) = m + 1$ a $\eb \sim \NN_n(\boldsymbol{0},\sigma^2 \Identita{n})$. Potom
+	\begin{enumerate}
+		\item $\wbeta$ a $s_n^2$ jsou nezávislé náhodné veličiny,
+		\item $(n - m - 1) \frac{s_n^2}{\sigma^2} \sim \chi^2(n - m - 1)$.
+		\item Jestliže $v_i = (\X^T \X)_{ii}^{-1}$, potom $T_i = \frac{\wbeta_i - \beta_i}{s_n \sqrt{v_i}} \sim t(n-m-1)$.
+		\item Nechť $\C \in \R^{r,m+1}$ takové, že $h(\eb) = r$. Potom kvadratická forma
+		$$
+			\frac{q}{\sigma^2} = \frac{(\wbeta - \beta)^T \C^T \left[ C (\X^T \X)^{-1} \C^T \right]^{-1} \C (\wbeta - \beta)}{\sigma^2} \sim \chi^2(r).
+		$$
+	\end{enumerate}
+\end{theorem}

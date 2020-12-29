@@ -1,0 +1,108 @@
+
+\subsubsection*{Označení:}
+$\lx_j = \frac{1}{n} \sumin x_{ij}$ -- průměr j-tého sloupce matice $\X$,
+$$
+	\lX = \begin{pmatrix}
+	\lx_0 & \lx_1 & \cdots & \lx_m \\
+	\vdots & \vdots & & \vdots \\
+	\lx_0 & \lx_1 & \cdots & \lx_m
+	\end{pmatrix}_{n \times m+1} \quad \underbrace{(\X_c)_{ij}}_{\text{centrované matice regresorů}} = x_{ij} - \lx_j, \quad i = 1, \dots, n, j = 1, \dots, m
+$$
+
+\begin{theorem}
+	V modelu $\Y = \X \betab + \eb$, kde $e_i$ jsou nekorelované a $e_i \sim \Nn$ pro $i = 1, \dots, n$ platí
+	$$
+		\E \left[ \frac{SSR}{n} \right] = \sigma^2 + \frac{\betab^T(\X - \lX)^T(\X - \lX) \betab}{m} = \sigma^2 + \frac{\betab_s^T \X_c^T \X_c \betab_s}{m},
+	$$
+	kde $\betab_s = (\beta_1, \dots, \beta_m)$.
+\end{theorem}
+
+\begin{proof}
+	
+\begin{align*}
+	\hyi & = \wbeta_0 + \sumjm x_{ij} \wbeta_j \\
+	\frac{\partial SSE}{\partial \beta_0} & = \sumin \left( y_i - (\beta_0 + \sumjn x_{ij} \wbeta_j) \right) = 0 \implies \wbeta_0 = \ly - \sumjm \lx_j \wbeta_j
+\end{align*}
+Celkem pak $\hy_i - \lx = \sumjm (x_{ij} - \lx_j) \wbeta_j, \quad i = 1, \dots, n$ a zapsáno maticově: 
+$$
+\hY = \lY = (\X - \lX) \wbetab, \quad \text{kde} \; \lY = (\ly, \ly, \dots, \ly)_{1 \times n}^T,
+$$
+protože první sloupec matice $\X - \lX$ je nulový. Potom
+$$
+SSR = \sumin(\hy_i - \ly)^2 = (\hY - \lY)^T(\hY - \lY) = \wbetab^T \underbrace{(\X - \lX)^T(\X - \lX)}_{\Am} \wbetab = \wbetab^T \Am \wbetab
+$$
+
+\end{proof}
+
+\begin{theorem}
+	Nechť $Z = \Y^T \Am \Y$ je kvadratická forma a nechť $\E \Y = \bmu$ a $\Cov \Y = \Sigma$. Potom platí:
+	$$
+		\E Z = \trace(\Am \Sigma) + \bmu^T \Am \bmu.
+	$$
+\end{theorem}
+
+\begin{proof}
+Nejdříve zjednodušíme matici $\Am$:
+\begin{align*}
+	\lX & = \frac{1}{n} \Bm, \; \text{kde} \; \Bm = \begin{pmatrix}
+	1 & 1 & \cdots & 1 \\
+	\vdots & \vdots & & \vdots \\
+	1 & 1 & \cdots & 1
+	\end{pmatrix} \quad \text{a tedy} \\
+	& \X - \lX = \left(\Identita{n} - \frac{1}{n} \Bm \right) \X \quad \text{a} \quad (\X - \lX)^T = \X^T \left(\Identita{n} - \frac{1}{n} \Bm \right) \\
+	& \Am = (\X - \lX)^T(\X - \lX) = \X^T \underbrace{\left(\Identita{n} - \frac{1}{n} \Bm \right)^2}_{\Identita{n} - \frac{2}{n} \Bm + \frac{\Bm^2}{n^2}} \X = \X^T \left(\Identita{n} - \frac{1}{n} \Bm \right) \X
+\end{align*}
+
+Dále rozepíšeme $\underbrace{\Am \Sigma}_{ = \Am \Cov \wbetab} = \sigma^2 \X^T \left( \Identita{n} - \frac{1}{n} \Bm \right) \X \left( \X^T \X \right)^{-1}$ a spočítáme $\trace (\Am \Sigma)$:
+
+\begin{equation*}
+\begin{split}
+\trace (\Am \Sigma) = \sigma^2 \trace \left[ \X \left( \X^T \X \right)^{-1} \X^T \left( \Identita{n} - \frac{1}{n} \Bm \right) \right] = \sigma^2 \trace\left[ \Hm - \frac{1}{n} \Hm \Bm \right] = \\ = \sigma^2 \left[ \trace \Hm - \lomn{1} \trace (\Hm \Bm) \right] = \sigma^2 \left[ \underbrace{\trace \Hm}_{=m+1} \lomn{1} \underbrace{\trace \Bm}_{= n} \right] = \sigma^2 m,
+\end{split}
+\end{equation*}
+jelikož víme, že $\Hm \X = \X$ a $\jednab = (1, \dots, 1)^T$ je první sloupec $\X$, takže $\Hm \jednab = \jednab$ a tedy $\Hm \Bm = \Bm$. Celkem tak dostáváme
+$$
+\E \left( \frac{SSR}{m} \right) = \lm \left( \sigma^2 m + \betab^T (\X - \lX)^T(\X - \lX) \betab \right) = \sigma^2 + \lm \betab^T (\X - \lX)^T(\X - \lX) \betab
+$$
+Navíc platí $(\X - \lX) \betab = \X_c \betab_s$, protože první sloupec matice $\X - \lX$ je nulový vektor.
+\end{proof}
+
+\begin{remark}
+Pokud $\betab_s$ = 0, potom $\E \left( \frac{SSR}{m} \right) = \sigma^2 = \E s_n^2$, takže $\betab_s \neq 0$ implikuje, že $\E \left( \frac{SSR}{m} \right) > \sigma^2$, tedy velké hodnoty $F = \frac{SSR/m}{s_n^2}$ budou znamenat zamítnutí $H_0: \betab_s = 0$. Budeme proto potřebovat rozdělení $F$ za platnosti $H_0$.
+\end{remark}
+
+\begin{theorem}
+Nechť v modelu $\Y = \X \betab + \eb$ $(**)$ jsou $e_1, \dots, e_n$ iid $\Nn$. Pokud $\betab_s = 0$, tj. $\beta_1 = \beta_2 = \cdots = \beta_m = 0$, potom
+$$
+F \sim F(m, n - m -1).
+$$
+\end{theorem}
+
+\begin{proof}
+V důkazu minulé věty jsme ukázali
+$$
+SSR = \wbetab^T \X^T \left( \Identita{n} - \lomn{1} \Bm \right) \X \wbetab = \hYb^T \left( \Identita{n} - \lomn{1} \Bm \right) \hYb
+$$
+a potřebujeme rozepsat $\hYb$:
+$$
+\hYb = \Hm \Y = \Hm (\X \betab + \eb) = \Hm (\jednab \beta_0 + \X_v \betab_s)+ \eb) = \beta_0 \underbrace{\Hm \jednab}_{= \jednab} + \Hm \X_v \underbrace{\betab_s}_{= 0} + \Hm \eb = \beta_0 \jednab + \Hm \eb
+$$
+
+$$
+SSR = (\beta_0 \jednab^T + \eb^T \Hm)\left( \Identita{n} - \lomn{1} \Bm \right) (\beta_0 \jednab + \Hm \eb) = \eb^T \Hm \left( \Identita{n} - \lomn{1} \Bm \right) \Hm \eb,
+$$
+protože $\left( \Identita{n} - \lomn{1} \Bm \right) \jednab = 0$ a $\left( \Identita{n} - \lomn{1} \Bm \right)$ je symetrická.
+
+Dále platí $\Hm = \Hm^T, \Hm^2 = \Hm$ a $\Hm \Bm = \Bm \Hm = \Bm$ (protože $\Hm \jednab = \jednab$) a celkem tedy dostáváme
+$$
+SSR = \eb^T \underbrace{\left( \Identita{n} - \lomn{1} \Bm \right)}_{\text{ozn.} \; \C} \eb = \eb^T \C \eb.
+$$
+Pro matici $\C$ platí
+\begin{align*}
+\C^T & = \left( \Identita{n}^T - \lomn{1} \Bm^T \right) = \left( \Identita{n} - \lomn{1} \Bm \right) = \C \\
+\C^2 & = \left( \Identita{n} - \lomn{1} \Bm \right)\left( \Identita{n} - \lomn{1} \Bm \right) = \Hm^2 - \lomn{1} \Hm \Bm - \lomn{1} \Bm \Hm + \frac{1}{n^2} \Bm^2 =  \Hm - \lomn{2} \Bm + \lomn{1} \Bm = \Hm - \lomn{1} \Bm = \C,
+\end{align*}
+tedy $\C$ je symetrická a idempotentní, a proto
+$$
+h(\C) = \trace(\C) = \trace \left( \Identita{n} - \lomn{1} \Bm \right) = m + 1 - 1 = m.
+$$

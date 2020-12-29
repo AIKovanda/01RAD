@@ -1,0 +1,199 @@
+Budeme potřebovat podobné formule pro~$\wbetab-\wbetab_{(-1)}$ a~$\mini{\SSE}$.
+
+\begin{theorem}
+	\begin{enumerate}[1)]
+		\item Nechť $\mini{\wbetab}$ značí $\LSE$ parametru $\wbetab$ v~modelu bez~$i$-tého pozorování. Potom platí 
+	$$ \wbetab-\mini{\wbetab}=\frac{(\textbf{X}^T\textbf{X})^{-1}\textbf{x}_i\hei}{1-\hii}=(\textbf{X}^T\textbf{X})^{-1}\textbf{x}_i\mini{\he}.$$
+	\item Pro~součet residuálních čtverců $\mini{\SSE}$ v~modelu bez~$i$-tého pozorování platí
+	$$\mini{\SSE}=\sumjn \he_j^2-\frac{\he_i^2}{1-\hii}.$$
+	\end{enumerate}
+
+\begin{proof}
+	\begin{enumerate}[1)]
+		\item Stejně jako v~důkazu předchozí věty platí, že 
+		$$ \mini{\wbetab}=S_1+\frac{1}{1-\hii}S_2,$$
+		kde $S_1=\wbetab-y_i\inv{(\textbf{X}^T\textbf{X})}\textbf{x}_i$ a~$S_2=\inv{\textbf{X}^T\textbf{X}}\textbf{x}_i\hyi-y_i\core \textbf{x}_i\hii$, tedy
+		\[
+		\begin{split}
+		\wbetab-\mini{\wbetab}&=y_i\core\textbf{x}_i-\frac{1}{1-\hii}\big(\core x_i\hyi-y_i\core \textbf{x}_i\hii\big)=\\&=\core \textbf{x}_i\Big(y_i-\frac{\hyi-y_i\hii}{1-\hii}\Big)=\core \textbf{x}_i\Big(\frac{y_i-y_i\hii-\hyi+y_i\hii}{1-\hii}\Big)=\\&=\core \textbf{x}_i\Big(\frac{y_i-\hyi}{1-\hii}\Big),
+		\end{split}
+		\] 
+		kde $\Big(\frac{y_i-\hyi}{1-\hii}\Big)=\frac{\hei}{1-\hii}=\mini{\he}$.
+		\item \[
+		\begin{split}
+		\mini{\SSE}&=\big(\mini{\textbf{y}}-\mini{\textbf{x}}^T\mini{\wbetab}\big)^T\big(\mini{\textbf{y}}-\mini{\textbf{x}}^T\mini{\wbetab}\big)=\sum_{\substack{j=1\\j\neq i}}^{n}(y_j-\textbf{x}_j^T\mini{\wbetab})^2=\\&=\sumjn (y_j-\textbf{x}_j^T\mini{\wbetab})^2-(y_i-\textbf{x}_i^T\mini{\wbetab})^2.
+		\end{split}
+		\]
+		Z bodu 1) víme, že $\mini{\wbetab}=\wbetab-\frac{\core \textbf{x}_i\hei}{1-\hii}$, tzn.
+		$$ \mini{\SSE}=\sumjn\Big(y_j-\textbf{x}_j^T\wbetab+\frac{\textbf{x}_j^T\core \textbf{x}_i\hei}{1-\hii}\Big)^2-\Big(y_i-\textbf{x}_i^T\wbetab+\frac{\textbf{x}_i^T\core \textbf{x}_i\hei}{1-\hii}\Big)^2.$$
+		Protože $\textbf{x}_j^T\core \textbf{x}_i=h_{ij}$, dostaneme
+		\[
+	\begin{split}
+	\mini{\SSE}&=\sumjn \Big(\he_j+\frac{h_{ij}\hei}{1-\hii}\Big)^2-\Big(\he_i+\frac{h_{ii}\hei}{1-\hii}\Big)^2=\underbrace{\sumjn\Big(\he_j+\frac{h_{ij}\hei}{1-\hii}\Big)^2}_{A}-\frac{\hei^2}{(1-\hii)^2},\\
+	A&= \sumjn \he_j^2+\frac{2\hei}{1-\hii}\underbrace{\sumjn h_{ij}\he_j}_{0}+\frac{\hei^2}{(1-\hii)^2}\underbrace{\sumjn h_{ij}^2}_{\hii}.
+	\end{split}
+	\]
+		Protože pak $\hyb=\textbf{H}\textbf{y}$, tak $\textbf{H}\hyb=\textbf{H}^2\textbf{y}=\textbf{H}\textbf{y}$ a~tedy $\textbf{H}\heb=\textbf{H}(\textbf{y}-\hyb)=\textbf{H}\textbf{y}-\textbf{H}\hyb=0$ a~tedy 
+		$$ \mini{\SSE}=\sumjn\he_j^2+\frac{\hei^2}{(1-\hii)^2}(\hii-1)=\sumjn\he_j^2-\frac{\hei^2}{1-\hii}.$$
+	\end{enumerate}
+\end{proof}
+\end{theorem}
+
+\begin{dusl}
+	V modelu (**) s~$m+1$ parametry $\beta$ a~bez~$i$-tého pozorování platí, že $$\EE{\mini{\SSE}}=(n-m-2)\sigma^2,$$
+	takže 
+	$$ \mini{\widehat{{\sigma}^2}}=\frac{\mini{\SSE}}{n-m-2}$$ je nestranný odhad $\sigma^2$. Dále pak 
+	$$ \mini{\widehat{{\sigma}^2}}=\frac{(1-\hii)(n-m-1)s_n^2-\hei^2}{(1-\hii)(n-m-2)}=\frac{1}{n-m-2}\Big(\SSE -\frac{\hei^2}{1-\hii}\Big),$$ kde $s_n^2=\frac{1}{n-m-1}\SSE$ (pro plný model).
+	\begin{proof}
+		Protože $\EE{\hei^2}=\D \hei=\sigma^2(1-\hii)$, dostaneme dle předchozí věty 
+		\[
+		\begin{split}
+		&\EE{\mini{\SSE}}=\sumjn\sigma^2(1-h_{jj})-\sigma^2=\sigma^2\big[(n-1)-\underbrace{\sumjn h_{jj}}_{h\textbf{H=m+1}}\big]=\sigma^2(n-m-2)\\
+		&\mini{\widehat{{\sigma}^2}}=\frac{1}{n-m-2}\mini{\SSE}=\frac{1}{n-m-2}\Big(\underbrace{\sumjn\he_j^2}_{\SSE=(n-m-1)s_n^2}-\frac{\hei^2}{1-\hii}\Big)=\frac{1}{n-m-2}\frac{(1-\hii)\SSE-\hei^2}{1-\hii}.
+		\end{split}
+		\]
+	\end{proof}
+\end{dusl}
+
+\begin{remark}
+	Dě se~ukázat, že $\mini{\SSE}$ a~$\hei$ jsou nezávislé náhodné veličiny. Protože $\frac{\mini{\SSE}}{\sigma^2}\sim\chi^2(n-m-2)$ a~$\frac{\hei}{\sigma\sqrt{1-\hii}}\sim\NN(0,1)$, dostaneme $\frac{\hei}{\mini{\widehat{{\sigma}^2}}\sqrt{1-\hii}}\sim t(n-m-2)$.
+\end{remark}
+
+\begin{corollary}
+	Uvažujme model (**), kde $h(X)=m+1$ a~$\textbf{e}\sim\NN_m(0,\sigma^2 I_m)$. Nechť pro~$i\in\hat{n}$ platí, že $\hii\neq1$. Potom $i$-té ??????????91dole? reziduum 
+	$$ \widehat{t}_i\sim t(n-m-2).$$
+\end{corollary}
+\begin{remark}
+	$\widehat{t}_i$ lze použít pro~test hypotézy, zda je $i$-té pozorování odlehlé (outlier), tedy
+	\[
+	\begin{split}
+	&H_0:~i\text{-té pozorování není odlehlé v~modelu }M\\
+	&H_1:~i\text{-té pozorování je odlehlé v~}M,
+	\end{split}
+	\] kde odlehlé značí odlehlé vzhledem k~$M:~\textbf{Y}\sim\NN_m(\textbf{X}\beta,\sigma^2 I_m)$:\begin{enumerate}[a)]
+		\item střední hodnota $i$-tého pozorování se~nerovná té dané modelem,
+		\item pozorovaná hodnota $Y_i$ je neobvyklá za~platnosti $M$.
+	\end{enumerate}
+$H_0$ zamítneme, pokud $$ |\widehat{t}_i|>t_{1-\frac{\alpha}{2}}(n-m-2)\approx u_{1-\frac{\lparen}{2}}\doteq 2\text{ pro~}\alpha=0.05\text{ a~}n\text{ velká}.$$
+Pokud test použijeme na~všechna pozorování, je potřeba aplikovat nějakou korekci na~vícenásobné testování, např. Bonferroni.
+\end{remark}
+\begin{remark}
+	Vztah $\mini{\he}$ a~$\widehat{t}_i$:
+	$$ \mini{\he}=\frac{\hei}{1-\hii}\quad\Rightarrow\quad\E\mini{\he}=0\quad\wedge\quad \D \mini{\he}=\frac{\sigma^2}{1-\hii}.$$
+	Standardizované PRESS reziduum $$\frac{\mini{\he}}{\sqrt{D\mini{\he}}}=\frac{\frac{\hei}{1-\hii}}{\frac{\sigma}{\sqrt{1-\hii}}}=\frac{\hei}{\sigma\sqrt{1-\hii}}=r_i.$$
+	Pokud použijeme $\mini{\widehat{{\sigma}^2}}$ jako odhad $\sigma^2$, pak \textbf{studentizovaná PRESS rezidua} $$\frac{\hei}{\mini{\widehat{{\sigma}}}\sqrt{1-\hii}}=\widehat{t}_i.$$
+\end{remark}
+\begin{remark}
+	$\mini{\he}=\frac{\hei}{1-\hii}$, a~proto pokud $i$-té pozorování má velký potenciál $\hii$, bude $\mini{\he}$ mnohem větší, než $\hei$, pozorování s~velkým $\hii$ jsou dobře modelována, ale měřeno $\mini{\he}$ mohou špatně predikovat. To je další ukázka fit/prediction dilema.
+	
+	Stejný efekt nastává také pro~
+	$$ \wbetab_i-\mini{\wbetab}=\core\textbf{x}_i\mini{\he}.$$
+	Rozdíl může být "malý", pokud je "fit" dobrý, ale může být také "velký", pokud je $\hii$ velké.
+\end{remark}
+
+\section{Míry influence}
+\begin{itemize}
+	\item I~pro~perfektní model mohou dva různé vzorky $(\textbf{x},\textbf{y})$ a~$(\textbf{x}',\textbf{y}')$ vést k~různým závěrům,
+	\item většinou máme k~dispozici jen originální data,
+	\item bude nás zajímat vliv $i$-tého řádku $\textbf{x}$ na~model,
+	\item už víme, že velké $\hii$ indikuje, že $i$-té pozorování má velký vliv a~velká rezidua naznačují možnou neadekvátnost modelu,
+	\item míry, které zavedeme, budou kombinovat tyto dva faktory,
+	\item použijeme přístup z~PRESS residní, tzn. budeme sledovat jak velký vliv má vynechání $i$-tého pozorování na~$\wbetab$ a~$\widehat{\textbf{y}}$.
+\end{itemize}
+\subsection*{DFBETAS}
+$\wbetab-\mini{\wbetab}$ měří vliv vynechání $i$-tého pozorování na~odhad $\wbeta$ (bude základem pro~naši analýzu). Připomeňme nyní vztah 
+$$ \wbetab-\mini{\wbetab}=\core \textbf{x}_i\frac{\hei}{1-\hii}.$$
+
+\begin{description}
+	\item[a) vliv $i$-tého pozorování na~$\beta_j$:]
+	$$\beta_j-\mini{\beta}{}_j=\frac{r_{ij}\hei}{1-\hii},\quad\text{ kde }r_{ji}\text{ je }(j,i)\text{tý prvek matice }\R=\core\textbf{x}^T.$$
+	
+	$i$-té pozorování budeme považovat za~influenční na~$\beta_j$, pokud $\wbeta_j-\mini{\wbeta}{}_j$ bude velká. Protože $\wbeta _j$ je náhodná veličina, "velké" bychom měli měřit relativně vzhledem k~s.f. $(\wbeta _j$, což je $\sigma\sqrt{v_j}$, $v_j=\core _{jj})$. Pokud ji odhadneme pomocí $\mini{\widehat{{\sigma}}}\sqrt{v_j}$, dostaneme definici
+	$$ \mathrm{DFBETAS}_{j,i}=\frac{\wbeta_j-\mini{\wbeta}{}_j}{\mini{\widehat{{\sigma}}}\sqrt{v_j}}=\frac{r_{ji}\hei}{\sqrt{v_j}\mini{\widehat{{\sigma}}}(1-\hii)}=\frac{r_{ji}}{\sqrt{v_j}}\frac{\widehat{t}_i}{\sqrt{1-\hii}},$$
+	kde $\widehat{t}_i$ je ext. studentizované reziduum. Kombinuje efekt velkého rezidua $\widehat{t}_i$ a~velkého $\hii$. Jedna možnost pro~limitní hodnoty: $i$-té pozorování je považováno za~influenční na~oblasti $\beta_j$, pokud 
+	$$ |\mathrm{DFBETAS}_{j,i}|>\frac{2}{\sqrt{n}}.$$ Máme $(m+1)\times n$ hodnot pro~srovnání, zjednodušíme to.
+	\item[b) Vliv $i$-tého pozorování na~celý vektor $\wbetab$:] 
+	spočívá v~použití nejaké normy na~vektor $\wbetab-\mini{\wbetab}$. Cook navrhnul
+	$$ D_i=\frac{(\wbetab-\mini{\wbetab})^T\textbf{M}(\wbetab-\mini{\wbetab})}{(m+1)c},$$
+	kde $\textbf{M}$ je PD matice a~$c$ normalizační konstanta. Nejužívanější volba je $\textbf{M}=\textbf{X}^T\textbf{X}$ a~$x=s_n^2$. Cookova vzdálenost se potom spočítá jako 
+	$$ D_i=\frac{(\wbetab-\mini{\wbetab})^T\textbf{X}^T\textbf{X}(\wbetab-\mini{\wbetab})}{(m+1)s_n^2}.$$
+	
+	$$ D_i=\frac{1}{(m+1)s_n^2}\Big(\frac{\hei}{1-\hii}\Big)^2 \underbrace{\textbf{x}_i^T\core \underbrace{\textbf{x}^T\textbf{x}\core}_{I}\textbf{x}_i}_{\hii}=\frac{1}{m+1}\frac{\hii}{1-\hii}\frac{\hei^2}{s_n^2(1-\hii)}.$$
+	Výpočetní formule je potom ve tvaru
+	$$ D_i=\frac{\widehat{r}_i^2}{m+1}\Big(\frac{\hii}{1-\hii}\Big).$$
+\end{description}
+
+\begin{remark}
+	$100(1-\alpha)\%$ simultání IS pro $\betab$ je $$ C(\alpha)=\Big\{ ~\betab~\Big|\frac{(\wbeta-\beta)^T\textbf{x}^T\textbf{x}(\wbeta-\beta)}{(m+1)s_n^2}\leq \FF_{1-\alpha}(m+1,n-m-1) \Big\},$$
+	tzn. $$\mini{\betab}\in C(\alpha)\quad \Leftrightarrow\quad D_i\leq \FF_{1-\alpha}(m+1,n-m-1).$$
+	To je motivace pro \textbf{RULE OF THUMB}: $$\text{$i$-té pozorování je influenční, jestliže $D_i>\FF_{\frac{1}{2}}(m+1,n-m-1)$}$$ (pro většinu $m,n$ je $\FF_{\frac{1}{2}}\approx1$, zjednodušení pravidla $D_i>1$).
+\end{remark}
+
+\begin{remark}
+	Také platí, že 
+	$$ D_i=\frac{(\widehat{\textbf{y}}-\mini{\widehat{\textbf{y}}})^T(\widehat{\textbf{y}}-\mini{\widehat{\textbf{y}}})}{(m+1)s_n^2},$$
+	tzn. dá se chápat jako míra influence na celkovou predikci.
+\end{remark}
+
+\subsection*{DFFITS}
+\begin{itemize}
+	\item vliv $i$-tého pozorování na $\hy_i$
+\end{itemize}
+$$ \mathrm{DFFITS}_i=\frac{\hyi-\mini{\hy}}{\mini{\widehat{{\sigma}}}\sqrt{\hii}}=...=\widehat{t}_i\sqrt{\frac{\hii}{1-\hii}}.$$
+RULE OF THUMB: $i$-té pozorování je influenční, pokud $|\mathrm{DFFITS}|>3\sqrt{\frac{m+1}{n-m-1}}$.
+
+\begin{remark}[Míry influence v R]
+\begin{itemize}
+	\item DFBETAS -- \verb|dfbetas()|
+	\item DFFITS -- \verb|dffits()|
+	\item Cookova vzdálenost $D_i$ -- \verb|cooks.distance()|
+	\item Leverage $\hii$ -- \verb|hotvalues()|
+	\item a vše shrnuje funkce \verb|influence.measures()| (má navíc covariance ratio)
+\end{itemize}
+
+Používané pravidlo: $i$-té pozorování je influenční, pokud:
+\begin{align*}
+	& = | \mathrm{DFBETAS} | > 1, \quad |\mathrm{DFFITS}| > 3 \sqrt{\frac{m+1}{n-m-1}} \\
+	& D_i > F_{0,5}(m+1,n-m-1), \quad \hii > 3 \frac{m+1}{n}
+\end{align*}
+\end{remark}
+
+\section{Transformace}
+
+Pokud není splněný některý z předpokladů modelu: linearita, normalita chyb, homoskedasticita, jednou z možností je pokusit se transformovat nějaké proměnné, aby transformovaný model tyto předpoklady alespoň \uv{přibližně} splňoval.
+
+\subsection{Transformace vysvětlované proměnné $y$}
+
+Hledáme funkci $h(.)$ tak, aby model $Y_i^* = h(Y_i) = \beta_0 + \sumjm x_{ij} \beta_j + e_i$ splňoval předpoklady.
+
+\subsubsection*{3 hlavní důvody pro transformaci $Y$}
+\begin{enumerate}
+	\item Transformace škály měření tak, aby pokrývala celé $\R$, což může odstranit problémy s podmínkami na $\betab$.
+	
+	Např. studie kapacity plic (FEV data, FEV $>$ 0):
+	\begin{itemize}
+		\item Chtěli bychom, aby model nepredikoval záporné hodnoty ($\implies$ restrikční podmínky na parametr $\beta$).
+		\item Lze obejít modelování $y^* = \log \mathrm{FEV}$.
+	\end{itemize}
+
+	Pokud $y$ jsou počty a 0 je možná hodnota, často se používá $y^* = \log (y+1)$ nebo obecně $y^* = log(y + c)$
+	
+	\item Transformace $Y$, aby její rozdělení bylo \uv{více} normální.
+	
+	Typicky to znamená pokusit se udělat rozdělení hodnot $y$ více symetrické. Často se setkáváme s rozděleními vychýlenými vpravo (obvykle se to stává, pokud naměříme nějakou fyzikální veličinu, která může nabývat pouze kladných hodnot).
+	
+	Transformace $y^* = \log y$ nebo $y^* = y^{\lambda}, \lambda < 1$ budou redukovat toto vychýlení.
+	
+	Typický postup: Začít s hodnotou $\lambda$ blízko 1, pak snižovat hodnotu $\lambda$, doku není dosaženo \uv{přibližně} symetrie reziduí.
+	
+	\item Možná nejzásadnější motivace je pokusit se dosáhnout konstantního rozptylu přes všechna pozorování.
+	
+	Např. pro fyzikální veličinu s kladnými hodnotami se často stane, že rozptyl bude malý pro $\mu \approx 0$ a větší pro $\mu$ velké (už je z důvodu, že obor hodnot $y$ je omezen na kladné hodnoty). Říkáme tomu \textbf{positive mean-variance relationship}.
+	
+  Nepřesnost měření kladných veličin se také často vyjadřuje pomocí koeficientu variace
+$$
+ \text{CV}(\text{Y}) = \frac{\text{s.d.} \text{Y}}{\E[\text{Y}]}.
+$$
+Často bývá více konstantní mezi případy než s.d. Variabilitu vyjadřuje relativně spíše než absolutně. Matematicky to znamená, že $ \D[\text{Y}] = \phi \E[\text{Y}]^2 - \phi \mu^2 $ pro nějaké $ \phi $.
+
+\end{enumerate}

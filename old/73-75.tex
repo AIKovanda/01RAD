@@ -1,0 +1,109 @@
+\newcommand{\bb}{\boldsymbol{b}}
+\newcommand{\yb}{\boldsymbol{y}}
+\newcommand{\lambdab}{\boldsymbol{\lambda}}
+\newcommand{\xtx}{(\X^T \X)^{-1}}
+\newcommand{\parcialni}[2]{\frac{\partial #1}{\partial #2}}
+
+\begin{lemma}
+	Označme $\wbetab_F$ a $\wbetab_R$ LSE parametru $\betab$ v plném a redukovaném modelu. Potom platí
+	\begin{enumerate}
+		\item $\wbetab_F = \wbetab_R - (\X^T \X)^{-1} \C^T \Am (\C \wbetab_F - \bb)$, kde $\Am = \left( \C (\X^T \X)^{-1} \C^T \right)^{-1}$
+		\item $\Delta SSE = SSE_R - SSE_F = \left( \C \wbetab_F - \bb \right)^T \Am \left( \C \wbetab_F - \bb \right)$.
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+\begin{enumerate}
+\item 
+Víme, že $\wbetab_F = \xtx \X^T \yb$ a musíme najít $\wbetab_R$. Budeme proto minimalizovat
+$$
+g(\betab) = (\yb - \X \betab)^T(\yb - \X \betab)
+$$
+za podmínky $\C \betab = \bb$. Sestavíme Lagrangeovu funkci
+\begin{align*}
+L & = L(\betab) = g(\betab) - 2 \lambdab^T(\C \betab - \bb), \; \text{kde} \quad \lambdab = (\lambda_1, \dots, \lambda_r) \\
+L & = \yb^T \yb - 2 \yb^T \X \betab + \betab^T \X^T \X \betab - 2 \lambdab^T \C \betab + 2 \lambdab^T \bb
+\end{align*}
+a tedy
+\begin{align*}
+\frac{\partial L}{\partial \betab} & = \left( \parcialni{L}{\beta_0}, \parcialni{L}{\beta_1}, \dots, \parcialni{L}{\beta_m} \right)^T = 2 \X^T \X \betab - 2 \X^T \yb - 2 \C^T \lambdab = 0 \\
+\parcialni{L}{\lambdab} & = \left( \parcialni{L}{\lambda_1}, \dots, \parcialni{L}{\lambda_r} \right)^T = \C \betab - \bb = 0.
+\end{align*}
+Z první rovnice dostáváme
+\begin{equation}
+\wbetab_R = \xtx \X^T \yb + \xtx \C^T \lambdab = \wbetab_F + \xtx \C^T \lambdab \tag{+} \label{Eq: Lagrange prvni}
+\end{equation}
+a dosadíme do druhé
+$$
+\C \wbeta_R - \bb = \C \wbetab_F - \bb + \C \xtx \C^T \lambdab = 0.
+$$
+Můžeme tak spočítat $\lambdab = -\left(\C \xtx \C^T\right)^{-1} \left( \C \wbetab_F - \bb \right)$ a dosazením do rovnice \eqref{Eq: Lagrange prvni} získáme
+$$
+\wbetab_R = \wbetab_F - \xtx \C^T \left( \C \xtx \C^T \right)^{-1} \left( \C \wbetab_F - \bb \right)= \wbetab_F - \xtx \C \Am (\C \wbetab_F - \bb).
+$$
+
+\item 
+Z důkazu věty $\wbetab = \xtx \X^T \betab$ víme, že 
+$$
+g(\betab) - g(\wbetab_F) = (\betab - \wbetab_F) \X^T \X (\betab - \wbetab_F) \quad \forall \betab.
+$$
+Dosadíme $\betab = \wbetab_R$:
+\begin{align*}
+	\Delta SSE & = g(\wbetab_R) - g(\wbetab_F) = (\wbetab_R - \wbetab_F) \X^T \X (\wbetab_R - \wbetab_F) = \\
+	& = (\C \wbetab_F - \bb)^T \Am^T \C \xtx \X^T \X (\X \X )^{-1} \C^T \Am (\C \wbetab_F - \bb) = (\times)
+\end{align*}
+a protože $\Am^T = \Am$, platí $\Am^T\underbrace{\C (\X \X)^{-1} \C^T}_{= \Am^{-1}} \Am = \Am \implies (\times) = (\C \wbetab - \bb)^T \Am (\C \wbetab - \bb)$.
+
+\end{enumerate}
+\end{proof}
+
+\begin{proof}
+Důkaz věty: Nejdříve ukážeme, že $\frac{\Delta SSE}{\sigma^2} \sim \chi^2 (r)$ za $H_0: \C\betab = \bb$.
+
+Za $H_0$: $\Y \sim \NN(\X \betab_R, \sigma^2 \Identita{n})$ a $\wbetab_F = \xtx \X^T \Y$, tzn.
+$$
+\hat{\boldsymbol{r}} = \C \wbetab_F - \bb \sim \NN\left( \E(\hat{\boldsymbol{r}}), \Cov(\hat{\boldsymbol{r}}) \right).
+$$
+\begin{align*}
+\E \hat{\boldsymbol{r}} & = \E (\C \wbetab_F - \bb) = \E \left( \C \xtx \X^T \Y \right) - \bb = \C \xtx \X^T \E \Y - \bb = \\
+& = \C \xtx \X^T \X \betab_R - \bb = \C \betab_R - \bb = 0 \quad \text{za platnosti \;} H_0 \\
+\Cov(\hat{\boldsymbol{r}}) & = \C \Cov(\wbetab_F) \C^T = \sigma^2 \C \xtx \C^T = \sigma^2 \Am^{-1} \\
+& \implies \hat{\boldsymbol{r}} = \C \wbetab_F - \bb \sim \NN \left( 0, \sigma^2 \Am^{-1} \right)
+\end{align*}
+Tedy
+$$
+\frac{\Delta SSE}{\sigma^2} = \frac{\hat{\boldsymbol{r}}^T \Am \hat{\boldsymbol{r}}}{\sigma^2} \sim \chi^2(r).
+$$
+
+Navíc bod 4) věty na str (55), kde $\Z \sim \NN_r(0, \Sigma) \implies \Z^T \Sigma^{-1} \Z \sim \chi^2(r)$ a bod 1) $\implies \wbetab_F$ a $s_n^2$ jsou nezávislé.
+
+Tedy $\Delta SSE$ je funkcí pouze $\wbetab_F$, tzn nezávisí na $s_n^2$, takže
+$$
+F = \frac{\frac{\Delta SSE}{\sigma^2 r}}{\frac{(n-m-1)s_n^2}{\sigma^2(n-m-1)}} = \frac{\frac{\Delta SSE}{r}}{s_n^2} \sim F(r, n-m-1).
+$$
+\end{proof}
+
+\begin{remark}
+Použitím rozkladu $SST = SSE + SSR$ dostaneme
+$$
+\Delta SSE = SSR_F - SSR_R.
+$$
+Interpretace: nárůst regresního součtu čtverců díky neplatnosti $H_0$. Dále
+$$
+SSR_F = SSR_R + \Delta SSE,
+$$
+kde $\Delta SSE$ je \textit{extra sum of squares} přidaná k $SSR$ díky neplatnosti $H_0$.
+
+Např. pokud $\betab = (\beta_0, \beta_1, \dots, \beta_{m-1}, 0)$, tzn. $\beta_m = 0$ a skutečný model má $\betab = \betab_F$, potom $\Delta SSE$ je extra regresní součet čtverců získaný díky přidání $\beta_m$ do modelu.
+
+Umožňuje rozklad $SSR$ plného modelu na jednotlivé části $\left( x_1, x_2 | x_1, x_3 | x_2 x_1, \dots \right)$.
+\end{remark}
+
+Př. analogie k Př. 5.25 str. 238
+
+\begin{remark}
+	Joint confidence region viz. Ex 5.30 str. 239
+\end{remark}
+
+
+

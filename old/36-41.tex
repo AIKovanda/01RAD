@@ -1,0 +1,120 @@
+\begin{table}[h]
+	\begin{tabular}{lllll}
+		Source & df & SS & MS & F \\
+		\hline
+		Regression & $1$ & SSR$=\sumin \hyi^{2}$ & MSR$=\frac{\SSR}{1}$ & $\frac{\SSR}{s_n^{2}}$ \\
+		Residual & $n-1$ & SSE$=\sumin(y_i=\hyi)^{2}$ & MSE$=\frac{\SSE}{n-1}$ &  \\
+		Total & $n$ & $\SST=\sumin y_i^{2}$ &  &  \\
+		\hline
+		&  & $\RMR^{2}=\rho^{2}(\textbf{y},\widehat{\textbf{y}})$ &  &  \\
+	\end{tabular}
+\caption{Tabulka ANOVA pro~$\beta_0=0$.}
+\end{table}
+
+\subsection{Predikce}
+Jakmile máme model, často bývá cílem odhadnout hodnoty veličiny $Y_0$ pro~nové $x_0$, které není v~původních datech. Budeme uvažovat dva typy predikce:\begin{enumerate}
+	\item predikce střední hodnoty $\mu_0=\EE{Y_0}$ v~bodě $x_0$,
+	\item predikce hodnoty nového pozorování $Y_0$ v~bodě $x_0$.
+\end{enumerate}
+Pro oba typy použijeme bodový odhad 
+$$ \widehat{Y}_0=\wbeta_0+\wbeta_1 x_0.$$
+Intervalové odhady se~ale budou lišit.
+
+\subsubsection*{Ad 1}
+	Protože je $\mu_0=\beta_0+\beta_1 x_0$ vlastně parametr, lze pro~něj odvodit IS (za předpokladu normality chyb). 
+	
+	Spočteme tedy $\D(\widehat{Y}_0)$. Dosazením odhadů $\wbeta_0$ a~$\wbeta_1$ dostaneme $\widehat{Y}_0=\overline{y}+\wbeta_1(x_0-\overline{x})$ a
+	$$ \D\widehat{Y}_0=\D(\overline{Y})+(x_0-\overline{x})^2\D(\wbeta_1)+2(x_0-\overline{x})\underbrace{\Cov(\overline{Y},\wbeta_1)}_{=0}=\frac{\sigma^2}{n}+\frac{\sigma^2(x_0-\overline{x})^2}{S_{xx}}=\sigma^2\Big[ \frac{1}{n}+\frac{(x_0-\overline{x})^2}{S_{xx}} \Big].$$
+	
+	Nahrazením $\sigma^2$ statistika $s_n^2$ dostaneme odhad $\D(\widehat{Y}_0)$ ve~tvaru 
+	$$ \widehat{\sigma}^2(\overline{Y}_0)=s_n^2\Big[ \frac{1}{n}+\frac{(x_0-\lx)^2}{\Sxx} \Big].$$
+	$\wsigma(\hY_0)$ se~obvykle nazývá \textbf{standardní chyba predikce v~bodě $x_0$}. Jsou-li $e_1,...,e_m~iid\N(0,\sigma^2)$, platí, že 
+	$$ \hY_0\sim\N\Big( \mu_0,\underbrace{\sigma^2\Big[ \frac{(x_0-\lx)^2}{\Sxx} \Big]}_{\sigma^2(\hY_0)} \Big) $$ a~tedy 
+	$$ \frac{\hY_0-\mu_0}{\sigma(\hY_0)}\sim\N(0,1). $$
+	Celkem tedy 
+	$$ T=\frac{\frac{\hY_0-\mu_0}{\sqrt{\sigma^2\big(\frac{1}{n}+\frac{(x_0-\lx)^2}{\Sxx}\big)}}}{\sqrt{\frac{(n-2)s_n^2}{\sigma^2}\frac{1}{n-2}}}=\frac{\hY_0-\mu_0}{\sqrt{s_n^2\big( \frac{1}{n}+\frac{(x_0-\lx)^2}{\Sxx} \big)}}=\frac{\hY_0-\mu_0}{\wsigma^2(\hY_0)}\sim t(n-2).$$ 
+	
+	Vyjádřením získáme $100(1-\alpha)$\% IS pro~$\mu_0$ ve~tvaru $$ \hY_0\pm t_{1-\frac{\alpha}{2}}(n-2)\wsigma^2(hY_0). $$
+	\begin{remark}
+		Z tvaru IS je vidět, že bude nejkratší pro~$x_0=\lx$ a~s~rostoucí vzdáleností $| x_0-\lx |$ se~prodlužuje.\begin{itemize}
+			\item  Speciálně potom čím dále jsme od~oblasti, kde jsou naše data $x$, tím méně spolehlivé jsou naše predikce. 
+			\item Je třeba opatrnosti při~predikci hodnot $Y$ mimo interval $(\min x_i,\max x_i)$.
+		\end{itemize}
+\end{remark}
+
+\subsubsection*{Ad 2}
+Intervalové odhady pro~$Y_0$ nejsou IS, protože $Y_0$ není parametr. Říká se~jim \textbf{intervaly predikce}. Potřebujeme rozptyl $Y_0-\hY_0$, pokud je nené pozorování $Y_0$ nezávislé na~$Y_i,i\in\hat{n}$, potom 
+$$ \D(Y_0-\hY_0)=\underbrace{\D Y_0}_{\sigma^2}+\D \hY_0+0=\sigma^2\Big[ 1+\frac{1}{n}+\frac{(x_0-\lx)^2}{\Sxx} \Big].$$ Odhad tohto rozptylu bude $s_p^2$, kde 
+$$ s_p=s_n\sqrt{1+\frac{1}{n}+\frac{(x_0-\lx)^2}{\Sxx}}.$$
+
+Za předpokladu normality chyb pak 
+$$ T=\frac{Y_0-\hY_0}{s_n\sqrt{1+\frac{1}{n}+\frac{(x_0-\lx)^2}{\Sxx}}}=\frac{Y_0-\hY_0}{s_p}\sim t(n-2).$$
+Vyjádřením získáme $100(1-\alpha)$\% interval predikce pro~$Y_0$ ve~tvaru 
+$$ \hY_0 \pm t_{1-\frac{\alpha}{2}}(n-2)s_p.$$
+
+\begin{remark}
+	Přesnost predikce \begin{enumerate}[a)]
+		\item roste s~rostoucím $n$ a~rostoucím rozsahem $x$ naměřeným pomocí $\Sxx$,
+		\item klesá s~rostoucím $|x_0-\lx|$.
+	\end{enumerate}
+Pokud můžeme předem zvolit $x_1,...x_n$, lze přesnost predikce zvýšit volbou dostatečně rozptýlených hodnot $x$. To ale může zvyšovat $\RMR^2$ a~někdy vést k~horšímu modelu.
+
+To je \textbf{základní rozpor v~regresní analýze}:\begin{itemize}
+	\item dobrý model nemusí poskytovat dobré predikce,
+	\item dobré predikce mohou vycházet z~méně přesných modelů.
+\end{itemize}
+\end{remark}
+\begin{remark}
+	Odvozené výsledky platí za~předpokladu normality chyb. Protože jsou ale za~podmínek regularity odhady $\wbeta_0,\wbeta_1$ asymptoticky normální, IS pro~$\EE{Y_0}$ budou fungovat (jsou použitelné i~pro~velká $n$). IP pro~$Y_0$ ale závisí na~normalitě  chyb i~pro~velká $n$, mohou tedy být nepřesné pro~nenormální chyby.
+\end{remark}
+\begin{example}[Ověření adekvátnosti modelu]Ověření adekvátnosti modelu je důležitá součást analýzy. Měla by být provedena dříve, než budeme interpretovat parametry modelu nebo přijímat nějaké závěry založené na~modelu.
+	
+	Všechny výsledky týkající se~$\beta_0,\beta_1$ byly odvozeny za~předpokladu \textbf{linearity modelu} a~některé za~předpokladu \textbf{normality chyb}.
+	
+	Bylo by tedy dobré mít testy ověřující linearitu.
+
+Základní procedury jsou následující:
+\begin{enumerate}[1)]
+	\item Prozkoumání \textbf{scatter plotu} dvojic $(x_i,y_i)$. Příklad lze vidět na~obrázku \ref{SCATTER}. Takový scatter plot může indikovat, že lepší model bude 
+	$$ y_i=\beta_0+\beta_1 x_i+\beta_2 x_i^2+e_i.$$
+	\begin{figure}[h]
+		\centering
+		\begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=1.0cm,y=1.0cm]
+		\draw[->,color=black] (-0.62,0) -- (3.88,0);
+		\foreach \x in {,2}
+		\draw[shift={(\x,0)},color=black] (0pt,-2pt);
+		\draw[->,color=black] (0,-0.68) -- (0,2.8);
+		\clip(-0.62,-0.68) rectangle (3.88,2.8);
+		\draw [color=black](2.7,-0.15) node[anchor=north west] {$x_i$};
+		\draw [color=black](-0.6,2) node[anchor=north west] {$y_i$};
+		\begin{scriptsize}
+		\fill [color=black] (0.52,0.48) circle (1.5pt);
+		\fill [color=black] (1.16,0.6) circle (1.5pt);
+		\fill [color=black] (1.8,0.9) circle (1.5pt);
+		\fill [color=black] (2.22,1.3) circle (1.5pt);
+		\fill [color=black] (2.54,1.76) circle (1.5pt);
+		\fill [color=black] (2.8,2.24) circle (1.5pt);
+		\end{scriptsize}
+		\end{tikzpicture}
+		\caption{Scatter plot naměřených dat.}
+		\label{SCATTER}
+	\end{figure}
+	Scatter plot ale může být zavádějící, pokud je odklon od~linearity způsoben spíše chybějící proměnnou než polynomiální závislostí na~$x$.
+	\item \textbf{Analýza hodnot testovacích statistik.} \begin{itemize}
+		\item Např. malá hodnota $\RMR^2$ společně s~významem hodnot??? $t$-statistiky pro~parametry $\beta_1$ obecně naznačuje, že skutečný model obsahuje i~jiné proměnné $x$,
+		\item velká hodnota $\RMR^2$ a~významná $t$-satistika ale samo o~sobě neznamená, že je model lineární.
+	\end{itemize}
+\item \textbf{Obrázky reziduí}. Je to efektivní diagnostický nástroj. Rezidua odhadují, kolik variability v~datech zůstne po~odstranění lineární části v~$x$. Dá se~také očekávat, že jejich hodnoty budou užitečné pro~detekci odchylek od~normality.
+
+	
+\end{enumerate}	
+	
+\end{example}
+\begin{example}
+	Analýza scatter plotů a~obrázků reziduí je dost subjektivní. Bylo by dobré mít nějaký objektivní analytický nástroj pro~ověření linearity modelu. Bohužel nejsou k~dispozici skoro žádné takové nástroje. Pro~většinu dat jsou v~praxi nejvíce využívány metody 1) - 3).
+	
+	Jinak je tomu u~navržených experimentů typu industriálních nebo klinických studií, kde existuje doporučený analytický test, tzv. \textit{lack of fit} test (LOFT). Ten předpokládá, že máme více pozorování pro~jednu $x_i$.
+\end{example}
+
+\subsubsection*{Ad 3 - Analýza reziduí}
+Intuitivně, pokud je náš model správný, měla by se~rezidua chovat jako náhodný výběr z~$\N(0,\sigma^2)$. Pokud se~bude zdát, že se tak nechovají, bude to znamenat neadekvátnost modelu. Později ukážeme grafický nástroj. Nejprve ale začneme vlastnostmi reziduí.

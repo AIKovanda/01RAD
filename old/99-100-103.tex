@@ -1,0 +1,118 @@
+\subsection{Box-Cox transformace}
+\begin{itemize}
+\item Pokud chyby nemají normální rozdělení, hledáme transformaci $Y$, která by nejenom linearizovala model, ale také transformovala chyby, aby byly přibližně normální.
+\item Jako užitečná se ukazuje následující třída transformací (power family):
+$$
+ y^{(\lambda)} = \begin{cases}
+      \frac{y^{\lambda}-1}{\lambda}, & \text{pokud}\ \lambda \neq 0 \\
+      \text{log}y, & \text{pokud}\ \lambda = 0
+    \end{cases} \, ,
+$$
+které předpokládají, že data $ y $ jsou pouze kladná. (Pokud ne, můžeme přičíst konstantu ke všem pozorováním a analyzovat takto posunutá data.)
+\begin{remark}
+$ \lim_{\lambda \rightarrow 0}  \frac{y^{\lambda}-1}{\lambda} = \text{log}y $
+\end{remark}
+\item Pro nalezení vlastního $ \lambda $ budeme předpokládat, že transformované veličiny \\ $ Y_i^{(\lambda)}, \, i = 1,\dots,n, $ splňují postačující podmínky RM, tj. 
+$$
+ Y_i^{(\lambda)} = \x_i^T \bbeta + \eb \quad \text{kde} \quad \eb \sim \NN_n (0,\sigma^2 \Identita{n}) \quad \quad \quad \left( Y_i^{(\lambda)} \sim \NN ( \X_i^T \bbeta , \sigma^2 ) \right)
+$$
+\end{itemize}
+Úkol je odhadnout zároveň $ \lambda , \bbeta , \sigma^2 $, použijeme MLE. Pomocí transformace získáme hustotu
+$$
+  f_{Y_i}(y_i) = f_{Y_i^{(\lambda)}}(y_i^{(\lambda)}) \cdot \dfrac{\d y_i^{(\lambda)}}{\d y_i} = \dfrac{1}{\sqrt{2 \pi \sigma^2}} e^{-\frac{1}{2 \sigma^2}( y_i^{(\lambda)} - \mu_i)^2} \cdot y_i^{\lambda - 1}, \quad \text{kde} \; \mu_i = \E[Y_i^{(\lambda)}] = \x_i^T \bbeta.
+$$
+Věrohodnostní funkce pro pozorování $ y_1,\dots,y_n $ bude mít tvar
+$$
+  L = \prod_{i=1}^{n}f_{Y_i}(y_i) = \left( \frac{1}{\sqrt{2 \pi \sigma^2}} \right)^2 e^{-\frac{1}{2 \sigma^2}(\sumin ( y_i^{(\lambda)} - \mu_i )^2} \cdot \mathrm{J}(\lambda), \quad \text{kde} \quad \mathrm{J}(\lambda) = \prod_{i=1}^{n} y_i^{\lambda - 1} = \left( \prod_{i=1}^{n} y_i \right)^{\lambda - 1}
+$$
+
+Dále vyjádříme log-likelihood:
+$$
+ l = \ln L = -\frac{n}{2}\ln 2 \pi - \frac{n}{2}\ln \sigma^2 - \frac{1}{2 \sigma^2} \sumin ( y_i^{(\lambda)} - \mu_i )^2 + \ln\text{J}(\lambda).
+$$
+Věrohodnostní rovnice nemají explicitní analytické řešení. Pro nalezení MLE si všimneme, že pro pevné $ \lambda $ je $ l $ proporcionální logaritmus věrohodnosti pro odhad ($ \bbeta , \sigma^2 $) na základě $ \y^{(\lambda)} = ( y_1^{(\lambda)}, \dots , y_n^{(\lambda)})^T $, tedy
+$$
+ \wbetab (\lambda ) = \core \X^T \y^{(\lambda)}
+$$
+$$
+ \wsigma^2 (\lambda ) = \frac{1}{n} \sumin ( y_i^{(\lambda)} - \hy _i^{(\lambda)} )^2 = \frac{1}{n} (\y^{(\lambda)})^T ( \I _n - \Hm ) \y^{(\lambda)} , \quad \text{kde} \; \hy_i^{(\lambda)} = \x_i^T \bbeta^{(\lambda)}.
+$$
+Dosazením do $ l $ dostaneme její hodnotu maximalizovanou vzhledem k ($ \bbeta , \sigma^2 $), tzv. profite log-likelihood
+$$
+  l_p^{(\lambda)} = -\frac{n}{2} \ln 2 \pi - \frac{n}{2} \ln \wsigma^2 ( \lambda ) - \frac{n}{2} + \ln \text{J}(\lambda) 
+  = C - \frac{n}{2} \ln \wsigma^2 ( \lambda ) + ( \lambda - 1 )  \sumin \ln y_i.
+$$
+\begin{remark}
+Kvůli komplikované závislosti $ l_p $ na $ \lambda $ bude třeba numerická metoda pro maximalizaci. Lze přepsat do tvaru, kde bude možné využít metody LR:
+\begin{align*}
+ l_p (\lambda) & =  C - \frac{n}{2} \ln \wsigma^2 ( \lambda )  - \frac{n}{2} \ln\text{J}(\lambda)^{2/n} = C - \frac{n}{2} \ln \frac{ \wsigma^2 ( \lambda )}{(\text{J}^{\frac{1}{n}}(\lambda))^2} \\
+ \text{J}^{\frac{1}{n}}(\lambda) & = \left[ \left( \prod_{i=1}^{n} y_i \right)^{\frac{1}{n}} \right]^{\lambda - 1} = ( \dot{y} )^{\lambda - 1}, \quad \text{kde} \, \dot{y} \, \text{je geometrický průměr.}
+\end{align*}
+Dosazením zpátky do $l_p(\lambda)$ dostáváme
+\begin{align*}
+\quad  l_p(\lambda) & = C - \frac{n}{2} \ln \frac{ \wsigma^2 ( \lambda )}{(\dot{y})^{\lambda - 1}} = C - \frac{n}{2}\ln s_{\lambda}^{2}, \\
+\text{kde} \quad s_{\lambda}^{2} & = \frac{ \wsigma^2 ( \lambda )}{(\dot{y})^{\lambda - 1}} = \frac{1}{n} \sumin \left( \frac{y_i^{(\lambda)}}{( \dot{y})^{\lambda-1}} - \frac{\hy_i^{(\lambda)}}{( \dot{y})^{\lambda-1}} \right)^2.
+\end{align*}
+Tedy $ s_{\lambda}^{2} $ je reziduální součet čtverců (SSE) v modelu $ \frac{y_i^{(\lambda)}}{( \dot{y})^{\lambda-1}} $ v závislosti na $ \x_i^T $ (tzn. $ s_{\lambda}^{2} $ lze snadno získat pomocí funkce $\ln()$). Celkem: max $ l_p(\lambda) \quad \Leftrightarrow \quad $ min $ s_{\lambda}^{2} $.
+\end{remark}
+
+\textbf{Algoritmus pro hledání vhodného $\lambda$:}
+\begin{enumerate}
+\item Zvolit oblast hodnot $ \lambda $, I = $ [ \lambda_{min}, \lambda_{max} ] $, a body $ \lambda \in $ I \\
+(typicky I = $[-2,2]$ a 10-20 rovnoměrně rozdělených bodů).
+
+\item Naladit model $ \frac{y^{(\lambda)}}{( \dot{y})^{\lambda-1}} \sim \chi $ a spočítat $ \frac{1}{n}\SSE = s_{\lambda}^{2} $.
+
+\item Z grafu ($ \lambda , s_{\lambda}^{2} $) vybrat $ \widehat{\lambda} $, které minimalizuje $ s_{\lambda}^{2} $.
+
+\item Pro zvolené $ \widehat{\lambda} $ naladit model $ y^{(\widehat{\lambda})} \sim \chi $ a pokračovat standardní analýzou.
+\end{enumerate}
+\subsubsection*{IS pro $ \lambda $}
+Snadno lze odvodit LRT test pro test $ \text{H}_0 : \lambda = \lambda_0 $. ($ \text{H}_0 : \lambda = 1 $ zde je třeba transformace, pokud zamítneme $ \text{H}_0 \Rightarrow $ transformace pomocí $ \widehat{\lambda} $).
+
+LRT statistika: $ \Lambda = -2 \ln \frac{L(\lambda_0}{L(\widehat{\lambda}} = 2 ( l_p(\widehat{\lambda}) - l_p(\lambda_0)) $. Víme, že $ \Lambda \Lp \chi^2(1)  $. Invertováním příslušné oblasti LRT testu, dostaneme as. $ 100(1-\alpha)\% $ IS pro $ \lambda $:
+\begin{align*}
+ \chi^2_{1-\alpha} & \geq \Lambda \\
+\chi^2_{1-\alpha} & \geq 2( \frac{n}{n}\ln s^2_{\lambda_0} - \frac{n}{n}\ln s^2_{\widehat{\lambda}}  ) \\
+\chi^2_{1-\alpha} & \geq n \ln\dfrac{s^2_{\lambda_0}}{s^2_{\widehat{\lambda}}}
+\end{align*}
+
+Pokud $ \widehat{\lambda} $ je MLE $ \lambda $, as. $ 100(1-\alpha)\% $ IS  pro $ \lambda $ je:
+$$
+ \left\{ \lambda \in \R \, \vert \, n \cdot \ln\dfrac{s^2_{\lambda_0}}{s^2_{\widehat{\lambda}}} \leq \chi^2_{1-\alpha}(1) \right\}.
+$$
+\begin{remark}
+ Kvůli jednoduchosti interpretace se často doporučuje zaokrouhlit $ \widehat{\lambda} $ na nejbližší $ \frac{1}{4} $ nebo $ \frac{1}{3} $.
+\end{remark}
+Příklad data TREES
+
+\subsection{Transformace vysvětlujících proměnných x}
+
+\begin{itemize}
+\item Pokud diagnostika modelu naznačuje, že vztah mezi $ \y $ a $ \X $ není lineární pro jeden nebo více regresorů, může být vhodné přeformovat model pomocí transformací proměnných $ \x $.
+
+\item Předpokládejme, že v modelu $ Y = \beta_0 + \sumjm \beta_j x_j + e $ máme podezření na nelinearitu v j-té proměnné $ x_j $.
+
+\item Jednou z možností jak postupovat jr nahrazení $ x_j $ proměnnou $ z_j = f(x_j) $, model tedy bude $ Y = \beta_0 + \beta_1 x_1 + \dots + \beta_j z_j + \dots + \beta_m x_m + e $.
+
+\item Pokud je $ f $ známé, jedná se o model LR a lze ho analyzovat standardně. Pokud je tato transformace vhodná, mělo by se to projevit ve zlepšení statistik $ \text{R}^2, \text{t}, \text{F} $ a zlepšení grafu reziduí pro $ z_j $ oproti těm pro $ x_j $.
+
+\item Bohužel $ f $ většinou známá není, možný přístup je parametrizovat nějak tuto funkci a pak odhadnout tyto parametry společně s $ \bbeta $.
+
+\begin{itemize}
+
+\item Typická parametrizace: 
+$$
+  z_j = x_j^{\lambda}, \quad \text{kde} \quad \lambda \in \R \quad \text{vhodné}.
+$$
+($ x_j > $ potom $ \lambda \in \R $, pokud $ x_j $ může být záporné, množina hodnot $ \lambda $ je omezená)
+\item Aproximace $ f $ pomocí polynomu vhodného stupně, tzn. 
+$$
+  z_j = \sum_{k=1}^{l} r_k x_j^{k} , \quad \text{kde} \, r_k \, \text{musí být odhadnuty,}
+$$
+\item další možností je použití trigonometrických funkcí nebo splines (piecewice polynomials).
+
+\end{itemize}
+
+Výsledný model ale v tomto případě nebude lineární v parametrech $ \beta_j $ $ j = 0,\dots,m $ a $ r_k $, $ k = 1,\dots,l $.
+\end{itemize}

@@ -1,0 +1,105 @@
+\begin{itemize}
+	\item z dosazení vyplývá, že odhady parametru $\betab$ a $\sigma^2$ lze získat použitím transformovaného modelu (2)
+	\item Protože ale transformovaný model neobsahuje intercept (první sloupec M je $(\sqrt{w_1}, \dots, \sqrt{w_n})^T)$), nefunguje klasický rozklad součtu čtverců a F statistika nelze definovat obvyklým způsobem, stejně jako $R^2$ (viz. regrese skrz počátek)
+	\item nicméně princip \uv{extra sum of squares} funguje, ať má model intercept nebo ne:
+	např. celkový F-test lze provést pomocí statistiky
+	$$
+	F_w = \frac{\SSE_R - \SSE_F}{\frac{m}{s_w^2}},
+	$$
+	kde $\SSE_F$ je reziduální součet čtverců $s_w^2$ plného modelu a $\SSE_R$ je reziduální součet čtverců redukovaného transformovaného modelu $\Z = \Mm_0 \betab_0 + \eb$, $\Mm_0 = (\sqrt{w_1}, \dots, \sqrt{w_n})^T)$.
+	
+	Pokud mají chyby normální rozdělení, platí za $H_0: \beta_1 = \cdots = \beta_m = 0$, že $F_w \sim F(m, n-m-1)$ a $H_0$ zamítáme, pokud $F_w > F_{1-\alpha}(m,n-m)$.
+	\item str. 110 (*)
+	\item pro analýzu reziduí je třeba uvažovat vhodné grafy reziduí:
+	\begin{itemize}
+		\item máme dva vektory reziduí:
+		\begin{align*}
+			& \hei \text{ v původním modelu (1)} \\
+			& \heps_i \text{ v transformovaném modelu (2)}
+		\end{align*}
+		a tedy dvě možnosti
+		\item pro kontrolu konstantního rozptylu lze uvažovat i standardizovaná nebo studentizovaná rezidua (pomocí bodu 4) a 5) věty lze ukázat, že jsou v obou modelech stejná)
+		\item je třeba být opatrný oproti jakým hodnotám budeme rezidua zobrazovat
+		\item grafy $\heps_i$ proti sloupcům $\Mm$ a predikovaným hodnotám $\hz$ jsou OK, neboť např.
+		$$
+		\sumin \hz_i \heps_i = 0
+		$$
+		(jsou OG, měl by být vidět roztýlený oblak kolem osy x).
+		\item dosazením $\heps_i = \sqrt{w_i}  \cdot \hei$ a $\hz_i = \sqrt{w_i} \cdot \hy_i$ dostaneme $\sumin w_i \hei \hy_i = 0$, tzn. graf $\hei$ proti $\hy_i$ bude zavádějící
+		\item graf $\sqrt{w_i}  \cdot \hei$ proti $\sqrt{w_i}  \cdot \hy_i$ je ale v pořádku
+		\item podobné závěry platí i pro grafy $\hei$ proti $\x_j^c, i = 1, \dots, m$.
+ 	\end{itemize}
+ 	\item (*): přirozené je definovat $R^2 = \rho^2(\hzb, \z)$, kde $\rho(\hzb, \z)$ je výběrový korelační koeficient, pro $\mathbb{W} = \I$ dostaneme standardní $R^2$
+\end{itemize}
+
+\begin{remark}
+\begin{itemize}
+	\item pokud jsou váhy neznámé, bylo by třeba je odhadnou společně s $\betab$ a $\sigma^2$ z dat
+	\item to ale není obecně možné, protože máme více parametrů než dat
+	\item někdy to možné je, pokud máme další informace o rozdělení chyb (tvar kovarianční matice atd.)
+\end{itemize}
+\end{remark}
+
+\begin{remark}
+	Celý postup WLS lze použít i na případ $\eb \sim \NN_m(0,\sigma^2 \Wm)$, kde $\Wm$ je známá, ale není diagonální. Protože $\Wm$ je symetrická, ex. regulární $\Km$ tak, že $\Wm = \Km \Km^T$. Stejná transformace jako u WLS opět vede na transformovaný model, kde $\epsb \sim \NN_m(0,\sigma^2 \Identita{m})$.
+\end{remark}
+
+\section{Korelované chyby}
+\begin{itemize}
+\item Zejména v časových nebo ekonomických datech se často objevuje korelace jednotlivých hodnot.
+\item potom není splněn předpoklad nezávislosti chyb
+\item tento stav je třeba detekovat (někdy pomohou grafy reziduí)
+\item modely pro korelovaná data: \textbf{Analýza časových řad}
+\end{itemize}
+
+Pokud je přítomna autokorelace a chyby mají konstantní rozptyl, platí:
+\begin{enumerate}
+\item OLS odhad $\wbeta$ je nestranný, ale neplatí Gauss-Markovova věta, tzn. $\wbeta$ nemá nejmenší rozptyl.
+\item MSE = $\frac{1}{n-m-1}\SSE$ (odhad $\sigma^2$) může být podstatně menší než skutečná hodnota $\sigma^2$, což může dávat falešný pocit přesnosti.
+\item V důsledku bodu 2) mohou být zvětšeny hodnoty T statistik, takže testy o parametrech a IS nefungují.
+\item Protože jsou chyby nezávislé, F-testy a t-testy nejsou přesně platné ani když jsou chyby normální.
+\end{enumerate}
+
+\subsection{Durbin-Watson statistika}
+Omezíme se na pozorování získaná v čase $t = 1,2,\dots, n$ a případ, že chyby $e_t$ splňují podmínky autoregresního procesu 1. řádu (AR1), tj.
+$$
+e_t = \rho e_{t-1}+ u_t, \quad |\rho| < 1,
+$$
+kde $\rho$ je autokorelační koeficient, $u_t \sim \NN (0, \sigma_n^2)$ jsou nezávislé v $t = 1,\dots, n$ a $u_t$ je nezávislá na $e_t, t \geq 1$. Častěji pro data časových řad platí $\rho > 0$ (pozitivní autokorelace).
+
+Pro test $\hypothesis{\rho = 0}{\rho > 0}$ se užívá \textbf{Durbin-Watsonova statistika}
+$$
+d = \frac{\sum_{t=2}^n(\he_t - \he_{t-1})^2}{\sum_{t=1}^n \he_t^2},
+$$
+kde $\he_t$ jsou rezidua modelu LR. Pokud zamítneme $H_0$, odhadne se $\rho$ pomocí
+$$
+\widehat{\rho} = \frac{\sum_{t=2}^n \he_t \he_{t-1}}{\sum_{t=2}^n \he_t^2}.
+$$
+
+\newcommand{\sumtn}{\sum_{t=2}^{n}}
+\begin{remark}
+Dá se ukázat, že $d \approx 2(1-\hrho)$:
+$$
+\sum_{t=2}^n(\he_t - \he_{t-1})^2 = \sumtn \he_t^2 + \sumtn \he_{t-1}^2 - 2 \sumtn \he_t \he_{t-1} \approx 2 \left( \sumtn \he_t^2 - \sumtn \he_t \he_{t-1} \right),
+$$
+Z Cauchy-Schwartzovy nerovnosti $\implies \frac{\sumtn \he_t \he_{t-1}}{\sum_{t=1}^n \he_t^2}$ leží přibližně v $(-1,1)$, tzn. $d$ leží přibližně v $(0,4)$. Dále
+$$
+\hrho \approx 1 \implies d \approx 0 \quad \text{a} \quad \hrho \approx 0 \implies d \approx 2,
+$$
+tzn. pro malé hodnoty $d$ budeme zamítat $H_0$, pro velké hodnoty nebudeme zamítat. Kritické hodnoty určené Durbinem a Watsonem jsou tabelované.
+\end{remark}
+
+\noindent \textbf{Test:}
+\begin{enumerate}
+	\item spočítat hodnotu $d$
+	\item nalézt kritické hodnoty $(d_L,d_U)$ pro dané $n$ a $m+1$
+	\item \begin{enumerate}
+		\item zamítnout $H_0$, pokud $d < d_L$
+		\item nezamítnout $H_0$, pokud $d > d_U$
+		\item pro $d_L < d < d_U$ test nerozhodne
+	\end{enumerate}
+\end{enumerate}
+
+\begin{remark}
+	Pro test $\hypothesis{\rho = 0}{\rho < 0}$ lze použít popsaný test pro $d' = 4 - d$. Metody pro korekci autokorelace: \textbf{Cochrane-Orcutt}.
+\end{remark}
