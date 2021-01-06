@@ -81,6 +81,7 @@
 % MATICE ------------------------------------------------------------------------------
  % indentita
 \newcommand{\I}{\mathbb{I}} % identita
+\newcommand{\nula}{\boldsymbol{0}}
 \newcommand{\Identita}[1]{\mathbb{I}_{#1}} % identita s indexem velikosti
 % obecné matice A,B,H
 \newcommand{\Am}{\mathbb{A}} % matice A
@@ -89,6 +90,12 @@
 \newcommand{\Mm}{\mathbb{M}}
 \newcommand{\Wm}{\mathbb{W}}
 \newcommand{\Km}{\mathbb{K}}
+\newcommand{\Qm}{\mathbb{Q}}
+\newcommand{\Lm}{\mathbf{\Lambda}}
+\newcommand{\Vm}{\mathbb{V}}
+\newcommand{\Rm}{\mathbb{R}}
+
+
 % Fisherova matice
 \newcommand{\fisher}{\mathbb{I}} % Fisherova matice
 
@@ -104,28 +111,32 @@
 % VEKTORY ----------------------------------------------------------------------------------------------
 % vektorová písmenka x,y,X,Y atd.
 % tučné X
-\newcommand{\X}{\textbf{X}} % klasické
-\newcommand{\lX}{\overline{\textbf{X}}} % s pruhem
+\newcommand{\X}{\mathbf{X}} % klasické
+\newcommand{\lX}{\overline{\mathbf{X}}} % s pruhem
 % tučné Y
-\newcommand{\Y}{\textbf{Y}} % klasické
+\newcommand{\Y}{\mathbf{Y}} % klasické
 \newcommand{\lY}{\overline{Y}} % s pruhem
 % tučné x
-\newcommand{\x}{\textbf{x}}
+\newcommand{\x}{\mathbf{x}}
 % tučné y
-\newcommand{\y}{\textbf{y}}
+\newcommand{\y}{\mathbf{y}}
 % tučné z
-\newcommand{\z}{\textbf{z}}
+\newcommand{\z}{\mathbf{z}}
+\newcommand{\Zb}{\mathbf{Z}}
 
 % beta
 \newcommand{\betab}{\boldsymbol{\beta}} 			% vektorové beta
 \newcommand{\bbeta}{\boldsymbol{\beta}}				% také vektorové beta
 \newcommand{\wbetab}{\widehat{\boldsymbol{\beta}}}	% vektorové beta se stříškou
 % rezidua: e
-\newcommand{\eb}{\textbf{e}}
+\newcommand{\eb}{\mathbf{e}}
 \newcommand{\lei}{\overline{e}_i}
 \newcommand{\hei}{\widehat{e}_i}
 % epsilon
 \newcommand{\epsb}{\boldsymbol{\epsilon}}
+
+% tučné q
+\newcommand{\qb}{\textbf{q}}
 
 
 %% PROMĚNNÉ SE STŘÍŠKOU -----------------------------------------------------------------------------------
@@ -152,11 +163,11 @@
 \newcommand{\hYn}{\widehat{Y}_n}
 \newcommand{\hYi}{\widehat{Y}_i}
 % vektorové
-\newcommand{\hYb}{\widehat{\textbf{Y}}}
-\newcommand{\hyb}{\widehat{\textbf{y}}}
+\newcommand{\hYb}{\widehat{\mathbf{Y}}}
+\newcommand{\hyb}{\widehat{\mathbf{y}}}
 % rezidua: e
 \newcommand{\he}{\widehat{e}}
-\newcommand{\heb}{\widehat{\textbf{e}}}
+\newcommand{\heb}{\widehat{\mathbf{e}}}
 % a nějaké další
 \newcommand{\hsn}{\widehat{\sigma}_n^2}				% sn se stříškou
 
@@ -250,7 +261,7 @@
 \newcommand{\lm}{\frac{1}{m}}
 \newcommand{\jednab}{\mathbf{1}}
 \newcommand{\norm}[1]{\| #1 \|}
-\newcommand{\In}{\mathrm{I}_n}
+\newcommand{\In}{\mathbf{I}_n}
 \newcommand{\Q}{\textbf{Q}}
 
 
