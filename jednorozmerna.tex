@@ -791,8 +791,8 @@ Obecně ale $\sumin (y_i - \oynn)^2 < \sumin y_i^2$, $\RMR^2$ v~modelu s~$\beta_
 \caption{Tabulka ANOVA pro~$\beta_0 = 0$.}
 \end{table}
 
-\subsection{Predikce}
-Jakmile máme model, často bývá cílem odhadnout hodnoty veličiny $Y_0$ pro~nové $x_0$, které není v~původních datech. Budeme uvažovat dva typy predikce:\begin{enumerate}
+\section{Predikce}
+Jakmile máme model, často bývá cílem odhadnout hodnoty veličiny $Y_0$ pro~nové $x_0$, které není v~původních datech. Budeme uvažovat dva typy predikce:\begin{enumerate}[1)]
 	\item predikce střední hodnoty $\mu_0 = \EE{Y_0}$ v~bodě $x_0$,
 	\item predikce hodnoty nového pozorování $Y_0$ v~bodě $x_0$.
 \end{enumerate}
@@ -800,7 +800,7 @@ Pro oba typy použijeme bodový odhad
  $ \widehat{Y}_0 = \wbeta_0+\wbeta_1 x_0. $
 Intervalové odhady se~ale budou lišit.
 
-\subsection{Ad 1}
+\subsection*{Ad 1)}
 	Protože je $\mu_0 = \beta_0+\beta_1 x_0$ vlastně parametr, lze pro~něj odvodit IS (za předpokladu normality chyb).
 	Spočteme tedy $\D(\widehat{Y}_0)$. Dosazením odhadů $\wbeta_0$ a~$\wbeta_1$ dostaneme $\widehat{Y}_0 = \overline{y}+\wbeta_1(x_0-\overline{x})$ a
 	 $$ \D\widehat{Y}_0 = \D(\overline{Y})+(x_0-\overline{x})^2\D(\wbeta_1)+2(x_0-\overline{x})\underbrace{\Cov(\overline{Y},\wbeta_1)}_{ = 0} = \frac{\sigma^2}{n}+\frac{\sigma^2(x_0-\overline{x})^2}{\Sxx} = \sigma^2\left[\frac{1}{n}+\frac{(x_0-\overline{x})^2}{\Sxx} \right]. $$
@@ -808,12 +808,12 @@ Intervalové odhady se~ale budou lišit.
 	Nahrazením $\sigma^2$ statistikou $s_n^2$ dostaneme odhad $\D(\widehat{Y}_0)$ ve~tvaru
 	 $$ \widehat{\sigma}^2(\overline{Y}_0) = s_n^2\left[\frac{1}{n}+\frac{(x_0-\lx)^2}{\Sxx} \right]. $$
 	 $\wsigma(\hY_0)$ se~obvykle nazývá \textbf{standardní chyba predikce v~bodě $x_0$ }. Jsou-li $e_1,...,e_m~iid~\NN(0,\sigma^2)$, platí, že
-	 $$ \hY_0\sim\N\left(\mu_0,\underbrace{\sigma^2\left[\frac{(x_0-\lx)^2}{\Sxx} \right]}_{\sigma^2(\hY_0)} \right), $$a~tedy
+	 $$ \hY_0\sim\N\left(\mu_0,\underbrace{\sigma^2\left[\frac{1}{n} + \frac{(x_0-\lx)^2}{\Sxx} \right]}_{\sigma^2(\hY_0)} \right), $$a~tedy
 	 $$ \frac{\hY_0-\mu_0}{\sigma(\hY_0)}\sim\NN(0,1). $$
 	Celkově tedy dostáváme
-	 $$ T = \frac{\frac{\hY_0-\mu_0}{\sqrt{\sigma^2\left(\frac{1}{n}+\frac{(x_0-\lx)^2}{\Sxx}\right)}}}{\sqrt{\frac{(n-2)s_n^2}{\sigma^2}\frac{1}{n-2}}} = \frac{\hY_0-\mu_0}{\sqrt{s_n^2\left(\frac{1}{n}+\frac{(x_0-\lx)^2}{\Sxx} \right)}} = \frac{\hY_0-\mu_0}{\wsigma^2(\hY_0)}\sim t(n-2). $$
+	 $$ T = \frac{\frac{\hY_0-\mu_0}{\sqrt{\sigma^2\left(\frac{1}{n}+\frac{(x_0-\lx)^2}{\Sxx}\right)}}}{\sqrt{\frac{(n-2)s_n^2}{\sigma^2}\frac{1}{n-2}}} = \frac{\hY_0-\mu_0}{\sqrt{s_n^2\left(\frac{1}{n}+\frac{(x_0-\lx)^2}{\Sxx} \right)}} = \frac{\hY_0-\mu_0}{\wsigma(\hY_0)}\sim t(n-2). $$
 	
-	Vyjádřením získáme $100(1-\alpha)$ \% IS pro~$\mu_0$ ve~tvaru $$ \hY_0\pm t_{1-\frac{\alpha}{2}}(n-2)\wsigma^2(hY_0). $$
+	Vyjádřením získáme $100(1-\alpha)$ \% IS pro~$\mu_0$ ve~tvaru $$ \hY_0\pm t_{1-\frac{\alpha}{2}}(n-2)\wsigma(\hY_0). $$
 	\begin{remark}
 		Z tvaru IS je vidět, že bude nejkratší pro~$x_0 = \lx$ a~s~rostoucí vzdáleností $| x_0-\lx |$ se~prodlužuje.\begin{itemize}
 			\item  Speciálně potom čím dále jsme od~oblasti, kde jsou naše data $x$, tím méně spolehlivé jsou naše predikce.
@@ -821,7 +821,7 @@ Intervalové odhady se~ale budou lišit.
 		\end{itemize}
 \end{remark}
 
-\subsection{Ad 2}
+\subsection*{Ad 2)}
 Intervalové odhady pro~$Y_0$ nejsou IS, protože $Y_0$ není parametr. Říká se~jim \textbf{intervaly predikce}. Potřebujeme znát hodnotu rozptylu $Y_0-\hY_0$. Pokud je pozorování $Y_0$ nezávislé na~$Y_i,~i\in\widehat{n}$, potom
  $$ \D(Y_0-\hY_0) = \underbrace{\D Y_0}_{\sigma^2}+\D \hY_0+0 = \sigma^2\left[1+\frac{1}{n}+\frac{(x_0-\lx)^2}{\Sxx} \right]. $$ Odhad tohoto rozptylu bude $s_p^2$, kde
  $$ s_p = s_n\sqrt{1+\frac{1}{n}+\frac{(x_0-\lx)^2}{\Sxx}}. $$
@@ -838,7 +838,8 @@ Vyjádřením získáme $100(1-\alpha)$ \% interval predikce pro~$Y_0$ ve~tvaru
 	\end{enumerate}
 Pokud můžeme předem zvolit $x_1,... x_n$, lze přesnost predikce zvýšit volbou dostatečně rozptýlených hodnot $x$. To ale může zvyšovat $\RMR^2$ a~někdy vést k~horšímu modelu.
 
-To je \textbf{základní rozpor v~regresní analýze}:\begin{itemize}
+To je \textbf{základní rozpor v~regresní analýze}:
+\begin{itemize}
 	\item dobrý model nemusí poskytovat dobré predikce,
 	\item dobré predikce mohou vycházet z~méně přesných modelů.
 \end{itemize}
@@ -850,7 +851,8 @@ To je \textbf{základní rozpor v~regresní analýze}:\begin{itemize}
 	
 	Všechny výsledky týkající se~$\beta_0,\beta_1$ byly odvozeny za~předpokladu \textbf{linearity modelu} a~některé za~předpokladu \textbf{normality chyb}.
 	Bylo by tedy dobré mít testy ověřující linearitu.
-\subsection*{Základní procedury pro ověření linearity}
+	
+\section{Základní procedury pro ověření linearity}
 \begin{enumerate}[1)]
 	\item Prozkoumání \textbf{scatter plotu} dvojic $(x_i,y_i)$. Příklad lze vidět na~obrázku \ref{SCATTER}. Takový scatter plot může indikovat, že lepší model bude
 	 $$ y_i = \beta_0+\beta_1 x_i+\beta_2 x_i^2+e_i. $$
@@ -877,9 +879,10 @@ To je \textbf{základní rozpor v~regresní analýze}:\begin{itemize}
 		\label{SCATTER}
 	\end{figure}
 	Scatter plot ale může být zavádějící, pokud je odklon od~linearity způsoben spíše chybějící proměnnou, než polynomiální závislostí na~$x$.
-	\item \textbf{Analýza hodnot testovacích statistik.} \begin{itemize}
-		\item Např. malá hodnota $\RMR^2$ společně s~významnou hodnotou $t$ -statistiky pro~parametry $\beta_1$ obecně naznačuje, že skutečný model obsahuje i~jiné proměnné $x$,
-		\item velká hodnota $\RMR^2$ a~významná $t$ -satistika ale samo o~sobě neznamená, že je model lineární.
+	\item \textbf{Analýza hodnot testovacích statistik.}
+	\begin{itemize}
+		\item Např. malá hodnota $\RMR^2$ společně s~významnou hodnotou t-statistiky pro~parametry $\beta_1$ obecně naznačuje, že skutečný model obsahuje i~jiné proměnné $x$,
+		\item velká hodnota $\RMR^2$ a~významná t-statistika ale samo o~sobě neznamená, že je model lineární.
 	\end{itemize}
 \item \textbf{Obrázky reziduí}. Je to efektivní diagnostický nástroj. Rezidua odhadují, kolik variability v~datech zůstane po~odstranění lineární části v~$x$. Dá se~také očekávat, že jejich hodnoty budou užitečné pro~detekci odchylek od~normality.
 
@@ -893,7 +896,7 @@ To je \textbf{základní rozpor v~regresní analýze}:\begin{itemize}
 	Jinak je tomu u~navržených experimentů typu industriálních nebo klinických studií, kde existuje doporučený analytický test, tzv. \textit{lack of fit} test (LOFT). Ten předpokládá, že máme více pozorování pro~jednu $x_i$.
 \end{example}
 
-\subsection{Ad 3 - Analýza reziduí}
+\subsection*{Ad 3) - Analýza reziduí}
 Intuitivně, pokud je náš model správný, měla by se~rezidua chovat jako náhodný výběr z~$\NN(0,\sigma^2)$. Pokud se~bude zdát, že se~tak nechovají, bude to znamenat neadekvátnost modelu. Později ukážeme grafický nástroj. Nejprve ale začneme vlastnostmi reziduí.\newcommand{\hx}{\overline{x}}
 \newcommand{\hej}{\widehat{e}_j}
 \newcommand{\Nn}{\mathcal{N}(0,\sigma^2)}
@@ -904,10 +907,10 @@ Intuitivně, pokud je náš model správný, měla by se~rezidua chovat jako ná
 \newcommand{\hr}{\widehat{r}}
 
 \begin{theorem}
-	Nechť $\hei$ jsou rezidua modelu $(*)$ odhadnutého metodou nejmenších čtverců. Potom platí, že
+	Nechť $\hei$ jsou rezidua modelu \eqref{Model 1D LR} odhadnutého metodou nejmenších čtverců. Potom platí, že
 	\begin{enumerate}
 		\item $\E \hei = 0, \quad i\in\widehat{n} $,
-		\item $\D \hei = \sigma_{}^2 = \sigma^2 \left[1 - \left(\frac{1}{n} + \frac{(x_i - \hx)^2}{\Sxx} \right) \right] \approx \sigma^2$ pro~velká $n$,
+		\item $\D \hei = \sigma_{\hei}^2 = \sigma^2 \left[1 - \left(\frac{1}{n} + \frac{(x_i - \hx)^2}{\Sxx} \right) \right] \approx \sigma^2$ pro~velká $n$,
 		\item $\Cov (\hei, \hej) = -\sigma^2 \left[1 - \left(\frac{1}{n} + \frac{(\hx - x_i)(\hx - x_j)}{\Sxx} \right) \right]$,
 		\item $\Cov(\hei, \hYi) = 0, \quad i\in\widehat{n} $.
 		\item Pokud jsou $e_1,..., e_n$~iid~$\Nn$, potom platí, že
@@ -919,7 +922,7 @@ Intuitivně, pokud je náš model správný, měla by se~rezidua chovat jako ná
 
 \begin{proof}
 \begin{enumerate}
-	\item $\hei = Y_i - \hYi$, takže $\E(\hei) = \E Y_i - \E \hYi$, ale $\E \hYi = \E(\model) = \model = \E Y_i$.
+	\item $\hei = Y_i - \hYi$, takže $\E(\hei) = \E Y_i - \E \hYi$, ale $\E \hYi = \E(\model) = \beta_0 + \beta_1 x_i = \E Y_i$.
 	\item
 	 $$
 		\D \hei = \D (Y_i - \hYi) = \D Y_i + \underbrace{\D \hYi}_{\sigma^2 \left[\frac{1}{n} + \frac{(x_i - \hx)^2}{\Sxx} \right]} - 2 \underbrace{\Cov(Y_i, \hYi)}_{\sigma^2 \left[\frac{1}{n} + \frac{(x_i - \hx)^2}{\Sxx} \right]} = \sigma^2 \left[1 - \left(\frac{1}{n} + \frac{(x_i - \hx)^2}{\Sxx} \right) \right].
@@ -938,15 +941,15 @@ Intuitivně, pokud je náš model správný, měla by se~rezidua chovat jako ná
 	takže $\Cov(\hei, \hej) = - \sigma^2 \left[\frac{1}{n} + \frac{(x_i - \hx)(x_j - \hx)}{\Sxx} \right]$.
 	\item
 	 $$
-		\Cov(\hei, \hYi) = \Cov(Y-i - \hYi, \hYi) = \underbrace{\Cov(Y_i, \hYi)}_{ = \sigma^2 \left[\frac{1}{n} + \frac{(x_i - \hx)^2}{\Sxx} \right]} - \underbrace{\D(\hYi)}_{ = \Cov(\hYi, \hYi) = \sigma^2 \left[\frac{1}{n} + \frac{(x_i - \hx)^2}{\Sxx} \right]} = 0.
+		\Cov(\hei, \hYi) = \Cov(Y_i - \hYi, \hYi) = \underbrace{\Cov(Y_i, \hYi)}_{ = \sigma^2 \left[\frac{1}{n} + \frac{(x_i - \hx)^2}{\Sxx} \right]} - \underbrace{\D(\hYi)}_{ = \Cov(\hYi, \hYi) = \sigma^2 \left[\frac{1}{n} + \frac{(x_i - \hx)^2}{\Sxx} \right]} = 0.
 	 $$
 	\item $e_i \sim \Nn \Rightarrow \hei \sim \NN(\cdot, \cdot)$, protože $\hei$ je LK $Y_1,..., Y_n$
-	\begin{itemize}
-		\item 1) $\Rightarrow \E \hei = 0$
-		\item 2) $\Rightarrow \D \hei = \sigma_{\hei}^2$
-	\end{itemize}
-	 $\Rightarrow \frac{\hei}{\sigma_{\hei}} \sim \NN(0,1)$
-\end{enumerate}
+	\begin{align*}
+		\text{1)} & \implies \E \hei = 0 \\
+		\text{2)} & \implies \D \hei = \sigma_{\hei}^2 \\
+	 			  & \implies \frac{\hei}{\sigma_{\hei}} \sim \NN(0,1)
+	\end{align*}
+	\end{enumerate}
 \end{proof}
 
 \begin{remark}
@@ -973,14 +976,15 @@ Intuitivně, pokud je náš model správný, měla by se~rezidua chovat jako ná
 
 \section{Grafy reziduí}
 \begin{itemize}
-	\item Histogram reziduí (náhled normality reziduí).
-	\item Kvantilový graf (QQ plot) standardizovanách reziduí - seřadíme dle velikosti: $\hr_{(1)} \leq \hr_{(2)} \leq... \leq \hr_n$ a~vyneseme oproti~$\Phi^{-1}\left((i - \frac{1}{2}) \frac{1}{n} \right)$, $i  \in\widehat{n} $. Body by měly ležet přibližně na~přímce ($\E (e_i) \approx \Phi^{-1}\left((i - \frac{1}{2}) \frac{1}{n} \right)$ pro~normální chyby).
+	\item \underline{Histogram reziduí} -- umožní náhled normality reziduí.
+	\item \underline{Kvantilový graf (QQ plot) standardizovaných reziduí} -- seřadíme dle velikosti: $\hr_{(1)} \leq \hr_{(2)} \leq... \leq \hr_n$ a~vyneseme oproti~$\Phi^{-1}\left((i - \frac{1}{2}) \frac{1}{n} \right)$, $i  \in\widehat{n} $. Body by měly ležet přibližně na~přímce ($\E (e_i) \approx \Phi^{-1}\left((i - \frac{1}{2}) \frac{1}{n} \right)$ pro~normální chyby).
 	
 	Použití: ověření normality, detekce odlehlých pozorování (obr. 3.6 str. 1077 GLM).
-	\item Standardizovaná rezidua $\times$ jednotlivým vysvětlujícím proměnným $x$ - $\hr_i$ nezávisí na~$\sigma$, graf $\hr_i \times x_i$ lze použít pro~detekci nelinearity nebo nekonstantního rozptylu.
-	\item Standardizovaná rezidua $\hr_i$$ \times $predikovaným hodnotám$ \hyi $-$ \Cov(\hei, \hYi) = 0 $, tedy$ \hei(\hr_i) $a~$ \hYi $by měly být nekorelované, pokud platí model$ (*) $. To znamená, že graf$ \hr_i \times \hyi $by měl být náhodně rozptýlený kolem~osy$ x $, navíc$ \hr_i $by měla ležet v~$ (-3,3) $($ \hr_i \approx \NN(0,1) $).
-	
-	\item Standardizovaná rezidua $\times$ pořadí pozorování - možná detekce řadové korelace mezi~pozorováními.
+	\item \underline{Standardizovaná rezidua $\times$ jednotlivým vysvětlujícím proměnným $x$} -- $\hr_i$ nezávisí na~$\sigma$, graf $\hr_i \times x_i$ lze použít pro~detekci nelinearity nebo nekonstantního rozptylu.
+	\item \underline{Standardizovaná rezidua $\hr_i \times$ predikovaným hodnotám $\hyi$} -- $\Cov(\hei, \hYi) = 0$, tedy $\hei(\hr_i)$ a~$\hYi$ by měly být nekorelované, pokud platí model \eqref{Model 1D LR}. To znamená, že graf $\hr_i \times \hyi$ by měl být náhodně rozptýlený kolem~osy $x$, navíc $\hr_i$ by měla ležet v~$(-3,3)$ ($ \hr_i \approx \NN(0,1) $).
+	(doplnit obrázky)
+	\item \underline{Standardizovaná rezidua $\times$ pořadí pozorování} -- možná detekce řadové korelace mezi~pozorováními.
+	(doplnit obrázky)
 	
 \end{itemize}
 
