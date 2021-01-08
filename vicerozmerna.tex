@@ -16,7 +16,7 @@ Označme
  \Y_{n\times 1} = \X_{n\times(m+1)}\betab_{(m+1)\times 1}+\eb_{n\times 1}. \tag{$**$}
  \end{equation}
 
- Nyní budeme předpokládat, že $e_1,\dots,e_n$ jsou nezávislé a~$e_i \sim\NN(0,\sigma^2)$, tzn. $\eb\sim\NN_n(\nula,\sigma^2 I_n)$ a~$\Y\sim\NN_n(\X\betab,\sigma^2 I_n)$.
+ Nyní budeme předpokládat, že $e_1,\dots,e_n$ jsou nezávislé a~$e_i \sim\NN(0,\sigma^2)$, tzn. $\eb\sim\NN_n(\nula,\sigma^2 \In)$ a~$\Y\sim\NN_n(\X\betab,\sigma^2 \In)$.
 
  Věrohodnostní funkce je potom ve~tvaru
  \begin{align*}
@@ -30,7 +30,7 @@ kde $\mu_i = \beta_0+\sumjn \beta_j x_{ij}$ a~$\boldsymbol{\mu} = (\mu_1,\dots,\
 
 \newpage
  \begin{theorem}
- 	Uvažujme model \eqref{the_chosen_one} a~nechť $\eb\sim\NN(\nula,\sigma^2 I_n)$. Potom $\wbetab$ je MLE $\betab$ právě tehdy, když $\wbetab$ je řešením soustavy rovnic
+ 	Uvažujme model \eqref{the_chosen_one} a~nechť $\eb\sim\NN(\nula,\sigma^2 \In)$. Potom $\wbetab$ je MLE $\betab$ právě tehdy, když $\wbetab$ je řešením soustavy rovnic
  	 $$ \X^T\X\betab = \X^T\Y\qquad\text{(soustava normálních rovnic)}. $$
  	Je-li matice $\X^T\X$ singulární, má tato soustava jednoznačné řešení ve~tvaru
  	 $$ \wbetab = (\X^T\X)^{-1}\X^T\Y. $$
@@ -43,7 +43,7 @@ kde $\mu_i = \beta_0+\sumjn \beta_j x_{ij}$ a~$\boldsymbol{\mu} = (\mu_1,\dots,\
  			a tedy
  			\begin{align}
  			g(\bbeta)-g(\wbetab)& = \betab^T\X^T\X\betab-2\wbetab^T\X^T\X\betab+\wbetab\X^T\X\wbetab = (\X\betab-\X\wbetab)^T(\X\betab-\X\wbetab) = \\
- 			&= \big(\X(\betab-\wbetab) \big)^T\big(\X(\betab-\wbetab) \big) = \langle \X(\betab-\wbetab),\X(\betab-\wbetab) \rangle\geq 0,\quad\forall\betab, \label{tohle}
+ 			&= \left(\X(\betab-\wbetab) \right)^T\left(\X(\betab-\wbetab) \right) = \langle \X(\betab-\wbetab),\X(\betab-\wbetab) \rangle\geq 0,\quad\forall\betab, \label{tohle}
  			\end{align}
  			 tedy $\wbetab$ minimalizuje $g(\bbeta)$ a~je tedy MLE parametru $\betab$.
  		\end{enumerate}
@@ -146,7 +146,10 @@ Protože $\wbetab = \Am \Y$, kde $\Am = (\X^T \X)^{-1} \X^T$, $\wbetab$ je LK $Y
 
 \item
 Nejdříve přepíšeme vektor reziduí $\heb = \Y - \X \wbetab = \Y - \hYb$. Pak
-$$\hYb = \X \wbetab = \X (\X^T \X)^{-1} \X^T \Y = \Hm \Y,$$
+\begin{equation}
+	\hYb = \X \wbetab = \X (\X^T \X)^{-1} \X^T \Y = \Hm \Y,
+	\label{Eq: HY}
+\end{equation}
 kde $\Hm = \X (\X^T \X)^{-1} \X^T$ je tzv. \textbf{projekční matice}.
  
 Pak $\heb = \Y - \Hm \Y = (\In - \Hm) \Y$. Dále platí
@@ -173,7 +176,7 @@ kde $g_{ij}$ je $(i,j)$-tý prvek matice $(\In - \Hm)$. Zbývá spočítat $\E(\
 	& = n - \trace(\X^T \X (\X^T \X)^{-1}) = n - \trace(\Identita{m+1}) = n - (m + 1)
 \end{align*}
 
-Celkem pak dostáváme $\E s_n^2 = \frac{1}{n - (m + 1)} \E (\SSE) = \frac{1}{n - (m + 1)} \sigma^2\big(n - (m + 1)\big) = \sigma^2$.
+Celkem pak dostáváme $\E s_n^2 = \frac{1}{n - (m + 1)} \E (\SSE) = \frac{1}{n - (m + 1)} \sigma^2\left(n - (m + 1)\right) = \sigma^2$.
 
 \item
  Jelikož $\wbeta$ je LK $Y_1,\dots, Y_n$, které jsou nezávislé a normálně rozdělené $$\Rightarrow \wbetab \sim \NN_{m+1} (\betab, \sigma^2(\X^T \X)^{-1}).$$
@@ -268,23 +271,23 @@ spočtěme $\Cov(\Zb)$ : \\
  
 \item Výsledky z~LA:
 \begin{itemize}
-\item $\Am_{n \times n}$ symetrická matice $\Rightarrow$ existuje ortogonální matice $\Qm$ a~diagonální matice $\Lm$ tak, že $\Am = \Qm \Lm \Qm^T$, sloupce $\Qm$ jsou ON vlastní vektory matice $\Am$ a~diagonální prvky matice $\Lm$ jsou jim odpovídající vlastní čísla.
+\item $\Am_{n \times n}$ symetrická matice $\Rightarrow$ existuje ortogonální matice $\Qm$ a~diagonální matice $\Lam$ tak, že $\Am = \Qm \Lam \Qm^T$, sloupce $\Qm$ jsou ON vlastní vektory matice $\Am$ a~diagonální prvky matice $\Lam$ jsou jim odpovídající vlastní čísla.
 \item $\Am_{n \times n}$ idempotentní matice $\Rightarrow$ vlastní čísla jsou pouze 0 nebo 1 $\Rightarrow h(\Am) = \trace(\Am)$.
 \end{itemize}
 V důkazu předchozí věty jsme ukázali, že
 $$(n - m -1) \frac{s_n^2}{\sigma^2} = \frac{\SSE}{\sigma^2} = \frac{1}{\sigma^2} \eb^T (\text{I}_n - \Hm) \eb.$$
 Protože je $(\text{I}_n - \Hm)$ symetrická a~idempotentní, tak
  $$
- \text{I}_n - \Hm = \Qm \Lm \Qm^T,  \quad \text{kde} \quad
+ \text{I}_n - \Hm = \Qm \Lam \Qm^T,  \quad \text{kde} \quad
  \begin{array}{c}
  {\Qm  \text{ je ortogonální matice}} \\
-{\Lm  \text{ je diagonální matice s~vlastními čísly } \text{I}_n - \Hm}
+{\Lam  \text{ je diagonální matice s~vlastními čísly } \text{I}_n - \Hm}
  \end{array}.
  $$
 Protože vlastní čísla $\text{I}_n - \Hm$ jsou 0 nebo 1 a~$\trace(\text{I}_n - \Hm) = h(\text{I}_n - \Hm) = n - m - 1$, \linebreak
- $\Lm$ může být zapsána ve~tvaru:
+ $\Lam$ může být zapsána ve~tvaru:
  $$
- \Lm = 
+ \Lam = 
  \left(\begin{array}{cc}
  \textbf{I}_{n-m-1} & \nula  \\
  \nula & \nula
@@ -292,7 +295,7 @@ Protože vlastní čísla $\text{I}_n - \Hm$ jsou 0 nebo 1 a~$\trace(\text{I}_n 
  $$
 takže
  $$
- \eb (\text{I}_n - \Hm) \eb = \eb \Qm \Lm \Qm^T \eb = \qb^T \Lm \qb, \quad \text{kde } \qb = \Qm^T \eb.
+ \eb (\text{I}_n - \Hm) \eb = \eb \Qm \Lam \Qm^T \eb = \qb^T \Lam \qb, \quad \text{kde } \qb = \Qm^T \eb.
  $$
  
 \begin{theorem}
@@ -300,16 +303,17 @@ takže
 \end{theorem}
 \vspace{0.1cm}
 To znamená, že $\qb$ je vektor nezávislých $\NN(0,\sigma^2)$ veličin $\left(\qb \sim \NN_n (\nula, \sigma^2 \In)\right)$ a
- $$ \frac{1}{\sigma^2} \eb^T (\text{I}_n - \Hm) \eb = \frac{1}{\sigma^2} \qb^T \Lm \qb = \sum_{i = 1}^{n-m-1}\frac{q_i^2}{\sigma^2} \quad \sim \chi^2 (n - m - 1) $$
+ $$ \frac{1}{\sigma^2} \eb^T (\text{I}_n - \Hm) \eb = \frac{1}{\sigma^2} \qb^T \Lam \qb = \sum_{i = 1}^{n-m-1}\frac{q_i^2}{\sigma^2} \quad \sim \chi^2 (n - m - 1) $$
 je suma druhých mocnin $n-m-1$ nezávislých $\NN(0,1)$ veličin.
 \item Z~předchozí věty:
  $$
   \frac{\widehat{\beta}_i - \beta_i}{\sigma \sqrt{v_i}} \sim \NN(0,1) \quad \text{a} \quad \frac{s_n}{\sigma} = \sqrt{\frac{\frac{(n-m-1) s_n^2}{\sigma^2}}{n-m-1}} = \sqrt{\frac{\chi^2(n-m-1)}{n-m-1}}
  $$
 a z~bodu $1)$ nezávislost
- $$
+\begin{equation}
   \text{T}_i = \frac{\widehat{\beta}_i - \beta_i}{s_n \sqrt{v_i}} = \frac{\frac{\widehat{\beta}_i - \beta_i}{\sigma \sqrt{v_i}}}{\frac{s_n}{\sigma}} \sim \mathrm{t}(n-m-1)
- $$
+\label{Rozdeleni_T}
+\end{equation}
 \item
  $\C \widehat{\beta} \sim \NN_r \left(\C \beta, \sigma^2 \C (\X^T \X)^{-1} \C^T \right)$, a~tedy
  $$ \C (\widehat{\beta} - \beta) = \C\widehat{\beta} - \C \beta \sim \NN_r \left(\nula, \sigma^2 \C (\X^T \X)^{-1} \C^T\right). $$
@@ -443,11 +447,12 @@ Bylo by dobré mít jednu statistiku pro~test
  $$
 ANOVA přístup pro~jednorozměrnou regresi naznačuje, že statistika
  $$
-\text{F} = \frac{\frac{\SSR}{m}}{s_m^2}
+\text{F} = \frac{\frac{\SSR}{m}}{s_n^2}
  $$
 by mohla být užitečná (vyplyne i~z~obecnějších přístupů k~testování později).
 
-\subsubsection*{Značení:}
+\textbf{Značení:}
+
 Označíme $\lx_j = \frac{1}{n} \sumin x_{ij}$ jako průměr j-tého sloupce matice $\X$,
  $$
 	\lX = \begin{pmatrix}
@@ -470,7 +475,7 @@ Označíme $\lx_j = \frac{1}{n} \sumin x_{ij}$ jako průměr j-tého sloupce mat
 	
 \begin{align*}
 	\hyi & = \wbeta_0 + \sumjm x_{ij} \wbeta_j \\
-	\frac{\partial \SSE}{\partial \beta_0} & = \sumin \big(y_i - (\beta_0 + \sumjn x_{ij} \wbeta_j) \big) = 0 \Rightarrow \wbeta_0 = \ly - \sumjm \lx_j \wbeta_j
+	\frac{\partial \SSE}{\partial \beta_0} & = \sumin \left(y_i - (\beta_0 + \sumjn x_{ij} \wbeta_j) \right) = 0 \Rightarrow \wbeta_0 = \ly - \sumjm \lx_j \wbeta_j
 \end{align*}
 Celkem pak $\hy_i - \ly = \sumjm (x_{ij} - \lx_j) \wbeta_j, \quad i\in\widehat{n} $ a~zapsáno maticově:
  $$
@@ -501,11 +506,10 @@ Nejdříve zjednodušíme matici $\Am$ :
 
 Dále rozepíšeme $\underbrace{\Am \Sigma}_{ = \Am \Cov \wbetab} = \sigma^2 \X^T \left(\Identita{n} - \frac{1}{n} \Bm \right) \X \left(\X^T \X \right)^{-1}$ a~spočítáme $\trace (\Am \Sigma)$ :
 
-\begin{equation*}
-\begin{split}
-\trace (\Am \Sigma) = \sigma^2 \trace \left[\X \left(\X^T \X \right)^{-1} \X^T \left(\Identita{n} - \frac{1}{n} \Bm \right) \right] = \sigma^2 \trace\left[\Hm - \frac{1}{n} \Hm \Bm \right] = \\ = \sigma^2 \left[\trace \Hm - \lomn{1} \trace (\Hm \Bm) \right] = \sigma^2 \left[\underbrace{\trace \Hm}_{ = m+1} \lomn{1} \underbrace{\trace \Bm}_{ = n} \right] = \sigma^2 m,
-\end{split}
-\end{equation*}
+\begin{align*}
+\trace (\Am \Sigma) & = \sigma^2 \trace \left[\X \left(\X^T \X \right)^{-1} \X^T \left(\Identita{n} - \frac{1}{n} \Bm \right) \right] = \sigma^2 \trace\left[\Hm - \frac{1}{n} \Hm \Bm \right] = \\
+& = \sigma^2 \left[\trace \Hm - \lomn{1} \trace (\Hm \Bm) \right] = \sigma^2 \left[\underbrace{\trace \Hm}_{ = m+1} - \lomn{1} \underbrace{\trace \Bm}_{ = n} \right] = \sigma^2 m,
+\end{align*}
 jelikož víme, že $\Hm \X = \X$ a~$\jednab = (1,\dots, 1)^T$ je první sloupec $\X$, takže $\Hm \jednab = \jednab$, a~tedy $\Hm \Bm = \Bm$. Celkem tak dostáváme
  $$
 \E \left(\frac{\SSR}{m} \right) = \lm \left(\sigma^2 m + \betab^T (\X - \lX)^T(\X - \lX) \betab \right) = \sigma^2 + \lm \betab^T (\X - \lX)^T(\X - \lX) \betab
@@ -514,13 +518,13 @@ Navíc platí $(\X - \lX) \betab = \X_c \betab_s$, protože první sloupec matic
 \end{proof}
 
 \begin{remark}
-Pokud $\betab_s$ = 0, potom $\E \left(\frac{\SSR}{m} \right) = \sigma^2 = \E s_n^2$, takže $\betab_s \neq 0$ implikuje, že $\E \left(\frac{\SSR}{m} \right) > \sigma^2$, tedy velké hodnoty $F = \frac{\SSR/m}{s_n^2}$ budou znamenat zamítnutí $H_0: \betab_s = 0$. Budeme proto potřebovat rozdělení $F$ za~platnosti $H_0$.
+Pokud $\betab_s$ = 0, potom $\E \left(\frac{\SSR}{m} \right) = \sigma^2 = \E s_n^2$, takže $\betab_s \neq 0$ implikuje, že $\E \left(\frac{\SSR}{m} \right) > \sigma^2$, tedy velké hodnoty $\FF = \frac{\SSR/m}{s_n^2}$ budou znamenat zamítnutí $H_0: \betab_s = 0$. Budeme proto potřebovat rozdělení $\FF$ za~platnosti $H_0$.
 \end{remark}
 
 \begin{theorem}
 Nechť v~modelu $\Y = \X \betab + \eb$ \eqref{the_chosen_one} jsou $e_1,\dots, e_n $~iid~$\Nn$. Pokud $\betab_s = 0$, tj. $\beta_1 = \beta_2 = \cdots = \beta_m = 0$, potom
  $$
-F \sim F(m, n - m -1).
+\FF \sim \FF(m, n - m -1).
  $$
 \end{theorem}
 
@@ -529,9 +533,9 @@ V důkazu minulé věty jsme ukázali
  $$
 \SSR = \wbetab^T \X^T \left(\Identita{n} - \lomn{1} \Bm \right) \X \wbetab = \hYb^T \left(\Identita{n} - \lomn{1} \Bm \right) \hYb
  $$
-a potřebujeme rozepsat $\hYb$ :
+a potřebujeme rozepsat $\hYb$, použijeme rovnost \eqref{Eq: HY}:
  $$
-\hYb = \Hm \Y = \Hm (\X \betab + \eb) = \Hm (\jednab \beta_0 + \X_v \betab_s)+ \eb) = \beta_0 \underbrace{\Hm \jednab}_{ = \jednab} + \Hm \X_v \underbrace{\betab_s}_{ = 0} + \Hm \eb = \beta_0 \jednab + \Hm \eb
+\hYb = \Hm \Y = \Hm (\X \betab + \eb) = \Hm \left( \jednab \beta_0 + \X_v \betab_s + \eb \right) = \beta_0 \underbrace{\Hm \jednab}_{= \jednab} + \Hm \X_v \underbrace{\betab_s}_{= \nula} + \Hm \eb = \beta_0 \jednab + \Hm \eb
  $$
 
  $$
@@ -541,59 +545,60 @@ protože $\left(\Identita{n} - \lomn{1} \Bm \right) \jednab = 0$ a~$\left(\Ident
 
 Dále platí $\Hm = \Hm^T, \Hm^2 = \Hm$ a~$\Hm \Bm = \Bm \Hm = \Bm$ (protože $\Hm \jednab = \jednab$) a~celkem tedy dostáváme
  $$
-\SSR = \eb^T \underbrace{\left(\Identita{n} - \lomn{1} \Bm \right)}_{\text{ozn.} \; \C} \eb = \eb^T \C \eb.
+\SSR = \eb^T \underbrace{\left(\Hm - \lomn{1} \Bm \right)}_{\text{ozn.} \; \C} \eb = \eb^T \C \eb.
  $$
 Pro matici $\C$ platí
 \begin{align*}
-\C^T & = \left(\Identita{n}^T - \lomn{1} \Bm^T \right) = \left(\Identita{n} - \lomn{1} \Bm \right) = \C \\
-\C^2 & = \left(\Identita{n} - \lomn{1} \Bm \right)\left(\Identita{n} - \lomn{1} \Bm \right) = \Hm^2 - \lomn{1} \Hm \Bm - \lomn{1} \Bm \Hm + \frac{1}{n^2} \Bm^2 = \Hm - \lomn{2} \Bm + \lomn{1} \Bm = \Hm - \lomn{1} \Bm = \C,
+\C^T & = \left(\Hm^T - \lomn{1} \Bm^T \right) = \left(\Hm - \lomn{1} \Bm \right) = \C \\
+\C^2 & = \left(\Hm - \lomn{1} \Bm \right)\left(\Hm - \lomn{1} \Bm \right) = \Hm^2 - \lomn{1} \Hm \Bm - \lomn{1} \Bm \Hm + \frac{1}{n^2} \Bm^2 = \Hm - \lomn{2} \Bm + \lomn{1} \Bm = \Hm - \lomn{1} \Bm = \C,
 \end{align*}
 tedy $\C$ je symetrická a~idempotentní, a~proto
  $$
-h(\C) = \trace(\C) = \trace \left(\Identita{n} - \lomn{1} \Bm \right) = m + 1 - 1 = m.
+h(\C) = \trace(\C) = \trace \left(\Hm - \lomn{1} \Bm \right) = m + 1 - 1 = m.
  $$
-Z věty o~spektrálním rozkladu plyne existence $Q$ OG a~?? $\Lambda$ tak, že
- $$ \C = \Q^T \Lambda \Q = \Q^T \left(\begin{array}{cc}
-I_m&\nula  \\
+Z věty o~spektrálním rozkladu plyne existence $\Q$ OG a~diagonální $\Lam$ tak, že
+ $$ \C = \Q^T \Lam \Q = \Q^T \left(\begin{array}{cc}
+\Identita{m}&\nula  \\
 \nula& \nula
 \end{array}
  \right)\Q, $$
-, která má vlastní čísla $0$ a~$1$, protože se~jedná o~idenpotentní matici. Dále potom
+která má vlastní čísla $0$ a~$1$, protože se~jedná o~idempotentní matici. Dále potom
  $$ \SSR = \eb^T\Q^T\left(\begin{array}{cc}
- I_m&\nula  \\
+ \Identita{m}&\nula  \\
  \nula& \nula
  \end{array}
- \right)\underbrace{\Q\eb}_{\Zb\sim\NN(0,\sigma^2 I_m)} = \Zb^T\left(\begin{array}{cc}
- I_m&\nula  \\
+ \right)\underbrace{\Q\eb}_{\Zb\sim\NN(\nula,\sigma^2 \Identita{n})} = \Zb^T\left(\begin{array}{cc}
+ \Identita{m}&\nula  \\
  \nula& \nula
  \end{array}
- \right)\Zb = \sumin Z_i^2, $$
+ \right)\Zb = \sum_{i=1}^m Z_i^2, $$
  kde $Z_i\sim\NN(0,\sigma^2)$ jsou nezávislé. Z~toho vyplývá, že
  $$ \frac{Z_i}{\sigma}\sim\NN(0,1)\qquad\text{a}\qquad\frac{\SSR}{\sigma^2}\sim\chi^2(m). $$
  To znamená, že
- $$ \frac{\frac{\SSR}{\sigma^2 m}}{\frac{(n-m-1)s_n^2}{\sigma^2}\frac{1}{n-m-1}} = \frac{\frac{\SSR}{m}}{s_m^2} = F\sim \FF(m,n-m-1), $$
-, pokud ukážeme, že $\SSR$ a~$s_n^2$ jsou nezávislé. K~tomu ale stačí dokázat, že $\SSR$ je nezávislé na~reziduích $\he_i,~i\in\widehat{n}$.
- $$ \SSR = \eb^T\Hm\big(I_n-\frac{1}{n}\Bm \big)\Hm\eb = \eb^T\Hm\underbrace{\big(I_n-\frac{1}{n}\Bm\big)\big(I_n-\frac{1}{n}\Bm\big)}_{ = I_n-\frac{1}{n}\Bm}\Hm\eb = \frac{T}{\textbf{w}^T\textbf{w}}, $$
- kde $\textbf{w} = \big(I_n-\frac{1}{n}\Bm\big)\Hm\eb\equiv \textbf{K}\eb$, $\heb = (I_n-\Hm)\eb\equiv \textbf{L}\eb$. Stačí tedy ukázat, že $\textbf{w}$ a~$\heb$ jsou nezávislé vektory. Víme, že
- $$ \binom{\textbf{w}}{\heb} = \binom{\textbf{K}}{\textbf{L}} \eb, $$
- tzn. má vícerozměrné normální rozdělení. Pokud je výraz $\textbf{K}\textbf{L}^T$ z~rovnice \ref{rovnicka} roven nule, pak jsou $\textbf{w}$ a~$\heb$ nezávislé.
+ $$ \frac{\frac{\SSR}{\sigma^2 m}}{\frac{(n-m-1)s_n^2}{\sigma^2}\frac{1}{n-m-1}} = \frac{\frac{\SSR}{m}}{s_n^2} = \FF\sim \FF(m,n-m-1), $$
+ pokud ukážeme, že $\SSR$ a~$s_n^2$ jsou nezávislé. K~tomu ale stačí dokázat, že $\SSR$ je nezávislé na~reziduích $\he_i,~i\in\widehat{n}$.
+ $$ \SSR = \eb^T\Hm\left(\In-\frac{1}{n}\Bm \right)\Hm\eb = \eb^T\Hm\underbrace{\left(\In-\frac{1}{n}\Bm\right)\left(\In-\frac{1}{n}\Bm\right)}_{ = \In-\frac{1}{n}\Bm}\Hm\eb = \textbf{w}^T\textbf{w}, $$
+ kde $\textbf{w} = \left(\In-\frac{1}{n}\Bm\right)\Hm\eb\equiv \Km\eb$, $\heb = (\In-\Hm)\eb\equiv \Lm\eb$. Stačí tedy ukázat, že $\textbf{w}$ a~$\heb$ jsou nezávislé vektory. Víme, že
+ $$ \binom{\textbf{w}}{\heb} = \binom{\Km}{\Lm} \eb, $$
+ tzn. má vícerozměrné normální rozdělení. Rozepíšeme kovarianci jako
   \begin{equation}\label{rovnicka}
-  \Cov\binom{\textbf{w}}{\heb} = \binom{\textbf{K}}{\textbf{L}}\Cov~\eb(\textbf{K}^T,\textbf{L}^T) = \sim^2 \left(\begin{array}{cc}
-  \textbf{K}\textbf{K}^T&\textbf{K}\textbf{L}^T  \\
-  \textbf{L}\textbf{K}^T & \textbf{L}\textbf{L}^T
+  \Cov\binom{\textbf{w}}{\heb} = \binom{\Km}{\Lm}\Cov\left[\eb\right](\Km^T,\Lm^T) = \sigma^2 \left(\begin{array}{cc}
+  \Km\Km^T&\Km\Lm^T  \\
+  \Lm\Km^T & \Lm\Lm^T
   \end{array}
-  \right)
+  \right).
   \end{equation}
-  Pro~$\textbf{K}\textbf{L}^T$ platí, že
- $$ \textbf{K}\textbf{L}^T = \big(I_n-\frac{1}{n}\Bm \big)\underbrace{\Hm(I_n-\Hm)}_{\Hm-\Hm^2 = \nula} = 0. $$
+  Pokud je výraz $\Km\Lm^T$ z~rovnice \eqref{rovnicka} roven nule, pak jsou $\textbf{w}$ a~$\heb$ nezávislé.
+  Pro~$\Km\Lm^T$ platí, že
+ $$ \Km\Lm^T = \left(\In-\frac{1}{n}\Bm \right)\underbrace{\Hm(\In-\Hm)}_{\Hm-\Hm^2 = \nula} = \nula. $$
 \end{proof}
 
- $\test{F>\FF_{1-\alpha}(m,n-m-1)}$
+ $\test{\FF>\FF_{1-\alpha}(m,n-m-1)}$
 
  \begin{remark}
  	Odvozeno pro~$e_i\sim\NN(0,\sigma^2)$, obecně se~používá, i~když to nevíme, pro~velké $n$ může být často zdůvodněno pomocí CLV.
  \end{remark}
-\subsection*{Tabulka ANOVA}
+\subsubsection{Tabulka ANOVA}
  $$ \begin{array}{l|cccc}
 \text{Source}& \mathrm{df} & \mathrm{SS} & \mathrm{MS} & F \\\hline
 \text{Regression} & m & \SSR & \MSR = \frac{\SSR}{m} & \frac{\MSR}{\MSE} \\
@@ -602,41 +607,41 @@ I_m&\nula  \\
 &  & \RR^2 & \overline{\RR}^2 &
 \end{array}
  $$
- \subsection*{Koeficient (vícenásobné) determinace $\RR^2$ }
+\subsection{Koeficient (vícenásobné) determinace $\RR^2$ }
  Podobně jako u~jednorozměrné regrese, lze F-test chápat jako test významnosti $\RR^2$, definovaného jako
  $$ \RR^2\equiv \frac{\SSR}{\SST} = 1-\frac{\SSE}{\SST}, $$
-, protože
+protože
  $$ F = \frac{\frac{\SSR}{m}}{\frac{\SSE}{n-m-1}} = \frac{n-m-1}{m}\left(\frac{\frac{\SSR}{\SST}}{\frac{\SSE}{\SST}} \right) = \frac{n-m-1}{m}\frac{\RR^2}{1-\RR^2}, $$
  což je rostoucí funkce $\RR^2$ (opět $\RR^2\in[0,1]$).
  \begin{remark}
- 	 $\RR^2$ je možno zvětšovat přidáváním nových proměnných $x$, i~když jsou statisticky nevýznamné. (Pro $n$ LN proměnných $x$ a~$n$ pozorování dostaneme "perfect fit", tedy přeučení.) Vysvětlení:
+ 	 $\RR^2$ je možno zvětšovat přidáváním nových proměnných $x$, i~když jsou statisticky nevýznamné. (Pro $n$ LN proměnných $x$ a~$n$ pozorování dostaneme \uv{perfect fit}, tedy přeučení.) Vysvětlení:
  	 $$ \RR^2 = 1-\frac{\SSE}{\SST}, $$
- 	kde $\SST$ je pevně dáno daty $y$, ale $\SSE$ může být snížena přidáním proměnných $x$. Minimalizujeme totiž $(\y-\X\betab)^T(\y-\X\wbeta)$ přes větší množinu $\betab$. To znamená, že $\frac{\SSE}{\SST}$ je nerostoucí funkce počtu proměnných, a~tedy $\RR^2$ je neklesající funkce počtu proměnných. Z~tohoto důvodu se~někdy definuje \textbf{upravený koeficient determinace} (adjusted coefficient of determination)
+ 	kde $\SST$ je pevně dáno daty $y$, ale $\SSE$ může být snížena přidáním proměnných $x$. Minimalizujeme totiž $(\y-\X\betab)^T(\y-\X\betab)$ přes větší množinu $\betab$. To znamená, že $\frac{\SSE}{\SST}$ je nerostoucí funkce počtu proměnných, a~tedy $\RR^2$ je neklesající funkce počtu proměnných. Z~tohoto důvodu se~někdy definuje \textbf{upravený koeficient determinace} (\textit{adjusted coefficient of determination})
  	 $$ \overline{\RR}^2 = \RR_{adj}^2 = 1-\frac{\frac{\SSE}{n-m-1}}{\frac{\SST}{n-1}} = 1-\frac{n-1}{n-m-1}\frac{\SSE}{\SST}. $$
- 	(S rostoucím $m$ klesá $\SSE$, ale i~$n-m-1$.)
+ 	S rostoucím $m$ klesá $\SSE$, ale i~$n-m-1$, což dává určitou kompenzaci.
  \end{remark}
-\section{IS a~$t$-testy pro~parametry}
+\section{IS a~t-testy pro~parametry}
 \begin{itemize}
 	\item Pokud se~model ukáže jako významný, bude nás zajímat, které koeficienty přispívají.
-	\item Lze použít IS a~TH stejně, jako u~jednorozměrné regrese.
+	\item Lze použít IS a~TH stejně jako u~jednorozměrné regrese.
 	\item Výsledky jsou odvozeny pro~normální chyby.
 	\item V~praxi se~používají i~pro~jiné typy chyb (za jistých předpokladů budou platit asymptoticky, lze je použít pro~velká $n$).
 \end{itemize}
-Pro konstrukci použijeme dokázanou vlastnost
- $$ T_j = \frac{\wbeta_j-\beta_j}{s_n\sqrt{v_j}}\sim t(n-m-1),\quad\text{kde}\quad v_j = (\X^T\X)_{jj}^{-1}. $$
-Standardním postupem získáme $100(1-\alpha)$ \%. IS pro~$\beta_j$ ve~tvaru
- $$ \big(\wbeta_j-t_{1-\frac{\alpha}{2}}(n-m-1)s_n\sqrt{v_j},\wbeta_j+t_{1-\frac{\alpha}{2}}(n-m-1)s_n\sqrt{v_j} \big) $$
-s jejich pomocí lze odvodit kritický obor pro~test
+Pro konstrukci použijeme dokázanou vlastnost (viz \eqref{Rozdeleni_T}):
+ $$ \Tstat_j = \frac{\wbeta_j-\beta_j}{s_n\sqrt{v_j}}\sim t(n-m-1),\quad\text{kde } v_j = (\X^T\X)_{jj}^{-1}. $$
+Standardním postupem získáme $100(1-\alpha)$\% IS pro~$\beta_j$ ve~tvaru
+ $$ \left(\wbeta_j-t_{1-\frac{\alpha}{2}}(n-m-1)s_n\sqrt{v_j},\wbeta_j+t_{1-\frac{\alpha}{2}}(n-m-1)s_n\sqrt{v_j} \right).$$
+S jejich pomocí lze odvodit kritický obor pro t-test
  $$ \hypothesis{\beta_j = b_j}{\beta_j\neq b_j} $$
 ve tvaru
- $$ \frac{|\wbeta_j-b_j|}{s_n\sqrt{v_j}}>t_{1-\frac{\alpha}{2}}(n-m-1). $$
+ $$ \frac{|\wbeta_j-b_j|}{s_n\sqrt{v_j}}>t_{1-\frac{\alpha}{2}}(n-m-1).$$
 Pro $b_j = 0$ dostaneme test významnosti $\beta_j$, tzn. $H_0:~\beta_j = 0$ zamítneme, pokud
  $$ \frac{|\wbeta_j|}{s_n\sqrt{v_j}}>t_{1-\frac{\alpha}{2}}(n-m-1). $$
 \begin{remark}
 	\begin{itemize}
 		\item Pokud nejsou porušeny předpoklady modelu nebo není přítomna kolinearita, lze zvážit odstranění všech nevýznamných proměnných (dle t-testu).
 		\item V~případě kolinearity, model může být významný (dle celkového F-testu), ale všechny nebo téměř všechny proměnné se~mohou jevit jako nevýznamné (dle t-testů).
-		\item Naopak, pokud má model velký počet možných proměnných, ně, které proměnné se~mohou jevit významné, i~když jsou náhodným šumem.
+		\item Naopak, pokud má model velký počet možných proměnných, některé proměnné se~mohou jevit významné, i~když jsou náhodným šumem.
 		\item Při~použití t-testů je třeba být obezřetný.
 	\end{itemize}
 \end{remark}
@@ -644,27 +649,29 @@ Pro $b_j = 0$ dostaneme test významnosti $\beta_j$, tzn. $H_0:~\beta_j = 0$ zam
 	5.26, str. 230 a~5.27, str. 231
 \end{example}
 \begin{remark}
-	Statistiky $\FF,\RR^2$ a~$t$ jsou užitečné pro~rozkrytí efektů jednoduchých proměnných, nemohou být ale používány úplně automaticky.
+	Statistiky $\FF,\RR^2$ a~T jsou užitečné pro~rozkrytí efektů jednoduchých proměnných, nemohou být ale používány úplně automaticky.
 \end{remark}
 
 \section{Obecná lineární hypotéza}
 F-test a~t-testy jsou speciálním případem \textbf{obecné lineární hypotézy}
- $$ \hypothesiswide{\textbf{C}\betab = \textbf{b}}{\textbf{C}\betab\neq\textbf{b}}, $$
-kde $\textbf{C}\in\R^{r\times(m+1)}$ a~$h(\textbf{C}) = r$, tzn. $r\leq m+1$. Rovnice $\textbf{C}\betab = \textbf{b}$ reprezentuje $r$ lineárně nezávislých podmínek
- $$ \sum_{j = 0}^m c_{ij}\beta_j = b_i,\qquad i = 1,\dots,r. $$
+ $$ \hypothesiswide{\C\betab = \textbf{b}}{\C\betab\neq\textbf{b}}, $$
+kde $\C\in\R^{r\times(m+1)}$ a~$h(\C) = r$, tzn. $r\leq m+1$. Rovnice $\C\betab = \textbf{b}$ reprezentuje $r$ lineárně nezávislých podmínek
+ $$ \sum_{j = 0}^m c_{ij}\beta_j = b_i,\quad i = 1,\dots,r. $$
 \begin{remark}
+	Jak volit $\bb$ a $\C$:
+	
 	\begin{enumerate}[a)]
-		\item Volba $\textbf{b} = (0,\dots,0)^T$ a~$ \textbf{C} = \left(\begin{array}{c|cccc}
+		\item Volba $\textbf{b} = (0,\dots,0)^T$ a~$ \C = \left(\begin{array}{c|cccc}
 		0 & 1 & 0 &... & 0 \\\hline
 		0 & 0 & 1 &  & \vdots \\
 		\vdots& \vdots & \ddots & \ddots & 0 \\
-		0 & 0 &... & 0 & 1
+		0 & 0 & \dots & 0 & 1
 		\end{array}
 		\right)_{m\times(m+1)} $ vede na~test
-		 $$ H_0:~\textbf{C}\betab = \nula\qquad\Leftrightarrow\qquad H_0:~\beta_1 = \beta_2 = ... = \beta_m = 0. $$
-		\item Volba $\textbf{b} = \nula$ a~$\textbf{C} = (0,\dots,0,1,0,\dots,0)$ vede na~test
+		 $$ H_0:~\C\betab = \nula\qquad\Leftrightarrow\qquad H_0:~\beta_1 = \beta_2 = ... = \beta_m = 0. $$
+		\item Volba $\textbf{b} = 0$ a~$\C = (0,\dots,0,1,0,\dots,0)$ vede na~test
 		 $$ H_0:~\beta_j = 0. $$
-		\item V~modelu $Y = \beta_0+\beta_1x_1+\beta_2x_2+\beta_3x_3+\beta_4x_4+e$ chceme testovat zároveň,že $\beta_2 = 0$ a~$\beta_3 = \beta_4$. To lze udělat volbou $ \textbf{C} = \left(\begin{array}{ccccc}
+		\item V~modelu $Y = \beta_0+\beta_1x_1+\beta_2x_2+\beta_3x_3+\beta_4x_4+e$ chceme testovat zároveň, že $\beta_2 = 0$ a~$\beta_3 = \beta_4$. To lze udělat volbou $ \C = \left(\begin{array}{rrrrr}
 		0 & 0 & 1 & 0 & 0 \\
 		0 & 0 & 0 & 1 & -1
 		\end{array}
@@ -673,8 +680,8 @@ kde $\textbf{C}\in\R^{r\times(m+1)}$ a~$h(\textbf{C}) = r$, tzn. $r\leq m+1$. Ro
 \end{remark}
 
 Pro test $H_0$ naladíme 2 modely:\begin{description}
-\item[plný model (full model)] bez~podmínek na~$\textbf{C}\betab$,
-\item[redukovaný model (reduced model)] za~předpokladu, že platí $H_0:~\textbf{C}\betab = b$.
+\item[plný model (full model)] bez~podmínek na~$\C\betab$,
+\item[redukovaný model (reduced model)] za~předpokladu, že platí $H_0:~\C\betab = \bb$.
 \end{description}
 
 Označme příslušné reziduální součty čtverců $\SSE_F$ a~$\SSE_R$ (bude platit $\SSE_F\leq\SSE_R$).
@@ -686,18 +693,21 @@ Označme příslušné reziduální součty čtverců $\SSE_F$ a~$\SSE_R$ (bude 
 \end{itemize}
 \begin{example}
 	Uvažujme F-test pro~$H_0:\beta_1 = \beta_2 = ... = \beta_m = 0$ v~plném modelu. Redukovaný model bude $Y_i = \beta_0+e_i,~i = 1,\dots,n~\Rightarrow~\wbeta_0 = \overline{\y}$ a~$\SSE_R = \sumin (y_i-\ly)^2 = \SST$, tedy
-	 $$ \Delta \SSE = \SST-\SSE_P = \sumin (y_i-\ly)^2-\sumin (y_i-\hy_i)^2 = \SSR $$
+	 $$ \Delta \SSE = \SST-\SSE_F = \sumin (y_i-\ly)^2-\sumin (y_i-\hy_i)^2 = \SSR $$
 	 a~statistiku $F = \frac{\frac{\SSR}{m}}{s_n^2} = F_{overall}\sim\FF(m,n-m-1)$, jak jsme již ukázali.
 \end{example}
 \begin{theorem}
-	Nechť v~modelu (**) platí, že $e_1,\dots,e_n$ jsou nezávislé a~$e_i\sim\NN(0,\sigma^2)$. Označme $\SSE_F$ reziuální s.č. plného modelu a~$\SSE_R$ reziduální s.č. modelu, kde platí $H_0:~\textbf{C}\betab = \textbf{b}$. Potom, za~platnosti $H_0$ je splněno
+	Nechť v~modelu \eqref{the_chosen_one} platí, že $e_1,\dots,e_n$ jsou nezávislé a~$e_i\sim\NN(0,\sigma^2)$. Označme $\SSE_F$ reziuální s.č. plného modelu a~$\SSE_R$ reziduální s.č. modelu, kde platí $H_0:~\C\betab = \textbf{b}$. Potom je za~platnosti $H_0$ splněno
 	 $$ F = \frac{\frac{\Delta\SSE}{r}}{s_n^2}\sim\FF(r,n-m-1). $$
-\end{theorem}\newcommand{\bb}{\boldsymbol{b}}
+\end{theorem}
+\begin{proof}
+
 \newcommand{\yb}{\boldsymbol{y}}
 \newcommand{\lambdab}{\boldsymbol{\lambda}}
 \newcommand{\xtx}{(\X^T \X)^{-1}}
 \newcommand{\parcialni}[2]{\frac{\partial #1}{\partial #2}}
 
+Nejdříve si dokámeme následující lemma:
 \begin{lemma}
 	Označme $\wbetab_F$ a~$\wbetab_R$ LSE parametru $\betab$ v~plném a~redukovaném modelu. Potom platí
 	\begin{enumerate}
@@ -733,26 +743,26 @@ a dosadíme do~druhé
  $$
 Můžeme tak spočítat $\lambdab = -\left(\C \xtx \C^T\right)^{-1} \left(\C \wbetab_F - \bb \right)$ a~dosazením do~rovnice \eqref{Eq: Lagrange prvni} získáme
  $$
-\wbetab_R = \wbetab_F - \xtx \C^T \left(\C \xtx \C^T \right)^{-1} \left(\C \wbetab_F - \bb \right) = \wbetab_F - \xtx \C \Am (\C \wbetab_F - \bb).
+\wbetab_R = \wbetab_F - \xtx \C^T \left(\C \xtx \C^T \right)^{-1} \left(\C \wbetab_F - \bb \right) = \wbetab_F - \xtx \C^T \Am (\C \wbetab_F - \bb).
  $$
 
 \item
-Z důkazu věty $\wbetab = \xtx \X^T \betab$ víme, že
+Z důkazu věty $\wbetab = \xtx \X^T \y$ víme, že
  $$
-g(\betab) - g(\wbetab_F) = (\betab - \wbetab_F) \X^T \X (\betab - \wbetab_F) \quad \forall \betab.
+g(\betab) - g(\wbetab_F) = (\betab - \wbetab_F)^T \X^T \X (\betab - \wbetab_F) \quad \forall \betab.
  $$
 Dosadíme $\betab = \wbetab_R$ :
 \begin{align*}
 	\Delta \SSE & = g(\wbetab_R) - g(\wbetab_F) = (\wbetab_R - \wbetab_F) \X^T \X (\wbetab_R - \wbetab_F) = \\
-	& = (\C \wbetab_F - \bb)^T \Am^T \C \xtx \X^T \X (\X \X)^{-1} \C^T \Am (\C \wbetab_F - \bb) = (\times)
+	& = (\C \wbetab_F - \bb)^T \Am^T \C \xtx \X^T \X \xtx \C^T \Am (\C \wbetab_F - \bb) = (\times),
 \end{align*}
-a, protože $\Am^T = \Am$, platí $\Am^T\underbrace{\C (\X \X)^{-1} \C^T}_{ = \Am^{-1}} \Am = \Am \Rightarrow (\times) = (\C \wbetab - \bb)^T \Am (\C \wbetab - \bb)$.
+a protože $\Am^T = \Am$, platí $\Am^T\underbrace{\C \xtx \C^T}_{ = \Am^{-1}} \Am = \Am \Rightarrow (\times) = (\C \wbetab - \bb)^T \Am (\C \wbetab - \bb)$.
 
 \end{enumerate}
 \end{proof}
 
-\begin{proof}
-Důkaz věty: Nejdříve ukážeme, že $\frac{\Delta \SSE}{\sigma^2} \sim \chi^2 (r)$ za~$H_0: \C\betab = \bb$.
+
+Vrátíme se tedy k původnímu důkazu věty. Nejdříve ukážeme, že $\frac{\Delta \SSE}{\sigma^2} \sim \chi^2 (r)$ za platnosti $H_0: \C\betab = \bb$.
 
 Za $H_0$ : $\Y \sim \NN(\X \betab_R, \sigma^2 \Identita{n})$ a~$\wbetab_F = \xtx \X^T \Y$, tzn.
  $$
@@ -802,77 +812,83 @@ Př. analogie k~Př. 5.25 str. 238
 
 
 \section{Predikce}
-Jakmile máme adekvátní model, můžeme ho použít pro~bodové a~intervalové predikce jako u~jednorozměrné regrese
+Jakmile máme adekvátní model, můžeme ho použít pro~bodové a~intervalové predikce jako u~jednorozměrné regrese.
 
-\textbf{ a) predikce} $\E [\Y_{\x}]$
+\begin{description}
+	\item[a) predikce] $\E [Y_{\x_0}]$
 
-Nechť $\x_0 = (1, x_{0,1},\dots, x_{0,m})^T$ je nový bod proměnné $\x$ bodový odhad $\E [\Y_{\x_0}]$ je roven
+Nechť $\x_0 = (1, x_{0,1},\dots, x_{0,m})^T$ je nový bod proměnné $\x$. Bodový odhad $\E [Y_{\x_0}]$ je roven
  $$
- \widehat{y}_{\x_0} = \widehat{\beta}_0 + \sum_{j = 1}^m x_{0,j} \widehat{\beta}_j = \x_0^T \widehat{\beta}
+ \widehat{y}_{\x_0} = \widehat{\beta}_0 + \sum_{j = 1}^m x_{0,j} \widehat{\beta}_j = \x_0^T \wbetab
  $$
 
-tzn. $\D [\widehat{\Y}_{\x_0}] = \x_0^T \cdot \D [\widehat{\beta}] \cdot \x_0 = \sigma^2 \x_0^T(\X^T \X)^{-1} \x_0$ a~může být odhadnut pomocí \\
- $
- \widehat{\sigma}^2(\widehat{\Y}_{\x_0}) = s_n^2 [\x_0^T(\X^T \X)^{-1} \x_0] $(rozptyl predikce). Speciálně, pokud$ \x_0^T = \x_i^T $($ i~$-tý řádek matice$ \X $)
+tzn. $\D [\hY_{\x_0}] = \x_0^T \cdot \D [\widehat{\betab}] \cdot \x_0 = \sigma^2 \x_0^T(\X^T \X)^{-1} \x_0$ a~může být odhadnut pomocí
  $$
-  \widehat{\sigma}^2(\widehat{\Y}_{\x_i}) = s_n^2 [\x_i^T(\X^T \X)^{-1} \x_i] = s_n^2 h_{ii} \quad \text{kde} \quad h_{ii} = (\text{H})_{ii} \quad \text{a} \quad \text{H} = \X (\X^T  \X)^{-1} \X^T.
+ \widehat{\sigma}^2(\hY_{\x_0}) = s_n^2 [\x_0^T(\X^T \X)^{-1} \x_0] \quad \text{(rozptyl predikce)}.
  $$
-Pro normální chyby lze odvodit interval spolehlivosti pro~$\E [\Y_{\x_0}] = \gamma_{\x_0}$, protože $\widehat{\Y}_{\x_0}$ je LK náhodné veličiny s~vícerozměrným normálním rozdělením, má normální rozdělení se~\\ $\E [\widehat{\Y}_{\x_0}] = \gamma_{\x_0} = \x_0^T \beta$ a~$\D [\widehat{\Y}_{\x_0}] = \sigma^2 \x_0^T(\X^T \X)^{-1} \x_0$
+ Speciálně pokud $\x_0^T = \x_i^T$ ($i$-tý řádek matice $\X$), tak
+ $$
+  \widehat{\sigma}^2(\hY_{\x_i}) = s_n^2 [\x_i^T(\X^T \X)^{-1} \x_i] = s_n^2 h_{ii}, \quad \text{kde } h_{ii} = (\Hm)_{ii} \quad \text{a} \quad \Hm = \X (\X^T  \X)^{-1} \X^T.
+ $$
+Pro normální chyby lze odvodit interval spolehlivosti pro~$\E [Y_{\x_0}] = \mu_{\x_0}$, protože $\hY_{\x_0}$ je LK náhodné veličiny s~vícerozměrným normálním rozdělením. Proto má normální rozdělení s $\E [\hY_{\x_0}] = \mu_{\x_0} = \x_0^T \betab$ a~$\D [\hY_{\x_0}] = \sigma^2 \x_0^T(\X^T \X)^{-1} \x_0$
 tzn.
  $$
-\frac{\widehat{\Y}_{\x_0} - \gamma_{\x_0}}{\sigma \sqrt{\x_0^T(\X^T \X)^{-1} \x_0}} \sim \NN(0,1)
+\frac{\hY_{\x_0} - \mu_{\x_0}}{\sigma \sqrt{\x_0^T(\X^T \X)^{-1} \x_0}} \sim \NN(0,1)
  $$
-a díky~nezávislosti $\widehat{\beta}$ a~$s_n^2$
+a díky~nezávislosti $\wbetab$ a~$s_n^2$
  $$
- \frac{\widehat{\Y}_{\x_0} - \gamma_{\x_0}}{s_n \sqrt{\x_0^T(\X^T \X)^{-1} \x_0}} \sim \mathrm{t}(n-m-1) \quad \Rightarrow \quad 100(1 - \alpha) \% \quad \text{IS pro~} \gamma_{\x_0}:
+ \frac{\hY_{\x_0} - \mu_{\x_0}}{s_n \sqrt{\x_0^T(\X^T \X)^{-1} \x_0}} \sim \mathrm{t}(n-m-1)
  $$
+ čímž získáme $100(1-\alpha)\%$ interval spolehlivosti pro $\mu_{\x_0}$
  $$
-   (\widehat{\Y}_{\x_0} \pm \mathrm{t}_{1-\frac{\alpha}{2}}(n-m-1) \cdot s_n \sqrt{\x_0^T(\X^T \X)^{-1} \x_0})
+   (\hY_{\x_0} \pm \mathrm{t}_{1-\frac{\alpha}{2}}(n-m-1) \cdot s_n \sqrt{\x_0^T(\X^T \X)^{-1} \x_0}).
  $$
 
-\textbf{ b) interval predikce pro~} $\Y_{\x_0}$
+\item[b) interval predikce pro] $Y_{\x_0}$
 
-Bodový odhad je opět $\widehat{\Y}_{\x_0}$, pokud $\Y_{\x_0}$ je skutečná hodnota $\Y_{\x}$ v~bodě $\x = \x_0$, potom $\Y_{\x_0}$ a~$\widehat{\Y}_{\x_0}$ budou nezávislé za~předpokladu, že pozorování $\Y_{\x_0}, \text{Y}_1,\dots, \text{Y}_n$ jsou nezávislé (což předpokládáme),
+Bodový odhad je opět $\widehat{Y}_{\x_0}$. Pokud $Y_{\x_0}$ je skutečná hodnota $Y_{\x}$ v~bodě $\x = \x_0$, potom $Y_{\x_0}$ a~$\widehat{Y}_{\x_0}$ budou nezávislé za~předpokladu, že pozorování $Y_{\x_0}, \text{Y}_1,\dots, \text{Y}_n$ jsou nezávislé (což předpokládáme),
 potom
  $$
-\D [\widehat{\Y}_{\x_0} - \Y_{\x_0}] = \D [\widehat{\Y}_{\x_0}] - \D [\Y_{\x_0}] = \sigma^2(1+ \x_0^T(\X^T \X)^{-1} \x_0),
+\D [\widehat{Y}_{\x_0} - Y_{\x_0}] = \D [\widehat{Y}_{\x_0}] + \D [Y_{\x_0}] = \sigma^2(1+ \x_0^T(\X^T \X)^{-1} \x_0),
  $$
 takže
  $$
-\frac{\widehat{\Y}_{\x_0} - \Y_{\x_0}}{\sigma \sqrt{1+ \x_0^T(\X^T \X)^{-1} \x_0 }} \sim \NN(0,1) \quad \text{a} \quad \frac{\widehat{\Y}_{\x_0} - \Y_{\x_0}}{s_n \sqrt{1+ \x_0^T(\X^T \X)^{-1} \x_0 }} \sim \mathrm{t}(n-m-1)
+\frac{\widehat{Y}_{\x_0} - Y_{\x_0}}{\sigma \sqrt{1+ \x_0^T(\X^T \X)^{-1} \x_0 }} \sim \NN(0,1) \quad \text{a} \quad \frac{\widehat{Y}_{\x_0} - Y_{\x_0}}{s_n \sqrt{1+ \x_0^T(\X^T \X)^{-1} \x_0 }} \sim \mathrm{t}(n-m-1)
  $$
 za předpokladu normality chyb. \\
- $100(1-\alpha) \%$ IP pro~$\Y_{\x_0}$ tedy je
+ $100(1-\alpha) \%$ IP pro~$Y_{\x_0}$ tedy je
  $$
- (\widehat{\Y}_{\x_0} \pm \mathrm{t}_{1 - \frac{\alpha}{2}}(n-m-1) \cdot s_n \sqrt{1+ \x_0^T(\X^T \X)^{-1} \x_0 })
+ (\widehat{Y}_{\x_0} \pm \mathrm{t}_{1 - \frac{\alpha}{2}}(n-m-1) \cdot s_n \sqrt{1+ \x_0^T(\X^T \X)^{-1} \x_0 })
  $$
 \begin{example}
-	\begin{remark}[Extrapolace]
+\end{example}
+	\begin{remark}
+		Extrapolace
+		
 	    \begin{itemize}
-	    \item U~jednoduché LR kvalitu predikce závisela na~vzdálenosti $x_0$ od~$\overline{x}$.
+	    \item U~jednoduché LR kvalita predikce závisela na~vzdálenosti $x_0$ od~$\overline{x}$.
 	    \item Je třeba si dát pozor na~predikce mimo $[x_{min},x_{max}]$.
 	    \item Podobné závěry platí i~pro~vícerozměrnou LR.
 	    \item Protože rozptyl predikce je úměrný $\x_0^T(\X^T \X)^{-1} \x_0$, v~bodech s~velkými hodnotami této veličiny nebude predikce spolehlivá.
-	    \item Speciálně, pokud $\x_i^T$ jsou pozorovaná data, můžeme očekávat, že body s~nejvyššími hodnotami $\x_0^T(\X^T \X)^{-1} \x_0 = h_{ii}$ budou na~hranici množiny, kde je predikce spolehlivá.
-	    \end{itemize}
-	    tzn., že vnitřek elipsoidu
+	    \item Speciálně pokud $\x_i^T$ jsou pozorovaná data, můžeme očekávat, že body s~nejvyššími hodnotami $\x_0^T(\X^T \X)^{-1} \x_0 = h_{ii}$ budou na~hranici množiny, kde je predikce spolehlivá, tzn. že vnitřek elipsoidu
 	 $$
 	       \x_0^T(\X^T \X)^{-1} \x_0 \leq     \max_{1 \leq j \leq n} h_{ii}
 	 $$
-	    může být považován za~přípustný obor predikce
-	    \begin{figure}[h]
-	\centering
-    \begin{tikzpicture}
-    \node[inner sep = 0pt] (pic) at (0,0)
-    {\includegraphics[width = 13cm]{pictures/picture_3_F.pdf}};
-    \draw [color = red](5.0,0.0) node[anchor = north west] { $(x_{01},x_{02})$ };
-    \draw [color = black](-5.9,4.2) node[anchor = north west] { $x_2$ };
-    \draw [color = black](5.5,-3.7) node[anchor = north west] { $x_1$ };
-     \draw [color = black](-1.0,1.4) node[anchor = north west] { $\text{společný obor dat } (x_1, x_2)$ };
-     \draw [color = black](-0.0,-3.6) node[anchor = north west] { $\text{obor hodnot } x_1$ };
-     \draw [color = black](-8.4,1.4) node[anchor = north west] { $\text{obor hodnot } x_2$ };
-    \end{tikzpicture}
-    \caption{ $(x_{01},x_{02})$ leží uvnitř oboru hodnot pro~obě $x_1$ i~$x_2$ ale vně společného oboru původních dat.}
-\end{figure}
-	\end{remark}
-\end{example}
+	    může být považován za~přípustný obor predikce.
+	\begin{figure}[h]
+		\centering
+	    \begin{tikzpicture}
+	    \node[inner sep = 0pt] (pic) at (0,0)
+	    {\includegraphics[width = 13cm]{pictures/picture_3_F.pdf}};
+	    \draw [color = red](5.0,0.0) node[anchor = north west] { $(x_{01},x_{02})$ };
+	    \draw [color = black](-5.9,4.2) node[anchor = north west] { $x_2$ };
+	    \draw [color = black](5.5,-3.7) node[anchor = north west] { $x_1$ };
+	     \draw [color = black](-1.0,1.4) node[anchor = north west] { $\text{společný obor dat } (x_1, x_2)$ };
+	     \draw [color = black](-0.0,-3.6) node[anchor = north west] { $\text{obor hodnot } x_1$ };
+	     \draw [color = black](-8.4,1.4) node[anchor = north west] { $\text{obor hodnot } x_2$ };
+	    \end{tikzpicture}
+	    \caption{ $(x_{01},x_{02})$ leží uvnitř oboru hodnot pro~obě $x_1$ i~$x_2$ ale vně společného oboru původních dat.}
+	\end{figure}
+\end{itemize}
+\end{remark}
+\end{description}
