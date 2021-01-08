@@ -586,7 +586,7 @@ Pokud bychom znali rozdělení pravděpodobnostní statistiky $\RMR^2$, nabízí
 		\item $0\leq \RMR^2\leq1$,
 		\item $\RMR^2 = 1-\frac{\SSE}{\SST}$, kde $\SSE = \sumin (y_i-\hyi)^2$ jako reziduální součet čtverců,
 		\item $\RMR^2 = 1~\Leftrightarrow~(\forall i\in\widehat{n})(\hyi = y_i)$ (všechna data leží na~přímce),
-		\item pokud označíme $\textbf{x} = (x_1,...,x_n)$ a~$\textbf{y} = (y_1,...,y_n)$, potom $\RMR^2 = \rho^2(\textbf{x},\textbf{y})$, kde $$ \rho(\textbf{x},\textbf{y}) = \frac{ \left( \sumin (x_i-\overline{x}_n)(y_i-\lyn) \right)^2}{\Sxx S_{yy}}, $$ tedy $\RMR^2$ je druhá mocnina výběrového korelačního koeficientu vektorů $\textbf{x},\textbf{y}$,
+		\item pokud označíme $\textbf{x} = (x_1,...,x_n)$ a~$\textbf{y} = (y_1,...,y_n)$, potom $\RMR^2 = \rho^2(\textbf{x},\textbf{y})$, kde $$ \rho(\textbf{x},\textbf{y}) = \frac{ \Big( \sumin (x_i-\overline{x}_n)(y_i-\lyn) \Big)^2}{\Sxx S_{yy}}, $$ tedy $\RMR^2$ je druhá mocnina výběrového korelačního koeficientu vektorů $\textbf{x},\textbf{y}$,
 		\item $\NF = \frac{\SSR}{s_n^2} = \mathrm{T}^2$,
 		\item pokud jsou chyby $e_1,...,e_n~iid~\NN(0,\sigma^2)$ a~$\beta_1 = 0$ (platí $H_0:~\beta_1 = 0$) v~modelu, potom $\NF\sim\NF(1,n-2)$.
 	\end{enumerate}
@@ -604,10 +604,10 @@ Pokud bychom znali rozdělení pravděpodobnostní statistiky $\RMR^2$, nabízí
 		\item Protože $\SST = \SSE+\SSR$, pak $0\leq \RMR^2 = \frac{\SSR}{\SST}\leq \frac{\SST}{\SST} = 1$.
 		\item $\SSR = \SST-\SSE~\Rightarrow~\RMR^2 = \frac{\SST-\SSE}{\SST} = 1-\frac{\SSE}{\SST}$.
 		\item Z~bodu 2 plyne, že $\RMR^2 = 1~\Leftrightarrow~\SSE = 0$ a~$\SSE = \sumin (y_i-\hyi)^2 = 0~\Leftrightarrow~y_i = \hyi, ~\forall i\in\widehat{n}$.
-		\item Platí $\hyi = \wbeta_0 + \wbeta_1 x_i = \lyn-\wbeta_1 x_n + \wbeta_1 x_i = \lyn-\wbeta_1(\overline{x}_n-x_i)$. Proto pak
-		$$ \SSR = \sumin (\hyi-\hyn)^2+\wbeta_1^2\sumin (x_i-\overline{x}_n)^2 = \wbeta_1^2 \Sxx, $$
+		\item Platí $\hyi = \wbeta_0 + \wbeta_1 x_i = \lyn-\wbeta_1 \overline{x}_n + \wbeta_1 x_i = \lyn-\wbeta_1(\overline{x}_n-x_i)$. Proto pak
+		$$ \SSR = \sumin (\hyi-\lyn)^2=\wbeta_1^2\sumin (x_i-\overline{x}_n)^2 = \wbeta_1^2 \Sxx, $$
 		a~protože $\wbeta_1 = \frac{1}{\Sxx}\sumin (x_i-\overline{x}_n)(y_i-\lyn)$, dostaneme
-		 $$ \rho^2(\textbf{x},\textbf{y}) = \frac{\left[\sumin (x_i-\overline{x}_n)(y_i-\lyn)\right]^2}{\Sxx S_{yy}} = \frac{\wbeta_1^2 \Sxx}{S_{yy}} = \frac{\SSR}{\SST} = \RMR^2, $$
+		 $$ \rho^2(\textbf{x},\textbf{y}) = \frac{\Big[\sumin (x_i-\overline{x}_n)(y_i-\lyn)\Big]^2}{\Sxx S_{yy}} = \frac{\wbeta_1^2 \Sxx}{S_{yy}} = \frac{\SSR}{\SST} = \RMR^2, $$
 		 neboť $S_{yy} = \sumin (y_i-\lyn)^2 = \SST$.
 		\item Z~definice $\NF$ podle \eqref{Definice F} plyne, že
 		 $$ \NF = \frac{(n-2)\RMR^2}{1-\RMR^2} = \frac{(n-2)\frac{\SSR}{\SST}}{\frac{\SSE}{\SST}} = \frac{\SSR}{\frac{\SSE}{n-2}} = \frac{\SSR}{s_n^2}. $$ Protože $\mathrm{T}_n = \wbeta_1\frac{\sqrt{\Sxx}}{s_n}$, pak $$ \mathrm{T}^2 = \frac{\wbeta_1^2 \Sxx}{s_n^2} = \frac{\SSR}{s_n^2} = F. $$
@@ -806,9 +806,9 @@ Intervalové odhady se~ale budou lišit.
 	 $$ \D\widehat{Y}_0 = \D(\overline{Y})+(x_0-\overline{x})^2\D(\wbeta_1)+2(x_0-\overline{x})\underbrace{\Cov(\overline{Y},\wbeta_1)}_{ = 0} = \frac{\sigma^2}{n}+\frac{\sigma^2(x_0-\overline{x})^2}{\Sxx} = \sigma^2\left[\frac{1}{n}+\frac{(x_0-\overline{x})^2}{\Sxx} \right]. $$
 	
 	Nahrazením $\sigma^2$ statistikou $s_n^2$ dostaneme odhad $\D(\widehat{Y}_0)$ ve~tvaru
-	 $$ \widehat{\sigma}^2(\overline{Y}_0) = s_n^2\left[\frac{1}{n}+\frac{(x_0-\lx)^2}{\Sxx} \right]. $$
+	 $$ \widehat{\sigma}^2(\widehat{Y}_0) = s_n^2\left[\frac{1}{n}+\frac{(x_0-\lx)^2}{\Sxx} \right]. $$
 	 $\wsigma(\hY_0)$ se~obvykle nazývá \textbf{standardní chyba predikce v~bodě $x_0$ }. Jsou-li $e_1,...,e_m~iid~\NN(0,\sigma^2)$, platí, že
-	 $$ \hY_0\sim\N\left(\mu_0,\underbrace{\sigma^2\left[\frac{1}{n} + \frac{(x_0-\lx)^2}{\Sxx} \right]}_{\sigma^2(\hY_0)} \right), $$a~tedy
+	 $$ \hY_0\sim\NN\bigg(\mu_0,\underbrace{\sigma^2\left[\frac{1}{n} + \frac{(x_0-\lx)^2}{\Sxx} \right]}_{\sigma^2(\hY_0)} \bigg), $$a~tedy
 	 $$ \frac{\hY_0-\mu_0}{\sigma(\hY_0)}\sim\NN(0,1). $$
 	Celkově tedy dostáváme
 	 $$ T = \frac{\frac{\hY_0-\mu_0}{\sqrt{\sigma^2\left(\frac{1}{n}+\frac{(x_0-\lx)^2}{\Sxx}\right)}}}{\sqrt{\frac{(n-2)s_n^2}{\sigma^2}\frac{1}{n-2}}} = \frac{\hY_0-\mu_0}{\sqrt{s_n^2\left(\frac{1}{n}+\frac{(x_0-\lx)^2}{\Sxx} \right)}} = \frac{\hY_0-\mu_0}{\wsigma(\hY_0)}\sim t(n-2). $$
@@ -836,7 +836,7 @@ Vyjádřením získáme $100(1-\alpha)$ \% interval predikce pro~$Y_0$ ve~tvaru
 		\item roste s~rostoucím $n$ a~rostoucím rozsahem $x$ naměřeným pomocí $\Sxx$,
 		\item klesá s~rostoucím $|x_0-\lx|$.
 	\end{enumerate}
-Pokud můžeme předem zvolit $x_1,... x_n$, lze přesnost predikce zvýšit volbou dostatečně rozptýlených hodnot $x$. To ale může zvyšovat $\RMR^2$ a~někdy vést k~horšímu modelu.
+Pokud můžeme předem zvolit $x_1,..., x_n$, lze přesnost predikce zvýšit volbou dostatečně rozptýlených hodnot $x$. To ale může zvyšovat $\RMR^2$ a~někdy vést k~horšímu modelu.
 
 To je \textbf{základní rozpor v~regresní analýze}:
 \begin{itemize}
@@ -897,14 +897,7 @@ To je \textbf{základní rozpor v~regresní analýze}:
 \end{example}
 
 \subsection*{Ad 3) - Analýza reziduí}
-Intuitivně, pokud je náš model správný, měla by se~rezidua chovat jako náhodný výběr z~$\NN(0,\sigma^2)$. Pokud se~bude zdát, že se~tak nechovají, bude to znamenat neadekvátnost modelu. Později ukážeme grafický nástroj. Nejprve ale začneme vlastnostmi reziduí.\newcommand{\hx}{\overline{x}}
-\newcommand{\hej}{\widehat{e}_j}
-\newcommand{\Nn}{\mathcal{N}(0,\sigma^2)}
-\newcommand{\hZi}{\widehat{Z}_i}
-\newcommand{\hzi}{\widehat{z}_i}
-\newcommand{\model}{\wbeta_0 + \wbeta_1 x_i}
-\newcommand{\hYj}{\widehat{Y}_j}
-\newcommand{\hr}{\widehat{r}}
+Intuitivně, pokud je náš model správný, měla by se~rezidua chovat jako náhodný výběr z~$\NN(0,\sigma^2)$. Pokud se~bude zdát, že se~tak nechovají, bude to znamenat neadekvátnost modelu. Později ukážeme grafický nástroj. Nejprve ale začneme vlastnostmi reziduí.
 
 \begin{theorem}
 	Nechť $\hei$ jsou rezidua modelu \eqref{Model 1D LR} odhadnutého metodou nejmenších čtverců. Potom platí, že
@@ -945,9 +938,9 @@ Intuitivně, pokud je náš model správný, měla by se~rezidua chovat jako ná
 	 $$
 	\item $e_i \sim \Nn \Rightarrow \hei \sim \NN(\cdot, \cdot)$, protože $\hei$ je LK $Y_1,..., Y_n$
 	\begin{align*}
-		\text{1)} & \implies \E \hei = 0 \\
-		\text{2)} & \implies \D \hei = \sigma_{\hei}^2 \\
-	 			  & \implies \frac{\hei}{\sigma_{\hei}} \sim \NN(0,1)
+		\text{1)} & \Rightarrow \E \hei = 0 \\
+		\text{2)} & \Rightarrow \D \hei = \sigma_{\hei}^2 \\
+	 			  & \Rightarrow \frac{\hei}{\sigma_{\hei}} \sim \NN(0,1)
 	\end{align*}
 	\end{enumerate}
 \end{proof}
