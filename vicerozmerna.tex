@@ -117,14 +117,14 @@ Pro $e_i \sim \Nn$ se~také používají statistiky $s_n^2, s_n$.
 
 \textit{Ex. 5.15, str. 203}
 
-\subsection{Vlastnosti odhadů $\wbeta, s_n^2$ }
+\subsection{Vlastnosti odhadů $\wbetab, s_n^2$ }
 \begin{theorem}
 	Nechť $\wbetab$ je OLS odhad parametru $\betab$ v~modelu \eqref{the_chosen_one}, kde $h(\X) = m+1$ a~$e_1,\dots, e_n$ nezávislé, $e_i \sim (0,\sigma^2)$. Potom platí, že
 	\begin{enumerate}
 		\item $\E(\wbetab) = \betab$ (tj. $\wbetab$ je nestranný)
 		\item $\Cov(\wbetab) = \sigma^2 (\X^T \X)^{-1}$
 		\item $\E(s_n^2) = \sigma^2$
-		\item Pokud navíc $e_i \sim \Nn, i\in\widehat{n} $, potom $\wbetab \sim \NN_{m-1}(\betab, \sigma^2(\X^T \X)^{-1})$. Speciálně $\wbeta_i \sim \NN(\beta_i, \sigma^2 \nu_i)$, kde $\nu_i$ je i-tý diagonání prvek matice $(\X^T \X)^{-1}$.
+		\item Pokud navíc $e_i \sim \Nn, i\in\widehat{n} $, potom $\wbetab \sim \NN_{m+1}(\betab, \sigma^2(\X^T \X)^{-1})$. Speciálně $\wbeta_i \sim \NN(\beta_i, \sigma^2 \nu_i)$, kde $\nu_i$ je i-tý diagonání prvek matice $(\X^T \X)^{-1}$.
 	\end{enumerate}
 \end{theorem}
 
@@ -334,7 +334,7 @@ za $\Rm = \C (\widehat{\beta} - \beta)$ a~$\Sigma^{-1} = \frac{1}{\sigma^2} [\C 
 \begin{enumerate}
 \item $\E [\heb] = \nula$,
 \item $\Cov(\heb) = \sigma^2 (\In - \Hm)$,
-\item pokud navíc $\eb \sim \NN_n (0, \sigma^2 \In)$, potom $\heb \sim \NN_n (\nula, \sigma^2 (\In - \Hm))$,
+\item pokud navíc $\eb \sim \NN_n (\nula, \sigma^2 \In)$, potom $\heb \sim \NN_n (\nula, \sigma^2 (\In - \Hm))$,
 \item jestliže má model intercept, tj. $\beta_0 \neq 0$, potom $\sumin \widehat{e}_i = 0$,
 \item $\sumin \widehat{e}_i \widehat{y}_i = 0$.
 \end{enumerate}		
@@ -433,34 +433,35 @@ Protože $v_i \geq 0$ a~$\sumjn d_{ij}^2 \geq 0 \Rightarrow \D [\widehat{\beta}_
 \begin{itemize}
 \item Zajímá nás, zda je model statisticky signifikantní, tj. zda alespoň jeden z~koeficientů $\beta_1,\dots, \beta_m$ je nulový.
 \item Mohli bychom testovat jednotlivé koeficienty $\text{H}_0 : \beta_j = 0$ pomocí alternativy t-testu.
-\item Celková chyba I. druhu by takto ale mohla být velká, pokud máme hodně proměnných. Museli bychom hodně snížit $\alpha$ pro~jednotlivé testy, což zvýší pravděpodobnost chyby II.~druhu (tzn. riziko akceptování nenulových koeficientů jako nulových, a~tedy vynechání významných proměnných z~modelu)
-\item Navíc je zde problém multikolinearity (viz později) jejíž jedním efektem jsou velké stand. chyby dohadů. To může vést k~akceptování všech koeficientů jeho 0, i~když je model celkově významný (uvidíme na~příkladu).
+\item Celková chyba I. druhu by takto ale mohla být velká, pokud máme hodně proměnných. Museli bychom hodně snížit $\alpha$ pro~jednotlivé testy, což zvýší pravděpodobnost chyby II.~druhu (tzn. riziko akceptování nenulových koeficientů jako nulových, a~tedy vynechání významných proměnných z~modelu).
+\item Navíc je zde problém multikolinearity (viz později), jejímž jedním efektem jsou velké standardní chyby dohadů. To může vést k~akceptování všech koeficientů jako 0, i~když je model celkově významný (uvidíme na~příkladu).
 \end{itemize}
 
 Bylo by dobré mít jednu statistiku pro~test
  $$
 \text{H}_0 : \beta_1 = \beta_2 = ... = \beta_m = 0 \quad \times \quad \text{H}_1 : (\exists i\in \widehat{m}, \beta_i \neq 0).
  $$
-ANOVA přístup pro~jedn. regresi naznačuje, že statistika
+ANOVA přístup pro~jednorozměrnou regresi naznačuje, že statistika
  $$
 \text{F} = \frac{\frac{\SSR}{m}}{s_m^2}
  $$
 by mohla být užitečná (vyplyne i~z~obecnějších přístupů k~testování později).
 
-\subsubsection*{Označení:}
- $\lx_j = \frac{1}{n} \sumin x_{ij}$ - průměr j-tého sloupce matice $\X$,
+\subsubsection*{Značení:}
+Označíme $\lx_j = \frac{1}{n} \sumin x_{ij}$ jako průměr j-tého sloupce matice $\X$,
  $$
 	\lX = \begin{pmatrix}
 	\lx_0 & \lx_1 & \cdots & \lx_m \\
 	\vdots & \vdots & & \vdots \\
 	\lx_0 & \lx_1 & \cdots & \lx_m
-	\end{pmatrix}_{n \times m+1} \quad \underbrace{(\X_c)_{ij}}_{\text{centrované matice regresorů}} = x_{ij} - \lx_j, \quad i\in\widehat{n}, j = 1,\dots, m
+	\end{pmatrix}_{n \times m+1} 
  $$
+ a $(\X_c)_{ij}$ centrované matice regresorů, kde $(\X_c)_{ij} = x_{ij} - \lx_j$, $i\in\widehat{n}, j = 1,\dots, m$.
 
 \begin{theorem}
 	V modelu $\Y = \X \betab + \eb$, kde $e_i$ jsou nekorelované a~$e_i \sim \Nn$ pro~$i  \in\widehat{n} $ platí
 	 $$
-		\E \left[\frac{\SSR}{n} \right] = \sigma^2 + \frac{\betab^T(\X - \lX)^T(\X - \lX) \betab}{m} = \sigma^2 + \frac{\betab_s^T \X_c^T \X_c \betab_s}{m},
+		\E \left[\frac{\SSR}{m} \right] = \sigma^2 + \frac{\betab^T(\X - \lX)^T(\X - \lX) \betab}{m} = \sigma^2 + \frac{\betab_s^T \X_c^T \X_c \betab_s}{m},
 	 $$
 	kde $\betab_s = (\beta_1,\dots, \beta_m)$.
 \end{theorem}
@@ -471,16 +472,14 @@ by mohla být užitečná (vyplyne i~z~obecnějších přístupů k~testování 
 	\hyi & = \wbeta_0 + \sumjm x_{ij} \wbeta_j \\
 	\frac{\partial \SSE}{\partial \beta_0} & = \sumin \big(y_i - (\beta_0 + \sumjn x_{ij} \wbeta_j) \big) = 0 \Rightarrow \wbeta_0 = \ly - \sumjm \lx_j \wbeta_j
 \end{align*}
-Celkem pak $\hy_i - \lx = \sumjm (x_{ij} - \lx_j) \wbeta_j, \quad i\in\widehat{n} $ a~zapsáno maticově:
+Celkem pak $\hy_i - \ly = \sumjm (x_{ij} - \lx_j) \wbeta_j, \quad i\in\widehat{n} $ a~zapsáno maticově:
  $$
-\hY = \lY = (\X - \lX) \wbetab, \quad \text{kde} \; \lY = (\ly, \ly,\dots, \ly)_{1 \times n}^T,
+\hYb - \lYb = (\X - \lX) \wbetab, \quad \text{kde} \; \lYb = (\ly, \ly,\dots, \ly)_{1 \times n}^T,
  $$
 protože první sloupec matice $\X - \lX$ je nulový. Potom
  $$
-\SSR = \sumin (\hy_i - \ly)^2 = (\hY - \lY)^T(\hY - \lY) = \wbetab^T \underbrace{(\X - \lX)^T(\X - \lX)}_{\Am} \wbetab = \wbetab^T \Am \wbetab
+\SSR = \sumin (\hy_i - \ly)^2 = (\hYb - \lYb)^T(\hYb - \lYb) = \wbetab^T \underbrace{(\X - \lX)^T(\X - \lX)}_{\Am} \wbetab = \wbetab^T \Am \wbetab
  $$
-
-\end{proof}
 
 \begin{theorem}
 	Nechť $Z = \Y^T \Am \Y$ je kvadratická forma a~nechť $\E \Y = \bmu$ a~$\Cov \Y = \Sigma$. Potom platí, že
@@ -489,10 +488,9 @@ protože první sloupec matice $\X - \lX$ je nulový. Potom
 	 $$
 \end{theorem}
 
-\begin{proof}
 Nejdříve zjednodušíme matici $\Am$ :
 \begin{align*}
-	\lX & = \frac{1}{n} \Bm, \; \text{kde} \; \Bm = \begin{pmatrix}
+	\lX & = \frac{1}{n} \Bm \X, \; \text{kde} \; \Bm = \begin{pmatrix}
 	1 & 1 & \cdots & 1 \\
 	\vdots & \vdots & & \vdots \\
 	1 & 1 & \cdots & 1
@@ -520,7 +518,7 @@ Pokud $\betab_s$ = 0, potom $\E \left(\frac{\SSR}{m} \right) = \sigma^2 = \E s_n
 \end{remark}
 
 \begin{theorem}
-Nechť v~modelu $\Y = \X \betab + \eb$$ (**) $jsou$ e_1,\dots, e_n $~iid~$ \Nn $. Pokud$ \betab_s = 0 $, tj.$ \beta_1 = \beta_2 = \cdots = \beta_m = 0 $, potom
+Nechť v~modelu $\Y = \X \betab + \eb$ \eqref{the_chosen_one} jsou $e_1,\dots, e_n $~iid~$\Nn$. Pokud $\betab_s = 0$, tj. $\beta_1 = \beta_2 = \cdots = \beta_m = 0$, potom
  $$
 F \sim F(m, n - m -1).
  $$
