@@ -3,7 +3,7 @@
 Předpokládejme, že kromě $y_i$ máme pro~každé $i\in\widehat{n}$ k~dispozici také $m$ nezávislých proměnných $x_{i1},x_{i2},\dots,x_{im}$. Pak získáme model
  $$ Y_i = \beta_0+\sum_{j = 1}^m \beta_j x_{ij}+e_i,\quad i\in\widehat{n}, $$
 kde $e_1,\dots,e_n$ jsou \textbf{nezávislé (nekorelované)} chyby a~$e_i\sim\NN(0,\sigma^2)$. Na~základě pozorování $(x_{i1},\dots,x_{im},y_i),~i\in\widehat{n}$ chceme odhadnout parametr $\betab = (\beta_0,\beta_1,\dots,\beta_m)^T$ (proložení dat \linebreak $m+1$ dimenzionální nadrovinou). Předpokládejme, že $n>m+1$, tj., že máme více dat než parametrů. Maticově můžeme tento stav zapsat jako
- $$ \Y = (Y_1,\dots,Y_n)^T,\quad \Y = (y_1,\dots,y_n)^T,\quad \eb = (e_1,\dots,e_n)^T. $$
+ $$ \Y = (Y_1,\dots,Y_n)^T,\quad \y = (y_1,\dots,y_n)^T,\quad \eb = (e_1,\dots,e_n)^T. $$
 Označme
  $$ \X = \left[\begin{array}{cccc}
 1 & x_{11} &... & x_{1m} \\
@@ -20,26 +20,26 @@ Označme
 
  Věrohodnostní funkce je potom ve~tvaru
  \begin{align*}
- L(\betab,\sigma^2)& = f_\pi(\Y) = \prod_{i = 1}^n \frac{1}{\sqrt{2\pi\sigma^2}}\e{-\frac{1}{2\sigma^2}(y_i-\mu_i)^2} = \frac{1}{(2\pi\sigma^2)^{\frac{n}{2}}}\e{-\frac{1}{2\sigma^2}\sumin (y_i-\mu_i)^2} = \\ & = \frac{1}{(2\pi\sigma^2)^{\frac{n}{2}}}\e{-\frac{1}{2\sigma^2}(\Y-\boldsymbol{\mu})^T(\Y-\boldsymbol{\mu})} = \frac{1}{(2\pi\sigma^2)^{\frac{n}{2}}}\e{-\frac{1}{2\sigma^2}(\Y-\X\betab)^T(\Y-\X\betab)},
+ L(\betab,\sigma^2)& = f_\pi(\y) = \prod_{i = 1}^n \frac{1}{\sqrt{2\pi\sigma^2}}\e{-\frac{1}{2\sigma^2}(y_i-\mu_i)^2} = \frac{1}{(2\pi\sigma^2)^{\frac{n}{2}}}\e{-\frac{1}{2\sigma^2}\sumin (y_i-\mu_i)^2} = \\ & = \frac{1}{(2\pi\sigma^2)^{\frac{n}{2}}}\e{-\frac{1}{2\sigma^2}(\y-\boldsymbol{\mu})^T(\y-\boldsymbol{\mu})} = \frac{1}{(2\pi\sigma^2)^{\frac{n}{2}}}\e{-\frac{1}{2\sigma^2}(\y-\X\betab)^T(\y-\X\betab)},
  \end{align*}
 kde $\mu_i = \beta_0+\sumjn \beta_j x_{ij}$ a~$\boldsymbol{\mu} = (\mu_1,\dots,\mu_n)^T = \X\betab$.
 
  Pro~pevné $\sigma^2$ je
- $$ \max_{\betab} L(\betab,\sigma^2)\quad\Leftrightarrow\quad\min_{\betab}\underbrace{(\Y-\X\betab)^T(\Y-\X\betab)}_{g(\betab)} $$
+ $$ \max_{\betab} L(\betab,\sigma^2)\quad\Leftrightarrow\quad\min_{\betab}\underbrace{(\y-\X\betab)^T(\y-\X\betab)}_{g(\betab)} $$
  je opět pomocí derivací, ukážeme algebraický přístup.
 
 \newpage
  \begin{theorem}
  	Uvažujme model \eqref{the_chosen_one} a~nechť $\eb\sim\NN(\nula,\sigma^2 \In)$. Potom $\wbetab$ je MLE $\betab$ právě tehdy, když $\wbetab$ je řešením soustavy rovnic
- 	 $$ \X^T\X\betab = \X^T\Y\qquad\text{(soustava normálních rovnic)}. $$
+ 	 $$ \X^T\X\betab = \X^T\y\qquad\text{(soustava normálních rovnic)}. $$
  	Je-li matice $\X^T\X$ singulární, má tato soustava jednoznačné řešení ve~tvaru
- 	 $$ \wbetab = (\X^T\X)^{-1}\X^T\Y. $$
+ 	 $$ \wbetab = (\X^T\X)^{-1}\X^T\y. $$
  	\begin{proof}
  		\begin{enumerate}[$\Leftarrow$]
- 			\item Ukážeme, že každé řešení $\wbetab$ soustavy $\X^T\X\betab = \X^T\Y$ minimalizuje $g(\betab)$ a~pro~každé $\betab$ platí, že
- 			 $$ g(\bbeta) = \left((\Y-\X\betab)^T(\Y-\X\betab)\right) = \Y^T\Y-2\underbrace{\Y^T\X\betab}_{\wbetab^T\X^T\X}+\betab^T\X^T\X\betab = \Y^T\Y-2\wbetab^T\X^T\X\betab+\betab^T\X^T\X\betab $$
+ 			\item Ukážeme, že každé řešení $\wbetab$ soustavy $\X^T\X\betab = \X^T\y$ minimalizuje $g(\betab)$ a~pro~každé $\betab$ platí, že
+ 			 $$ g(\bbeta) = \left((\y-\X\betab)^T(\y-\X\betab)\right) = \y^T\y-2\underbrace{\y^T\X\betab}_{\wbetab^T\X^T\X}+\betab^T\X^T\X\betab = \y^T\y-2\wbetab^T\X^T\X\betab+\betab^T\X^T\X\betab $$
  			má platit i~pro~$\wbetab$ :
- 			 $$ g(\wbetab) = \Y^T\Y-2\wbetab^T\X^T\X\wbetab+\wbetab^T\X^T\X\wbetab = \Y^T\Y-\wbetab^T\X^T\X\wbetab $$
+ 			 $$ g(\wbetab) = \y^T\y-2\wbetab^T\X^T\X\wbetab+\wbetab^T\X^T\X\wbetab = \y^T\y-\wbetab^T\X^T\X\wbetab $$
  			a tedy
  			\begin{align}
  			g(\bbeta)-g(\wbetab)& = \betab^T\X^T\X\betab-2\wbetab^T\X^T\X\betab+\wbetab\X^T\X\wbetab = (\X\betab-\X\wbetab)^T(\X\betab-\X\wbetab) = \\
@@ -48,24 +48,24 @@ kde $\mu_i = \beta_0+\sumjn \beta_j x_{ij}$ a~$\boldsymbol{\mu} = (\mu_1,\dots,\
  			 tedy $\wbetab$ minimalizuje $g(\bbeta)$ a~je tedy MLE parametru $\betab$.
  		\end{enumerate}
  	\begin{enumerate}[$\Rightarrow$]
- 		\item Předpokládejme, že $\wbetab_1$ minimalizuje $g(\betab)$ (je tedy MLE). To potom znamená, že \linebreak $g(\wbetab_1)\leq g(\betab),~\forall \betab$, speciálně $g(\wbetab_1)\leq g(\wbetab)$, kde $\wbetab$ je řešení soustavy $\X^T\X\betab = \X^T\Y$. Z~rovnice \eqref{tohle} vyplývá, že $g(\wbetab_1)\geq g(\wbetab)$. Celkem tedy $g(\wbetab_1) = g(\wbetab)$. Dosazením do~\eqref{tohle} dostaneme, že
+ 		\item Předpokládejme, že $\wbetab_1$ minimalizuje $g(\betab)$ (je tedy MLE). To potom znamená, že \linebreak $g(\wbetab_1)\leq g(\betab),~\forall \betab$, speciálně $g(\wbetab_1)\leq g(\wbetab)$, kde $\wbetab$ je řešení soustavy $\X^T\X\betab = \X^T\y$. Z~rovnice \eqref{tohle} vyplývá, že $g(\wbetab_1)\geq g(\wbetab)$. Celkem tedy $g(\wbetab_1) = g(\wbetab)$. Dosazením do~\eqref{tohle} dostaneme, že
  		 $$ 0 = g(\wbetab_1)-g(\wbetab) = \langle \X(\wbetab_1-\wbetab),\X(\wbetab_1-\wbetab) \rangle $$
  		a tedy $\X(\wbetab_1-\wbetab) = \nula$ Potom ale vynásobením $\X^T$ zleva dostaneme, že
- 		 $$ \X^T\X\wbetab_1 - \underbrace{\X^T\X\wbetab}_{\X^T\Y} = 0\quad\Rightarrow\quad \X^T\X\wbetab_1 = \X^T\Y $$
- 		 a~$\wbetab_1$ splňuje soustavu $\X^T\X\betab = \X^T\Y$.
+ 		 $$ \X^T\X\wbetab_1 - \underbrace{\X^T\X\wbetab}_{\X^T\y} = 0\quad\Rightarrow\quad \X^T\X\wbetab_1 = \X^T\y $$
+ 		 a~$\wbetab_1$ splňuje soustavu $\X^T\X\betab = \X^T\y$.
  		
- 		Aby byl důkaz korektní, je třeba ukázat, že soustava $\X^T\X\betab = \X^T\Y$ má vždy alespoň 1 řešení. Pokud existuje $(\X^T\X)^{-1}$, není co dokazovat, řešení máme přímo. Co když je ale $\X^T\X$ singulární?
+ 		Aby byl důkaz korektní, je třeba ukázat, že soustava $\X^T\X\betab = \X^T\y$ má vždy alespoň 1 řešení. Pokud existuje $(\X^T\X)^{-1}$, není co dokazovat, řešení máme přímo. Co když je ale $\X^T\X$ singulární?
  	\end{enumerate}
  	\end{proof}
  \end{theorem}
 \begin{lemma}
-	Soustava lineárních rovnic $\mathbb{A}\X = \Y$ má řešení právě tehdy, když $\langle \Y,\z\rangle = 0$ pro~všechna $\z$ splňující $\mathbb{A}\z = \nula$.
+	Soustava lineárních rovnic $\mathbb{A}\x = \y$ má řešení právě tehdy, když $\langle \y,\z\rangle = 0$ pro~všechna $\z$ splňující $\mathbb{A}\z = \nula$.
 \end{lemma}
 \begin{theorem}
-	Soustava normálních rovnic $\X^T\X\betab = \X^T\Y$ má vždy alespoň jedno řešení.
+	Soustava normálních rovnic $\X^T\X\betab = \X^T\y$ má vždy alespoň jedno řešení.
 	\begin{proof}
-		Musíme ukázat, že $\langle \X^T\Y,\z\rangle = 0,~\forall\z$ splňující $\X^T\X\z = \nula$. Potom
-		 $$\X^T\X\z = \nula~\Rightarrow~\langle \X^T\X\z,\z\rangle = \langle \X\z,\X\z\rangle = 0,$$ a~tedy $\X\z = \nula$. Celkem dostáváme $\langle\X^T\Y,\z\rangle = \langle\Y,\X\z\rangle = 0$. Obecně totiž platí, že $\langle \X,\mathbb{A}\Y\rangle = \langle \mathbb{A}^T\X,\Y\rangle$.
+		Musíme ukázat, že $\langle \X^T\y,\z\rangle = 0,~\forall\z$ splňující $\X^T\X\z = \nula$. Potom
+		 $$\X^T\X\z = \nula~\Rightarrow~\langle \X^T\X\z,\z\rangle = \langle \X\z,\X\z\rangle = 0,$$ a~tedy $\X\z = \nula$. Celkem dostáváme $\langle\X^T\y,\z\rangle = \langle\y,\X\z\rangle = 0$. Obecně totiž platí, že $\langle \X,\mathbb{A}\y\rangle = \langle \mathbb{A}^T\X,\y\rangle$.
 	\end{proof}
 \end{theorem}
 \begin{remark}
@@ -89,7 +89,7 @@ kde $\mu_i = \beta_0+\sumjn \beta_j x_{ij}$ a~$\boldsymbol{\mu} = (\mu_1,\dots,\
 	\end{proof}
 \end{theorem}
 \begin{remark}
-	Pokud $\X_{n\times(m-1)},~n>m+1,~h(\X) = m+1,~\eb\sim\NN(0,\sigma^2 I_m)$, pak existuje jednoznačné řešení normálních rovnic $\wbetab = (\X^T\X)^{-1}\X^T\Y$.
+	Pokud $\X_{n\times(m-1)},~n>m+1,~h(\X) = m+1,~\eb\sim\NN(0,\sigma^2 I_m)$, pak existuje jednoznačné řešení normálních rovnic $\wbetab = (\X^T\X)^{-1}\X^T\y$.
 \end{remark}
 \begin{remark}
 	\begin{itemize}
