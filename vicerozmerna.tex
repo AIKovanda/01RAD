@@ -319,7 +319,7 @@ Protože $\Sigma$ je pozitivně definitní, existuje regulární matice $\Rm$ ta
 Dále
 $$\Cov(\textbf{U}) = \Rm^{-1} \Sigma (\Rm^{-1})^T = \Rm^{-1} \Rm\Rm^T (\Rm^T)^{-1} = \textbf{I}_r,$$
  tedy $\textbf{U} \sim \NN_r (\nula, \textbf{I}_r)$, takže složky \textbf{U} jsou nezávislé $\NN(0,1)$ rozdělené náhodné veličiny. Pak
- $$ \Zb^T \Sigma^{-1} \Zb = \textbf{U}^T \Rm^T (\Rm^T)^{-1} \Rm^{-1} \Rm \textbf{U} = \textbf{U}^T \textbf{U} = \sum_i^r \text{U}_i^2 \sim \chi^2(r) $$
+ $$ \Zb^T \Sigma^{-1} \Zb = \textbf{U}^T \Rm^T (\Rm^T)^{-1} \Rm^{-1} \Rm \textbf{U} = \textbf{U}^T \textbf{U} = \sum_{i=1}^r \text{U}_i^2 \sim \chi^2(r) $$
 a věta je dokázána pro $\Zb = \Cm (\widehat{\beta} - \beta)$ a~$\Sigma = \sigma^2 \Cm (\X^T \X)^{-1} \Cm^T$.
 
 \end{enumerate}
@@ -345,9 +345,9 @@ Ukázali jsme, že $\heb = (\In - \Hm) \eb$.
 \item $$\E [\heb] = (\In - \Hm) \cdot \E [\eb] = (\In - \Hm) \cdot 0 = 0$$
 \item $$\Cov(\heb) = (\In - \Hm) \Cov(\eb) (\In - \Hm)^T = \sigma^2 (\In - \Hm)$$
 \item $\heb$ je LK složek $\eb  \Rightarrow  \heb \sim \NN_n \big(\nula, \sigma^2 (\In - \Hm)\big)$
-\item Soustava normálních rovnic $\X^T \X \betab = \X^T \y$ lze zapsat jako $\X^T (\y - \X \betab) = \nula$. Pro první rovnici musí platit
+\item Soustava normálních rovnic $\X^T \X \wbetab = \X^T \y$ lze zapsat jako $\X^T (\y - \X \wbetab) = \nula$. Pro první rovnici musí platit
  $$
- \sumin x_{i1} \cdot (y_i - \x_i^T \betab) = 0,
+ \sumin x_{i1} \cdot (y_i - \x_i^T \wbetab) = 0,
  $$
 kde pro model s interceptem je $x_{i1}$ vektor jedniček. Pro $\wbetab$ tedy platí
  $$
@@ -386,7 +386,7 @@ Pro \textbf{chyby nenormální} ukážeme, že OLS $\wbetab$ je BLUE (best linea
 	 $$
 V maticovém zápisu
 	 $$
-		\betab = \Am \Y, \quad \text{kde } \Am = (a_{ij})
+		\wbetab = \Am \Y, \quad \text{kde } \Am = (a_{ij})
 	 $$
 pro $i = 0,\dots, m$ a~$j  \in\widehat{n} $.
 \end{define}
@@ -394,10 +394,10 @@ pro $i = 0,\dots, m$ a~$j  \in\widehat{n} $.
  Pokud v~modelu $\Y = \X \betab + \eb$ platí $h(\X) = m+1$, potom OLS $\wbetab$ je lineární, neboť $\wbetab = (\X^T \X)^{-1} \X^T \Y$, kde $\Am = (\X^T \X)^{-1} \X^T$
 \end{remark}
 \begin{theorem}[Gauss-Markov]
-	Uvažujeme model $\Y = \X \betab + \eb$, kde matice $\X$ má plnou hodnost, $e_i, i\in\widehat{n} $ jsou nekorelované a~$e_i \sim (0, \sigma^2)$. Potom OLS odhad $\wbetab$ je BLUE parametru $\betab$ (best linear unbiased estimation).
+	Uvažujeme model $\Y = \X \betab + \eb$, kde matice $\X$ má plnou hodnost, $e_i, i\in\widehat{n} $ jsou nekorelované a~$e_i \sim \NN(0, \sigma^2)$. Potom OLS odhad $\wbetab$ je BLUE parametru $\betab$ (best linear unbiased estimation).
 \end{theorem}
 \begin{proof}
-	Nechť $\wbetab = \Am \Y$ je lineární odhad $\betab$. Aby byl nestranný musí platit $\E [\wbetab] = \betab$, tzn. $$ \E [\Am \Y] = \Am \E [\Y] = \Am \X \betab = \betab, $$
+	Nechť $\wbetab = \Am \Y$ je lineární odhad $\betab$. Aby byl nestranný musí platit $\E [\wbetab] = \betab$, tzn. $$ \E [\Am \Y] = \Am \E [\Y] = \Am \X \betab \stackrel{!}{=} \betab, $$
 	tedy $(\Am \X - \textbf{I}_{m+1}) \betab = 0$. Protože to musí platit $\forall \betab \in \R^{m+1}$, dostáváme $\Am \X - \textbf{I}_{m+1} = 0$, nebo ekvivalentně $\Am \X = \textbf{I}_{m+1}$.
 	
 	Spočteme kovarianční matici $\wbetab$
@@ -470,7 +470,7 @@ Označíme $\lx_j = \frac{1}{n} \sumin x_{ij}$ jako průměr j-tého sloupce mat
 	
 \begin{align*}
 	\hyi & = \wbeta_0 + \sumjm x_{ij} \wbeta_j \\
-	\frac{\partial \SSE}{\partial \beta_0} & = \sumin \left(y_i - (\beta_0 + \sumjn x_{ij} \wbeta_j) \right) = 0 \Rightarrow \wbeta_0 = \ly - \sumjm \lx_j \wbeta_j
+	\frac{\partial \SSE}{\partial \wbeta_0} & = -2\sumin \Big(y_i - (\wbeta_0 + \sumjm x_{ij} \wbeta_j) \Big) = 0 \Rightarrow \wbeta_0 = \ly - \sumjm \lx_j \wbeta_j
 \end{align*}
 Celkem pak $\hy_i - \ly = \sumjm (x_{ij} - \lx_j) \wbeta_j, \quad i\in\widehat{n} $ a~zapsáno maticově:
  $$
@@ -577,7 +577,7 @@ která má vlastní čísla $0$ a~$1$, protože se~jedná o~idempotentní matici
  $$ \binom{\textbf{w}}{\heb} = \binom{\Km}{\Lm} \eb, $$
  tzn. má vícerozměrné normální rozdělení. Rozepíšeme kovarianci jako
   \begin{equation}\label{rovnicka}
-  \Cov\binom{\textbf{w}}{\heb} = \binom{\Km}{\Lm}\Cov\left[\eb\right](\Km^T,\Lm^T) = \sigma^2 \left(\begin{array}{cc}
+  \Cov\binom{\textbf{w}}{\heb} = \binom{\Km}{\Lm}\Cov(\eb)(\Km^T,\Lm^T) = \sigma^2 \left(\begin{array}{cc}
   \Km\Km^T&\Km\Lm^T  \\
   \Lm\Km^T & \Lm\Lm^T
   \end{array}
@@ -622,7 +622,7 @@ protože
 	\item Výsledky jsou odvozeny pro~normální chyby.
 	\item V~praxi se~používají i~pro~jiné typy chyb (za jistých předpokladů budou platit asymptoticky, lze je použít pro~velká $n$).
 \end{itemize}
-Pro konstrukci použijeme dokázanou vlastnost (viz \eqref{Rozdeleni_T}):
+Pro konstrukci použijeme dokázanou vlastnost, viz \eqref{Rozdeleni_T}:
  $$ \Tstat_j = \frac{\wbeta_j-\beta_j}{s_n\sqrt{v_j}}\sim t(n-m-1),\quad\text{kde } v_j = (\X^T\X)_{jj}^{-1}. $$
 Standardním postupem získáme $100(1-\alpha)$\% IS pro~$\beta_j$ ve~tvaru
  $$ \left(\wbeta_j-t_{1-\frac{\alpha}{2}}(n-m-1)s_n\sqrt{v_j},\wbeta_j+t_{1-\frac{\alpha}{2}}(n-m-1)s_n\sqrt{v_j} \right).$$
@@ -635,14 +635,11 @@ Pro $b_j = 0$ dostaneme test významnosti $\beta_j$, tzn. $H_0:~\beta_j = 0$ zam
 \begin{remark}
 	\begin{itemize}
 		\item Pokud nejsou porušeny předpoklady modelu nebo není přítomna kolinearita, lze zvážit odstranění všech nevýznamných proměnných (dle t-testu).
-		\item V~případě kolinearity, model může být významný (dle celkového F-testu), ale všechny nebo téměř všechny proměnné se~mohou jevit jako nevýznamné (dle t-testů).
+		\item V~případě kolinearity může být model významný (dle celkového F-testu), ale všechny nebo téměř všechny proměnné se~mohou jevit jako nevýznamné (dle t-testů).
 		\item Naopak, pokud má model velký počet možných proměnných, některé proměnné se~mohou jevit významné, i~když jsou náhodným šumem.
 		\item Při~použití t-testů je třeba být obezřetný.
 	\end{itemize}
 \end{remark}
-\begin{example}
-	5.26, str. 230 a~5.27, str. 231
-\end{example}
 \begin{remark}
 	Statistiky $F,\RR^2$ a~T jsou užitečné pro~rozkrytí efektů jednoduchých proměnných, nemohou být ale používány úplně automaticky.
 \end{remark}
@@ -674,10 +671,7 @@ kde $\Cm\in\R^{r\times(m+1)}$ a~$h(\Cm) = r$, tzn. $r\leq m+1$. Rovnice $\Cm\bet
 	\end{enumerate}
 \end{remark}
 
-Pro test $H_0$ naladíme 2 modely:\begin{description}
-\item[plný model (full model)] bez~podmínek na~$\Cm\betab$,
-\item[redukovaný model (reduced model)] za~předpokladu, že platí $H_0:~\Cm\betab = \bb$.
-\end{description}
+Pro test $H_0$ naladíme 2 modely, \textbf{plný model} (full model) bez~podmínek na~$\Cm\betab$ a \textbf{redukovaný model} (reduced model) za~předpokladu, že platí $H_0:~\Cm\betab = \bb$.
 
 Označme příslušné reziduální součty čtverců $\SSE_F$ a~$\SSE_R$ (bude platit $\SSE_F\leq\SSE_R$).
 
