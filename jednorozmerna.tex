@@ -497,7 +497,7 @@ Dosazením za~$\widehat{\sigma}(\wbeta_i)$ dostaneme
 \end{remark}
 
 
-\subsection{TH pro~$\beta_0, \beta_1$ }
+\section{Testování hypotéz pro~$\beta_0, \beta_1$ }
 
 Chtěli bychom ověřit platnost předpokladu lineárního vztahu mezi~$x$ a~$y$.
 
@@ -556,7 +556,7 @@ Myšlenkou metody (analýza rozptylu ANOVA) je určit, kolik variability v~pozor
  $$ \SST = \sumin(y_i-\overline{y}_n)^2, $$
 pokud regresní přímka $y = \widehat{\beta}_0+\widehat{\beta}_1 x$ dobře prokládá data, tedy $\widehat{y}_i\approx y_i$. Dále bude platit, že
  $$ \sumin (\hyi-\lhyn)^2\approx\sumin (y_i-\lyn)^2. $$
-Ukážeme, že $\lhy = \lyn$, a~tak
+Ukážeme, že $\lhy_n = \lyn$, a~tak
  $$ \sumin (\hyi-\lhyn)^2 = \sumin (\hyi-\lyn)^2 = \SSR, $$ což značí \textit{regression sum of squares} (regresní součet čtverců). Podíl
  $$ \RMR^2 = \frac{\SSR}{\SST} = \frac{\sumin (\hyi-\lyn)^2}{\sumin (y_i-\lyn)^2} $$ tak vyjadřuje podíl variability v~$(y_1,...,y_n)$ vysvětlené regresním modelem. Statistika $\RMR^2$ se nazývá \textbf{koeficient determinace} \textit{(coefficient of determination)} a pro každý model by měla mít hodnotu $\RMR^2\approx 1$.
 
@@ -564,7 +564,7 @@ Ukážeme, že $\RMR^2$ je kvadrát výběrového korelačního koeficientu mezi
 
 Pokud bychom znali rozdělení pravděpodobnostní statistiky $\RMR^2$, nabízí se~její použití pro~test $H_0:~\beta_1 = 0$, kterou bychom zamítli, pokud bude $\RMR^2\approx1$. Protože každá monotonní funkce $\RMR^2$ vede na~ekvivalentní test, budeme uvažovat statistiku 
 \begin{equation}
-	\NF = \frac{(n-2)\RMR^2}{1-\RMR^2}. \label{Definice F}
+	F = \frac{(n-2)\RMR^2}{1-\RMR^2}. \label{Definice F}
 	\end{equation}
 
 \begin{lemma}\label{lemma_k_vete}
@@ -587,8 +587,8 @@ Pokud bychom znali rozdělení pravděpodobnostní statistiky $\RMR^2$, nabízí
 		\item $\RMR^2 = 1-\frac{\SSE}{\SST}$, kde $\SSE = \sumin (y_i-\hyi)^2$ jako reziduální součet čtverců,
 		\item $\RMR^2 = 1~\Leftrightarrow~(\forall i\in\widehat{n})(\hyi = y_i)$ (všechna data leží na~přímce),
 		\item pokud označíme $\textbf{x} = (x_1,...,x_n)$ a~$\textbf{y} = (y_1,...,y_n)$, potom $\RMR^2 = \rho^2(\textbf{x},\textbf{y})$, kde $$ \rho(\textbf{x},\textbf{y}) = \frac{ \Big( \sumin (x_i-\overline{x}_n)(y_i-\lyn) \Big)^2}{\Sxx S_{yy}}, $$ tedy $\RMR^2$ je druhá mocnina výběrového korelačního koeficientu vektorů $\textbf{x},\textbf{y}$,
-		\item $\NF = \frac{\SSR}{s_n^2} = \mathrm{T}^2$,
-		\item pokud jsou chyby $e_1,...,e_n~iid~\NN(0,\sigma^2)$ a~$\beta_1 = 0$ (platí $H_0:~\beta_1 = 0$) v~modelu, potom $\NF\sim\NF(1,n-2)$.
+		\item $F = \frac{\SSR}{s_n^2} = \mathrm{T}^2$,
+		\item pokud jsou chyby $e_1,...,e_n~iid~\NN(0,\sigma^2)$ a~$\beta_1 = 0$ (platí $H_0:~\beta_1 = 0$) v~modelu, potom $F\sim\FF(1,n-2)$.
 	\end{enumerate}
 \begin{proof}
 	Důkaz věty bude založen na~rozkladu
@@ -609,25 +609,25 @@ Pokud bychom znali rozdělení pravděpodobnostní statistiky $\RMR^2$, nabízí
 		a~protože $\wbeta_1 = \frac{1}{\Sxx}\sumin (x_i-\overline{x}_n)(y_i-\lyn)$, dostaneme
 		 $$ \rho^2(\textbf{x},\textbf{y}) = \frac{\Big[\sumin (x_i-\overline{x}_n)(y_i-\lyn)\Big]^2}{\Sxx S_{yy}} = \frac{\wbeta_1^2 \Sxx}{S_{yy}} = \frac{\SSR}{\SST} = \RMR^2, $$
 		 neboť $S_{yy} = \sumin (y_i-\lyn)^2 = \SST$.
-		\item Z~definice $\NF$ podle \eqref{Definice F} plyne, že
-		 $$ \NF = \frac{(n-2)\RMR^2}{1-\RMR^2} = \frac{(n-2)\frac{\SSR}{\SST}}{\frac{\SSE}{\SST}} = \frac{\SSR}{\frac{\SSE}{n-2}} = \frac{\SSR}{s_n^2}. $$ Protože $\mathrm{T}_n = \wbeta_1\frac{\sqrt{\Sxx}}{s_n}$, pak $$ \mathrm{T}^2 = \frac{\wbeta_1^2 \Sxx}{s_n^2} = \frac{\SSR}{s_n^2} = F. $$
-		\item $\mathrm{T}\sim t(n-2) \Rightarrow \NF = \mathrm{T}^2\sim\NF(1,n-2)$.
+		\item Z~definice $F$ podle \eqref{Definice F} plyne, že
+		 $$ F = \frac{(n-2)\RMR^2}{1-\RMR^2} = \frac{(n-2)\frac{\SSR}{\SST}}{\frac{\SSE}{\SST}} = \frac{\SSR}{\frac{\SSE}{n-2}} = \frac{\SSR}{s_n^2}. $$ Protože $\mathrm{T}_n = \wbeta_1\frac{\sqrt{\Sxx}}{s_n}$, pak $$ \mathrm{T}^2 = \frac{\wbeta_1^2 \Sxx}{s_n^2} = \frac{\SSR}{s_n^2} = F. $$
+		\item $\mathrm{T}\sim t(n-2) \Rightarrow F = \mathrm{T}^2\sim\FF(1,n-2)$.
 		
 	\end{enumerate}
 \end{proof}
 \end{theorem}
 \begin{remark}
 \begin{enumerate}
-	\item 	Z bodů 5 a~6 vyplývá, že použití libovolné statistiky $\mathrm{T}_n,\RMR^2$ nebo $\NF$ vede na~ekvivalentní test významnosti regrese.
+	\item 	Z bodů 5 a~6 vyplývá, že použití libovolné statistiky $\mathrm{T}_n,\RMR^2$ nebo $F$ vede na~ekvivalentní test významnosti regrese.
 	\item $\RMR^2$ poskytuje hrubou představu o~kvalitě modelu, čím je blíže $1$, tím lépe přímka prokládá data (nicméně je třeba jisté obezřetnosti, jak uvidíme později).
-	\item $\NF$ lze chápat jako statistiku pro~test významnosti velkých hodnot $\RMR^2$.
+	\item $F$ lze chápat jako statistiku pro~test významnosti velkých hodnot $\RMR^2$.
 \end{enumerate}
 \end{remark}
 Výsledky se~většinou uvádí v~tabulce ANOVA:
 \begin{table}[h]\label{ANOVA_table}
 	\begin{tabular}{|lllll|}
 	\hline
-	Source & df & SS & MS & $\NF$\\
+	Source & df & SS & MS & $F$\\
 	\hline
 	Regression & 1 & $\SSR$ & MSR = $\SSR$ & $\frac{\mathrm{MSR}}{\mathrm{MSE}}$ \\
 	Residual & $n-2$ & $\SSE$ & $\mathrm{MSE} = \frac{\mathrm{\SSE}}{n-2} = s_n^2$ & \\
@@ -637,7 +637,7 @@ Výsledky se~většinou uvádí v~tabulce ANOVA:
 
 Kde \textbf{Source} je zdroj součtu čtverců, \textbf{df} počet stupňů volnosti příslušný danému součtu čtverců, \textbf{SS} počet čtverců a~\textbf{MS} $(\mathrm{MS} = \frac{\mathrm{SS}}{\mathrm{df}})$ \uv{mean squares}.
 \begin{remark}
-	 $H_0:\beta_1 = 0$ je zamítnuta, pokud $\NF>\NF_{1-\alpha}(1,n-2)$. V~tomto jednorozměrném případě je to ekvivalentní t-testu, neboť $\NF = \mathrm{T}^2$.
+	 $H_0:\beta_1 = 0$ je zamítnuta, pokud $F>\FF_{1-\alpha}(1,n-2)$. V~tomto jednorozměrném případě je to ekvivalentní t-testu, neboť $F = \mathrm{T}^2$.
 \end{remark}
 \begin{theorem}
 	Mějme $e_1,...,e_n~iid~\NN(0,\sigma^2)$. Za~platnosti $H_0:~\beta_1 = 0$ je splněno, že
@@ -670,7 +670,7 @@ Kde \textbf{Source} je zdroj součtu čtverců, \textbf{df} počet stupňů voln
 
 Při hodnocení kvality modelu potřebujeme více kritérií. Mezi~ně patří například\begin{enumerate}
 	\item \uv{velké} $\RMR^2$,
-	\item \uv{velké} $\NF$ nebo $|\mathrm{T}|$ hodnoty,
+	\item \uv{velké} $F$ nebo $|\mathrm{T}|$ hodnoty,
 	\item \uv{malé} hodnoty $s_n^2$ vzhledem k~$\lyn$.
 \end{enumerate}
 Další kritéria budeme probírat později.
@@ -723,7 +723,7 @@ LSE parametr $\beta_1$ dostaneme minimalizací $S~ = \sumin (y_i - \beta_1 x_i)^
  \widehat{\beta}_1 = \frac{\sumin y_i  x_i }{\sumin x_i^2}.
  $$
 Pokud $e_1,..., e_n~iid~\NN(0,\sigma^2)$, potom 
-$$\E [\widehat{\beta}_1] = \beta_1\quad\text{a}\quad\D [\widehat{\beta}_1] = \frac{\sigma^2}{\sumin x_i^2}\quad\Rightarrow\quad\widehat{\beta}_1 \sim \NN\left(\beta_1, \frac{\sigma^2}{\sumin x_i^2}\right)$$
+$$\E [\widehat{\beta}_1] = \beta_1\quad\text{a}\quad\D [\widehat{\beta}_1] = \frac{\sigma^2}{\sum_{i=1}^n x_i^2}\quad\Rightarrow\quad\widehat{\beta}_1 \sim \NN\left(\beta_1, \frac{\sigma^2}{\sum_{i=1}^n x_i^2}\right)$$
 a $s_n^2 = \frac{1}{n-1}\sumin (y_i -  \widehat{y}_i)^2 = \frac{\SSE}{n-1}$ je nestranný odhad $\sigma^2$.
 Dále $\frac{\SSE}{\sigma^2} \sim \chi^2(n-1)$ a~nezávisí na~$\widehat{\beta}_1$.
  $\text{H}_0 : \beta_1 = 0$ lze otestovat za~pomoci statistiky
@@ -761,7 +761,7 @@ Definujeme $F : = \frac{(n-1) \RMR^2}{1 - \RMR^2}$. Potom
  $$
   F = \frac{\sumin \widehat{y}_i^2 }{\frac{1}{n-1} \sumin (y_i - \widehat{y}_i)^2 } = \frac{\widehat{\beta}_1 \sumin x_i^2 }{ s_n^2} = \text{T}^2.
  $$
-Vztah mezi~$\RMR^2, \NF$ a $\mathrm{T}^2$ je tedy stejný jako pro~$\beta_0 \neq 0$.
+Vztah mezi~$\RMR^2, F$ a $\mathrm{T}^2$ je tedy stejný jako pro~$\beta_0 \neq 0$.
 
 \begin{remark}
   Tato definice $\RMR^2$ se~ale v~praxi moc nepoužívá, protože neumožňuje přímé srovnání modelů s~interceptem a bez něj.
@@ -783,7 +783,7 @@ Obecně ale $\sumin (y_i - \oynn)^2 < \sumin y_i^2$, $\RMR^2$ v~modelu s~$\beta_
 		Source & df & SS & MS & F \\
 		\hline
 		Regression & $1$ & $\SSR = \sumin \hyi^2$ & MSR $ = \frac{\SSR}{1}$ & $\frac{\SSR}{s_n^2}$ \\
-		Residual & $n-1$ & $\SSE = \sumin (y_i = \hyi)^2$ & MSE $ = \frac{\SSE}{n-1}$ &  \\
+		Residual & $n-1$ & $\SSE = \sumin (y_i - \hyi)^2$ & MSE $ = \frac{\SSE}{n-1}$ &  \\
 		Total & $n$ & $\SST = \sumin y_i^2$ &  &  \\
 		\hline
 		&  & $\RMR^2 = \rho^2(\textbf{y},\widehat{\textbf{y}})$ &  &  \\
@@ -969,14 +969,14 @@ Intuitivně, pokud je náš model správný, měla by se~rezidua chovat jako ná
 
 \section{Grafy reziduí}
 \begin{itemize}
-	\item \underline{Histogram reziduí} -- umožní náhled normality reziduí.
-	\item \underline{Kvantilový graf (QQ plot) standardizovaných reziduí} -- seřadíme dle velikosti: $\hr_{(1)} \leq \hr_{(2)} \leq... \leq \hr_n$ a~vyneseme oproti~$\Phi^{-1}\left((i - \frac{1}{2}) \frac{1}{n} \right)$, $i  \in\widehat{n} $. Body by měly ležet přibližně na~přímce ($\E (e_i) \approx \Phi^{-1}\left((i - \frac{1}{2}) \frac{1}{n} \right)$ pro~normální chyby).
+	\item \textbf{Histogram reziduí} -- umožní náhled normality reziduí.
+	\item \textbf{Kvantilový graf (QQ plot) standardizovaných reziduí} -- seřadíme dle velikosti: $\hr_{(1)} \leq \hr_{(2)} \leq... \leq \hr_n$ a~vyneseme oproti~$\Phi^{-1}\left((i - \frac{1}{2}) \frac{1}{n} \right)$, $i  \in\widehat{n} $. Body by měly ležet přibližně na~přímce ($\E (e_i) \approx \Phi^{-1}\left((i - \frac{1}{2}) \frac{1}{n} \right)$ pro~normální chyby).
 	
 	Použití: ověření normality, detekce odlehlých pozorování (obr. 3.6 str. 1077 GLM).
-	\item \underline{Standardizovaná rezidua $\times$ jednotlivým vysvětlujícím proměnným $x$} -- $\hr_i$ nezávisí na~$\sigma$, graf $\hr_i \times x_i$ lze použít pro~detekci nelinearity nebo nekonstantního rozptylu.
-	\item \underline{Standardizovaná rezidua $\hr_i \times$ predikovaným hodnotám $\hyi$} -- $\Cov(\hei, \hYi) = 0$, tedy $\hei(\hr_i)$ a~$\hYi$ by měly být nekorelované, pokud platí model \eqref{Model 1D LR}. To znamená, že graf $\hr_i \times \hyi$ by měl být náhodně rozptýlený kolem~osy $x$, navíc $\hr_i$ by měla ležet v~$(-3,3)$ ($ \hr_i \approx \NN(0,1) $).
+	\item \textbf{Standardizovaná rezidua $\times$ jednotlivým vysvětlujícím proměnným $x$} -- $\hr_i$ nezávisí na~$\sigma$, graf $\hr_i \times x_i$ lze použít pro~detekci nelinearity nebo nekonstantního rozptylu.
+	\item \textbf{Standardizovaná rezidua $\hr_i \times$ predikovaným hodnotám $\hyi$} -- $\Cov(\hei, \hYi) = 0$, tedy $\hei(\hr_i)$ a~$\hYi$ by měly být nekorelované, pokud platí model \eqref{Model 1D LR}. To znamená, že graf $\hr_i \times \hyi$ by měl být náhodně rozptýlený kolem~osy $x$, navíc $\hr_i$ by měla ležet v~$(-3,3)$ ($ \hr_i \approx \NN(0,1) $).
 	(doplnit obrázky)
-	\item \underline{Standardizovaná rezidua $\times$ pořadí pozorování} -- možná detekce řadové korelace mezi~pozorováními.
+	\item \textbf{Standardizovaná rezidua $\times$ pořadí pozorování} -- možná detekce řadové korelace mezi~pozorováními.
 	(doplnit obrázky)
 	
 \end{itemize}

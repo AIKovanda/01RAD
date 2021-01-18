@@ -32,7 +32,7 @@ kde $\mu_i = \beta_0+\sumjn \beta_j x_{ij}$ a~$\boldsymbol{\mu} = (\mu_1,\dots,\
  \begin{theorem}
  	Uvažujme model \eqref{the_chosen_one} a~nechť $\eb\sim\NN(\nula,\sigma^2 \In)$. Potom $\wbetab$ je MLE $\betab$ právě tehdy, když $\wbetab$ je řešením soustavy rovnic
  	 $$ \X^T\X\betab = \X^T\y\qquad\text{(soustava normálních rovnic)}. $$
- 	Je-li matice $\X^T\X$ singulární, má tato soustava jednoznačné řešení ve~tvaru
+ 	Je-li matice $\X^T\X$ nesingulární, má tato soustava jednoznačné řešení ve~tvaru
  	 $$ \wbetab = (\X^T\X)^{-1}\X^T\y. $$
  	\begin{proof}
  		\begin{enumerate}[$\Leftarrow$]
@@ -114,7 +114,7 @@ Pro $e_i \sim \Nn$ se~také používají statistiky $s_n^2, s_n$.
 
 \subsection{Vlastnosti odhadů $\wbetab, s_n^2$ }
 \begin{theorem}
-	Nechť $\wbetab$ je OLS odhad parametru $\betab$ v~modelu \eqref{the_chosen_one}, kde $h(\X) = m+1$ a~$e_1,\dots, e_n$ nezávislé, $e_i \sim (0,\sigma^2)$. Potom platí, že
+	Nechť $\wbetab$ je OLS odhad parametru $\betab$ v~modelu \eqref{the_chosen_one}, kde $h(\X) = m+1$ a~$e_1,\dots, e_n$ nezávislé, $e_i \sim \NN(0,\sigma^2)$. Potom platí, že
 	\begin{enumerate}
 		\item $\E(\wbetab) = \betab$ (tj. $\wbetab$ je nestranný)
 		\item $\Cov(\wbetab) = \sigma^2 (\X^T \X)^{-1}$
@@ -274,10 +274,10 @@ $$(n - m -1) \frac{s_n^2}{\sigma^2} = \frac{\SSE}{\sigma^2} = \frac{1}{\sigma^2}
 Protože je $(\text{I}_n - \Hm)$ symetrická a~idempotentní, tak
  $$
  \text{I}_n - \Hm = \Qm \Lam \Qm^T,  \quad \text{kde} \quad
- \begin{array}{c}
- {\Qm  \text{ je ortogonální matice}} \\
-{\Lam  \text{ je diagonální matice s~vlastními čísly } \text{I}_n - \Hm}
- \end{array}.
+ \begin{array}{l}
+ {\Qm  \text{ je ortogonální matice a}} \\
+{\Lam  \text{ je diagonální matice s~vlastními čísly } \text{I}_n - \Hm}.
+ \end{array}
  $$
 Protože vlastní čísla $\text{I}_n - \Hm$ jsou 0 nebo 1 a~$\trace(\text{I}_n - \Hm) = h(\text{I}_n - \Hm) = n - m - 1$, \linebreak
  $\Lam$ může být zapsána ve~tvaru:
@@ -397,7 +397,7 @@ pro $i = 0,\dots, m$ a~$j  \in\widehat{n} $.
 	Uvažujeme model $\Y = \X \betab + \eb$, kde matice $\X$ má plnou hodnost, $e_i, i\in\widehat{n} $ jsou nekorelované a~$e_i \sim \NN(0, \sigma^2)$. Potom OLS odhad $\wbetab$ je BLUE parametru $\betab$ (best linear unbiased estimation).
 \end{theorem}
 \begin{proof}
-	Nechť $\wbetab = \Am \Y$ je lineární odhad $\betab$. Aby byl nestranný musí platit $\E [\wbetab] = \betab$, tzn. $$ \E [\Am \Y] = \Am \E [\Y] = \Am \X \betab \stackrel{!}{=} \betab, $$
+	Nechť $\wbetab = \Am \Y$ je lineární odhad $\betab$. Aby byl nestranný musí platit $\E [\wbetab] = \betab$, tzn. $$ \E [\Am \Y] = \Am \E [\Y] = \Am \X \betab = \betab, $$
 	tedy $(\Am \X - \textbf{I}_{m+1}) \betab = 0$. Protože to musí platit $\forall \betab \in \R^{m+1}$, dostáváme $\Am \X - \textbf{I}_{m+1} = 0$, nebo ekvivalentně $\Am \X = \textbf{I}_{m+1}$.
 	
 	Spočteme kovarianční matici $\wbetab$
@@ -588,7 +588,7 @@ která má vlastní čísla $0$ a~$1$, protože se~jedná o~idempotentní matici
  $$ \Km\Lm^T = \left(\In-\frac{1}{n}\Bm \right)\underbrace{\Hm(\In-\Hm)}_{\Hm-\Hm^2 = \nula} = \nula. $$
 \end{proof}
 
- $\test{F>F_{1-\alpha}(m,n-m-1)}$
+ $\test{F>\FF_{1-\alpha}(m,n-m-1)}$
 
  \begin{remark}
  	Odvozeno pro~$e_i\sim\NN(0,\sigma^2)$, obecně se~používá, i~když to nevíme, pro~velké $n$ může být často zdůvodněno pomocí CLV.
@@ -686,7 +686,7 @@ Označme příslušné reziduální součty čtverců $\SSE_F$ a~$\SSE_R$ (bude 
 	 a~statistiku $F = \frac{\frac{\SSR}{m}}{s_n^2} = F_{overall}\sim\FF(m,n-m-1)$, jak jsme již ukázali.
 \end{example}
 \begin{theorem}
-	Nechť v~modelu \eqref{the_chosen_one} platí, že $e_1,\dots,e_n$ jsou nezávislé a~$e_i\sim\NN(0,\sigma^2)$. Označme $\SSE_F$ reziuální s.č. plného modelu a~$\SSE_R$ reziduální s.č. modelu, kde platí $H_0:~\Cm\betab = \textbf{b}$. Potom je za~platnosti $H_0$ splněno
+	Nechť v~modelu \eqref{the_chosen_one} platí, že $e_1,\dots,e_n$ jsou nezávislé a~$e_i\sim\NN(0,\sigma^2)$. Označme $\SSE_F$ reziduální s.č. plného modelu a~$\SSE_R$ reziduální s.č. modelu, kde platí $H_0:~\Cm\betab = \textbf{b}$. Potom je za~platnosti $H_0$ splněno
 	 $$ F = \frac{\frac{\Delta\SSE}{r}}{s_n^2}\sim\FF(r,n-m-1). $$
 \end{theorem}
 \begin{proof}
@@ -772,7 +772,7 @@ Navíc bod 4) věty na~str (55), kde $\Zb \sim \NN_r(0, \Sigma) \Rightarrow \Zb^
 
 Tedy $\Delta \SSE$ je funkcí pouze $\wbetab_F$, tzn nezávisí na~$s_n^2$, takže
  $$
-F = \frac{\frac{\Delta \SSE}{\sigma^2 r}}{\frac{(n-m-1)s_n^2}{\sigma^2(n-m-1)}} = \frac{\frac{\Delta \SSE}{r}}{s_n^2} \sim F(r, n-m-1).
+F = \frac{\frac{\Delta \SSE}{\sigma^2 r}}{\frac{(n-m-1)s_n^2}{\sigma^2(n-m-1)}} = \frac{\frac{\Delta \SSE}{r}}{s_n^2} \sim \FF(r, n-m-1).
  $$
 \end{proof}
 
@@ -787,16 +787,11 @@ Interpretace: nárůst regresního součtu čtverců díky~neplatnosti $H_0$. D�
  $$
 kde $\Delta \SSE$ je \textit{extra sum of squares} přidaná k~$\SSR$ díky~neplatnosti $H_0$.
 
-Např., pokud $\betab = (\beta_0, \beta_1,\dots, \beta_{m-1}, 0)$, tzn. $\beta_m = 0$ a~skutečný model má $\betab = \betab_F$, potom $\Delta \SSE$ je extra regresní součet čtverců získaný díky~přidání $\beta_m$ do~modelu.
+Například, pokud $\betab = (\beta_0, \beta_1,\dots, \beta_{m-1}, 0)$, tzn. $\beta_m = 0$ a~skutečný model má $\betab = \betab_F$, potom $\Delta \SSE$ je extra regresní součet čtverců získaný díky~přidání $\beta_m$ do~modelu.
 
 Umožňuje rozklad $\SSR$ plného modelu na~jednotlivé části $\left(x_1, x_2 | x_1, x_3 | x_2 x_1,... \right)$.
 \end{remark}
 
-Př. analogie k~Př. 5.25 str. 238
-
-\begin{remark}
-	Joint confidence region viz. Ex 5.30 str. 239
-\end{remark}
 
 
 
