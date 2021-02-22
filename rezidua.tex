@@ -1010,9 +1010,9 @@ Pro náš model LR:
 \begin{align*}
 L(\betab,\sigma^2) & = \frac{1}{\left(2\pi \sigma^2\right)^{n/2}} \exp \left[- \frac{1}{2\sigma^2} \left(\y - \X \betab \right)^T \left(\y - \X \betab \right) \right] \\
 l(\betab, \sigma^2) & = - \frac{n}{2} \ln 2\pi - \frac{n}{2} \ln \sigma^2 - \frac{1}{2} \frac{\left(\y - \X \betab \right)^T \left(\y - \X \betab \right)}{\sigma^2} \\
-\AIC & = -2l(\wbetab, \wsigma^2) + 2p^* = n \ln 2\pi + \ln \wsigma^2 + \frac{\left(\y - \X \betab \right)^T \left(\y - \X \betab \right)}{\wsigma^2} + 2p^*,
+\AIC & = -2l(\wbetab, \wsigma^2) + 2p^* = n \ln 2\pi + n\ln \wsigma^2 + \frac{\left(\y - \X \wbetab \right)^T \left(\y - \X \wbetab \right)}{\wsigma^2} + 2p^*,
 \end{align*}
-ale $\wsigma^2 = \frac{1}{n} \left(\y - \X \betab \right)^T \left(\y - \X \betab \right) = \frac{\SSE}{n}$, tedy
+ale $\wsigma^2 = \frac{1}{n} \left(\y - \X \wbetab \right)^T \left(\y - \X \wbetab \right) = \frac{\SSE}{n}$, tedy
  $$
 \AIC = \underbrace{n \ln 2 \pi + n}_C + n \ln \frac{\SSE}{n} + 2p^*
  $$

@@ -2,7 +2,7 @@
 
 Předpokládejme, že kromě $y_i$ máme pro~každé $i\in\widehat{n}$ k~dispozici také $m$ nezávislých proměnných $x_{i1},x_{i2},\dots,x_{im}$. Pak získáme model
  $$ Y_i = \beta_0+\sum_{j = 1}^m \beta_j x_{ij}+e_i,\quad i\in\widehat{n}, $$
-kde $e_1,\dots,e_n$ jsou \textbf{nezávislé (nekorelované)} chyby a~$e_i\sim\NN(0,\sigma^2)$. Na~základě pozorování $(x_{i1},\dots,x_{im},y_i),~i\in\widehat{n}$ chceme odhadnout parametr $\betab = (\beta_0,\beta_1,\dots,\beta_m)^T$ (proložení dat \linebreak $m+1$ dimenzionální nadrovinou). Předpokládejme, že $n>m+1$, tj., že máme více dat než parametrů. Maticově můžeme tento stav zapsat jako
+kde $e_1,\dots,e_n$ jsou \textbf{nezávislé (nekorelované)} chyby a~$e_i\sim(0,\sigma^2)$. Na~základě pozorování $(x_{i1},\dots,x_{im},y_i),~i\in\widehat{n}$ chceme odhadnout parametr $\betab = (\beta_0,\beta_1,\dots,\beta_m)^T$ (proložení dat \linebreak $m+1$ dimenzionální nadrovinou). Předpokládejme, že $n>m+1$, tj., že máme více dat než parametrů. Maticově můžeme tento stav zapsat jako
  $$ \Y = (Y_1,\dots,Y_n)^T,\quad \y = (y_1,\dots,y_n)^T,\quad \eb = (e_1,\dots,e_n)^T. $$
 Označme
  $$ \X = \left[\begin{array}{cccc}
@@ -30,7 +30,7 @@ kde $\mu_i = \beta_0+\sumjn \beta_j x_{ij}$ a~$\boldsymbol{\mu} = (\mu_1,\dots,\
 
 \newpage
  \begin{theorem}
- 	Uvažujme model \eqref{the_chosen_one} a~nechť $\eb\sim\NN(\nula,\sigma^2 \In)$. Potom $\wbetab$ je MLE $\betab$ právě tehdy, když $\wbetab$ je řešením soustavy rovnic
+ 	Uvažujme model \eqref{the_chosen_one} a~nechť $\eb\sim\NN_n(\nula,\sigma^2 \In)$. Potom $\wbetab$ je MLE $\betab$ právě tehdy, když $\wbetab$ je řešením soustavy rovnic
  	 $$ \X^T\X\betab = \X^T\y\qquad\text{(soustava normálních rovnic)}. $$
  	Je-li matice $\X^T\X$ nesingulární, má tato soustava jednoznačné řešení ve~tvaru
  	 $$ \wbetab = (\X^T\X)^{-1}\X^T\y. $$
@@ -102,7 +102,7 @@ kde $\mu_i = \beta_0+\sumjn \beta_j x_{ij}$ a~$\boldsymbol{\mu} = (\mu_1,\dots,\
 \subsection{Odhad parametru $\sigma^2$ }
 Pro normální chyby získáme MLE $\sigma^2$ derivací $\ln L(\beta, \sigma^2)$, z~čehož plyne:
 \begin{align*}
-	\hsn & = \frac{1}{n} \SSE = \frac{1}{n}(\y - \X \wbetab)^T(\y - \X \wbetab) = \frac{1}{n} \sumin (y_i - \hyi)^2, \\
+	\widehat{\sigma}_n^2 & = \frac{1}{n} \SSE = \frac{1}{n}(\y - \X \wbetab)^T(\y - \X \wbetab) = \frac{1}{n} \sumin (y_i - \hyi)^2, \\
 	& \text{kde \;} \hyi = (\X \wbetab)_i = \x_i^T \wbetab, \quad i\in\widehat{n} \\
 \end{align*}
 a $\x_i^T$ značí i-tý řádek matice $\X$. Protože se~jedná o~vychýlený odhad, používá se~obecně odhad
@@ -110,16 +110,16 @@ a $\x_i^T$ značí i-tý řádek matice $\X$. Protože se~jedná o~vychýlený o
 	s_n^2 = \frac{1}{n-(m+1)} \SSE = \frac{1}{n - m - 1} \sumin (y_i - \hyi)^2
  $$
 a $s_n = \sqrt{s_n^2}$ jako odhad $\sigma$ (už není nestranný).
-Pro $e_i \sim \Nn$ se~také používají statistiky $s_n^2, s_n$.
+Pro $e_i \sim (0,\sigma^2)$ se~také používají statistiky $s_n^2, s_n$.
 
 \subsection{Vlastnosti odhadů $\wbetab, s_n^2$ }
 \begin{theorem}
-	Nechť $\wbetab$ je OLS odhad parametru $\betab$ v~modelu \eqref{the_chosen_one}, kde $h(\X) = m+1$ a~$e_1,\dots, e_n$ nezávislé, $e_i \sim \NN(0,\sigma^2)$. Potom platí, že
+	Nechť $\wbetab$ je OLS odhad parametru $\betab$ v~modelu \eqref{the_chosen_one}, kde $h(\X) = m+1$ a~$e_1,\dots, e_n$ nekorelované, $e_i \sim (0,\sigma^2)$. Potom platí, že
 	\begin{enumerate}
 		\item $\E(\wbetab) = \betab$ (tj. $\wbetab$ je nestranný)
 		\item $\Cov(\wbetab) = \sigma^2 (\X^T \X)^{-1}$
 		\item $\E(s_n^2) = \sigma^2$
-		\item Pokud navíc $e_i \sim \Nn, i\in\widehat{n} $, potom $\wbetab \sim \NN_{m+1}(\betab, \sigma^2(\X^T \X)^{-1})$. Speciálně $\wbeta_i \sim \NN(\beta_i, \sigma^2 \nu_i)$, kde $\nu_i$ je i-tý diagonání prvek matice $(\X^T \X)^{-1}$.
+		\item Pokud navíc $e_i \sim \NN(0,\sigma^2), i\in\widehat{n} $, potom $\wbetab \sim \NN_{m+1}(\betab, \sigma^2(\X^T \X)^{-1})$. Speciálně $\wbeta_i \sim \NN(\beta_i, \sigma^2 \nu_i)$, kde $\nu_i$ je i-tý diagonání prvek matice $(\X^T \X)^{-1}$.
 	\end{enumerate}
 \end{theorem}
 
@@ -194,7 +194,7 @@ Celkem pak dostáváme $\E s_n^2 = \frac{1}{n - (m + 1)} \E (\SSE) = \frac{1}{n 
 		\item $\wbetab$ a~$s_n^2$ jsou nezávislé náhodné veličiny,
 		\item $(n - m - 1) \frac{s_n^2}{\sigma^2} \sim \chi^2(n - m - 1)$.
 		\item Jestliže $v_i = (\X^T \X)_{ii}^{-1}$, potom $T_i = \frac{\wbeta_i - \beta_i}{s_n \sqrt{v_i}} \sim t(n-m-1)$.
-		\item Nechť $\Cm \in \R^{r,m+1}$ takové, že $h(\eb) = r$. Potom kvadratická forma
+		\item Nechť $\Cm \in \R^{r,m+1}$ takové, že $h(\Cm) = r, r\leq m+1$. Potom kvadratická forma
 		 $$
 			\frac{q}{\sigma^2} = \frac{(\wbetab - \betab)^T \Cm^T \left[\Cm (\X^T \X)^{-1} \Cm^T \right]^{-1} \Cm (\wbetab - \betab)}{\sigma^2} \sim \chi^2(r).
 		 $$
@@ -290,7 +290,7 @@ Protože vlastní čísla $\text{I}_n - \Hm$ jsou 0 nebo 1 a~$\trace(\text{I}_n 
  $$
 takže
  $$
- \eb (\text{I}_n - \Hm) \eb = \eb \Qm \Lam \Qm^T \eb = \qb^T \Lam \qb, \quad \text{kde } \qb = \Qm^T \eb.
+ \eb^T (\text{I}_n - \Hm) \eb = \eb^T \Qm \Lam \Qm^T \eb = \qb^T \Lam \qb, \quad \text{kde } \qb = \Qm^T \eb.
  $$
  
 \begin{theorem}
@@ -375,7 +375,7 @@ $$
 \end{remark}
 
 \section{Gauss - Markov theorem}
-Pro \textbf{normální chyby}, tj. $e_i~iid~\NN(0,\sigma^2)$, je OLS $\wbetab$ MLE, tzn. je eficientní MVVE parametr $\betab$.
+Pro \textbf{normální chyby}, tj. $e_i~iid~\NN(0,\sigma^2)$, je OLS $\wbetab$ MLE, tzn. je eficientní MVUE parametr $\betab$.
 
 Pro \textbf{chyby nenormální} ukážeme, že OLS $\wbetab$ je BLUE (best linear unbiased estimation) parametru $\betab$ (za jistých podmínek). Mohou ale existovat lepší lineární vychýlené odhady nebo nelineární odhady.
 
@@ -394,7 +394,7 @@ pro $i = 0,\dots, m$ a~$j  \in\widehat{n} $.
  Pokud v~modelu $\Y = \X \betab + \eb$ platí $h(\X) = m+1$, potom OLS $\wbetab$ je lineární, neboť $\wbetab = (\X^T \X)^{-1} \X^T \Y$, kde $\Am = (\X^T \X)^{-1} \X^T$
 \end{remark}
 \begin{theorem}[Gauss-Markov]
-	Uvažujeme model $\Y = \X \betab + \eb$, kde matice $\X$ má plnou hodnost, $e_i, i\in\widehat{n} $ jsou nekorelované a~$e_i \sim \NN(0, \sigma^2)$. Potom OLS odhad $\wbetab$ je BLUE parametru $\betab$ (best linear unbiased estimation).
+	Uvažujeme model $\Y = \X \betab + \eb$, kde matice $\X$ má plnou hodnost, $e_i, i\in\widehat{n} $ jsou nekorelované a~$e_i \sim (0, \sigma^2)$. Potom OLS odhad $\wbetab$ je BLUE parametru $\betab$ (best linear unbiased estimation).
 \end{theorem}
 \begin{proof}
 	Nechť $\wbetab = \Am \Y$ je lineární odhad $\betab$. Aby byl nestranný musí platit $\E [\wbetab] = \betab$, tzn. $$ \E [\Am \Y] = \Am \E [\Y] = \Am \X \betab = \betab, $$
@@ -430,7 +430,7 @@ Protože $v_i \geq 0$ a~$\sumjn d_{ij}^2 \geq 0 \Rightarrow \D [\widehat{\beta}_
 \subsection{Celkový F-test (overall F-test)}
 
 \begin{itemize}
-\item Zajímá nás, zda je model statisticky signifikantní, tj. zda alespoň jeden z~koeficientů $\beta_1,\dots, \beta_m$ je nulový.
+\item Zajímá nás, zda je model statisticky signifikantní, tj. zda alespoň jeden z~koeficientů $\beta_1,\dots, \beta_m$ je nenulový.
 \item Mohli bychom testovat jednotlivé koeficienty $\text{H}_0 : \beta_j = 0$ pomocí alternativy t-testu.
 \item Celková chyba I. druhu by takto ale mohla být velká, pokud máme hodně proměnných. Museli bychom hodně snížit $\alpha$ pro~jednotlivé testy, což zvýší pravděpodobnost chyby II.~druhu (tzn. riziko akceptování nenulových koeficientů jako nulových, a~tedy vynechání významných proměnných z~modelu).
 \item Navíc je zde problém multikolinearity (viz později), jejímž jedním efektem jsou velké standardní chyby odhadů. To může vést k~akceptování všech koeficientů jako 0, i~když je model celkově významný (uvidíme na~příkladu).
@@ -459,7 +459,7 @@ Označíme $\lx_j = \frac{1}{n} \sumin x_{ij}$ jako průměr j-tého sloupce mat
  a $(\X_c)_{ij}$ centrované matice regresorů, kde $(\X_c)_{ij} = x_{ij} - \lx_j$, $i\in\widehat{n}, j = 1,\dots, m$.
 
 \begin{theorem}
-	V modelu $\Y = \X \betab + \eb$, kde $e_i$ jsou nekorelované a~$e_i \sim \Nn$ pro~$i  \in\widehat{n} $ platí
+	V modelu $\Y = \X \betab + \eb$, kde $h(\X) = m + 1$, $e_i$ jsou nekorelované a~$e_i \sim (0,\sigma^2)$ pro~$i  \in\widehat{n} $ platí
 	 $$
 		\E \left[\frac{\SSR}{m} \right] = \sigma^2 + \frac{\betab^T(\X - \lX)^T(\X - \lX) \betab}{m} = \sigma^2 + \frac{\betab_s^T \X_c^T \X_c \betab_s}{m},
 	 $$
@@ -517,7 +517,7 @@ Pokud $\betab_s$ = 0, potom $\E \left(\frac{\SSR}{m} \right) = \sigma^2 = \E s_n
 \end{remark}
 
 \begin{theorem}
-Nechť v~modelu $\Y = \X \betab + \eb$ \eqref{the_chosen_one} jsou $e_1,\dots, e_n $~iid~$\Nn$. Pokud $\betab_s = 0$, tj. $\beta_1 = \beta_2 = \cdots = \beta_m = 0$, potom
+Nechť v~modelu $\Y = \X \betab + \eb$ \eqref{the_chosen_one} jsou $e_1,\dots, e_n $~iid~$\NN(0,\sigma^2),h(\X) = m + 1$. Pokud $\betab_s = 0$, tj. $\beta_1 = \beta_2 = \cdots = \beta_m = 0$, potom
  $$
 F \sim \FF(m, n - m -1).
  $$
@@ -686,7 +686,7 @@ Označme příslušné reziduální součty čtverců $\SSE_F$ a~$\SSE_R$ (bude 
 	 a~statistiku $F = \frac{\frac{\SSR}{m}}{s_n^2} = F_{overall}\sim\FF(m,n-m-1)$, jak jsme již ukázali.
 \end{example}
 \begin{theorem}
-	Nechť v~modelu \eqref{the_chosen_one} platí, že $e_1,\dots,e_n$ jsou nezávislé a~$e_i\sim\NN(0,\sigma^2)$. Označme $\SSE_F$ reziduální s.č. plného modelu a~$\SSE_R$ reziduální s.č. modelu, kde platí $H_0:~\Cm\betab = \textbf{b}$. Potom je za~platnosti $H_0$ splněno
+	Nechť v~modelu \eqref{the_chosen_one} platí, že $e_1,\dots,e_n$ jsou nezávislé a~$e_i\sim\NN(0,\sigma^2), h(\X) = m + 1$. Označme $\SSE_F$ reziduální s.č. plného modelu a~$\SSE_R$ reziduální s.č. modelu, kde platí $H_0:~\Cm\betab = \textbf{b}$. Potom je za~platnosti $H_0$ splněno
 	 $$ F = \frac{\frac{\Delta\SSE}{r}}{s_n^2}\sim\FF(r,n-m-1). $$
 \end{theorem}
 \begin{proof}
@@ -700,7 +700,7 @@ Nejdříve si dokámeme následující lemma:
 \begin{lemma}
 	Označme $\wbetab_F$ a~$\wbetab_R$ LSE parametru $\betab$ v~plném a~redukovaném modelu. Potom platí
 	\begin{enumerate}
-		\item $\wbetab_F = \wbetab_R - (\X^T \X)^{-1} \Cm^T \Am (\Cm \wbetab_F - \bb)$, kde $\Am = \left(\Cm (\X^T \X)^{-1} \Cm^T \right)^{-1}$
+		\item $\wbetab_R = \wbetab_F - (\X^T \X)^{-1} \Cm^T \Am (\Cm \wbetab_F - \bb)$, kde $\Am = \left(\Cm (\X^T \X)^{-1} \Cm^T \right)^{-1}$
 		\item $\Delta \SSE = \SSE_R - \SSE_F = \left(\Cm \wbetab_F - \bb \right)^T \Am \left(\Cm \wbetab_F - \bb \right)$.
 	\end{enumerate}
 \end{lemma}
@@ -714,7 +714,7 @@ g(\betab) = (\yb - \X \betab)^T(\yb - \X \betab)
  $$
 za podmínky $\Cm \betab = \bb$. Sestavíme Lagrangeovu funkci
 \begin{align*}
-L & = L(\betab) = g(\betab) - 2 \lambdab^T(\Cm \betab - \bb), \; \text{kde} \quad \lambdab = (\lambda_1,\dots, \lambda_r) \\
+L & = L(\betab,\lambda) = g(\betab) - 2 \lambdab^T(\Cm \betab - \bb), \; \text{kde} \quad \lambdab = (\lambda_1,\dots, \lambda_r) \\
 L & = \yb^T \yb - 2 \yb^T \X \betab + \betab^T \X^T \X \betab - 2 \lambdab^T \Cm \betab + 2 \lambdab^T \bb
 \end{align*}
 a tedy
@@ -803,7 +803,7 @@ Jakmile máme adekvátní model, můžeme ho použít pro~bodové a~intervalové
 
 Nechť $\x_0 = (1, x_{0,1},\dots, x_{0,m})^T$ je nový bod proměnné $\x$. Bodový odhad $\E [Y_{\x_0}]$ je roven
  $$
- \widehat{y}_{\x_0} = \widehat{\beta}_0 + \sum_{j = 1}^m x_{0,j} \widehat{\beta}_j = \x_0^T \wbetab
+ \widehat{Y}_{\x_0} = \widehat{\beta}_0 + \sum_{j = 1}^m x_{0,j} \widehat{\beta}_j = \x_0^T \wbetab
  $$
 
 tzn. $\D [\hY_{\x_0}] = \x_0^T \cdot \D [\widehat{\betab}] \cdot \x_0 = \sigma^2 \x_0^T(\X^T \X)^{-1} \x_0$ a~může být odhadnut pomocí

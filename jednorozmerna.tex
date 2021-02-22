@@ -122,7 +122,7 @@ Existuje více měr vhodnosti přímky. Použití LSE pro~libovolné rozdělení
 \end{enumerate}
 
 \begin{example}
-Nechť $e_1,..., e_n$ jsou $~iid~$ s~hustotou
+Nechť $\epsilon\in\R,e_1,..., e_n$ jsou $~iid~$ s~hustotou
 \begin{equation*}
   f(\epsilon) = \frac{1}{2} \e{- | \epsilon |} \quad (\text{Laplaceovo rozdělení}).
 \end{equation*}
@@ -237,7 +237,7 @@ Větší pozornost je naproti tomu potřeba u~odvození asymptotických rozděle
   		a střední hodnota pro~$\widehat{\beta}_0$ má tvar
   		\begin{equation*}
   		\begin{aligned}
-  		    \E [\widehat{\beta}_0] = \E [\oyn - \widehat{\beta}_1 \oxn] = \E [\oyn] - \oxnn \E [\widehat{\beta}_1] = \frac{1}{n} \sumin \E [Y_i] - \oxnn \beta_1 = \beta_0 + \frac{\beta_1}{n} \sumin x_i - \oxnn \beta_1 = \beta_0.
+  		    \E [\widehat{\beta}_0] = \E [\oyn - \widehat{\beta}_1 \overline{x}_n] = \E [\oyn] - \oxnn \E [\widehat{\beta}_1] = \frac{1}{n} \sumin \E [Y_i] - \oxnn \beta_1 = \beta_0 + \frac{\beta_1}{n} \sumin x_i - \oxnn \beta_1 = \beta_0.
   		    \end{aligned}
   		\end{equation*}
   \item 
@@ -268,6 +268,7 @@ Větší pozornost je naproti tomu potřeba u~odvození asymptotických rozděle
   pak je $\widehat{\beta}_0$ i $\widehat{\beta}_1$ LK nezávislých normálních náhodných veličin $Y_i$. Z toho vyplývá, že mají normální rozdělení, kde $\E$ a $\D$ jsme už vypočítali.
 \end{enumerate}
 \end{proof}
+\label{Veta1}
 \end{theorem}
 
 
@@ -311,9 +312,9 @@ Větší pozornost je naproti tomu potřeba u~odvození asymptotických rozděle
 	
 	Následně máme
 	\begin{align*}
-	\Cov(Y_i, \hYi) & = \Cov(Y_i, \wbeta_0 + \wbeta_1 x_0) = \Cov(Y_i, \wbeta_0) + x_i \Cov(Y_i, \wbeta_1), \\
+	\Cov(Y_i, \hYi) & = \Cov(Y_i, \wbeta_0 + \wbeta_1 x_i) = \Cov(Y_i, \wbeta_0) + x_i \Cov(Y_i, \wbeta_1), \\
 	\Cov(Y_i, \wbeta_1) & = \frac{1}{\Sxx} \sumjn (x_j - \lxn) \underbrace{\Cov(Y_i, Y_j)}_{ = 0 \text{ pro~} i\neq j} = \frac{\sigma^2(x_i - \lxn)}{\Sxx}, \\
-	\Cov(Y_i, \wbeta_0) & = \Cov(Y_i, \overline{Y}_n - \lxn \wbeta_1) = \Cov(Y_i, \overline{Y}) - \lxn \Cov(Y_i, \wbeta_1) = \frac{\sigma^2}{n} - \frac{\lxn \sigma^2 (x_i - \lxn)}{\Sxx}, 
+	\Cov(Y_i, \wbeta_0) & = \Cov(Y_i, \overline{Y}_n - \lxn \wbeta_1) = \Cov(Y_i, \overline{Y}_n) - \lxn \Cov(Y_i, \wbeta_1) = \frac{\sigma^2}{n} - \frac{\lxn \sigma^2 (x_i - \lxn)}{\Sxx}, 
 	\end{align*}
 	kde za $\wbeta_1$ dosadíme podle \eqref{Vzorec: beta1}. Tedy
 	\begin{align*}
@@ -322,7 +323,7 @@ Větší pozornost je naproti tomu potřeba u~odvození asymptotických rozděle
 	\end{align*}
 	Dosazením do \eqref{Vzorec: A} dostaneme
 	 $$
-		A = n\sigma^2 + 2\sigma^2 - 4\sigma^2
+		A = n\sigma^2 + 2\sigma^2 - 4\sigma^2 = \sigma^2(n-2)
 	 $$
 	a celkem máme
 	 $$
@@ -331,9 +332,9 @@ Větší pozornost je naproti tomu potřeba u~odvození asymptotických rozděle
 \end{proof}
 
 \begin{corollary}\label{tvrzeni}
-	Nechť platí předpoklady věty 1 a~nechť $e_1,..., e_n~iid~\NN(0,\sigma^2)$. Potom platí, že
+	Nechť platí předpoklady věty \ref{Veta1} a~nechť $e_1,..., e_n~iid~\NN(0,\sigma^2)$. Potom platí, že
 	\begin{enumerate}[a)]
-		\item $\frac{(n-2)s_n^2}{\sigma^2} \sim \chi(n-2)$
+		\item $\frac{(n-2)s_n^2}{\sigma^2} \sim \chi^2(n-2)$
 		\item $s_n^2$ je nezávislé na~$\wbeta_0$ a~$\wbeta_1$.
 	\end{enumerate}
 \end{corollary}
@@ -543,7 +544,7 @@ A zapsáno dohromady
 \begin{remark}
 	Někdy dopředu známe kandidáta $b_1$ jako hodnotu parametru $\beta_1$ a~chtěli bychom testovat
 	 $\hypothesis{\beta_1 = b_1}{\beta_1\neq b_1}$. Test tedy zamítá $H_0$, pokud
-	 $$ \abs{\beta_1-b_1}\cdot \frac{\sqrt{\Sxx}}{s_n}> t_{1-\frac{\alpha}{2}}(n-2). $$
+	 $$ \abs{\wbeta_1-b_1}\cdot \frac{\sqrt{\Sxx}}{s_n}> t_{1-\frac{\alpha}{2}}(n-2). $$
 \end{remark}
 \subsubsection*{Test významnosti interceptu}
 Otázka je, zda přímka prochází počátkem $(0,0)$, tedy $\hypothesis{\beta_0 = 0}{\beta_0\neq0}$. Nezamítnutí $H_0$ znamená, že jednodušší model $y = \beta_1 x+e$ lépe popisuje data, než $y = \beta_0+\beta_1 x+e$. $H_0$ potom zamítneme, pokud
@@ -568,7 +569,7 @@ Pokud bychom znali rozdělení pravděpodobnostní statistiky $\RMR^2$, nabízí
 	\end{equation}
 
 \begin{lemma}\label{lemma_k_vete}
-	Nechť $\widehat{e}_i = y_i-\hyi$ značí rezidua, kde $\hyi = \wbeta_0+\wbeta_1 x_i$ a~$\wbeta_0,\wbeta_1$ jsou LSE. Potom \begin{enumerate}
+	Nechť $\widehat{e}_i = y_i-\hyi$ značí rezidua, kde $\hyi = \wbeta_0+\wbeta_1 x_i$ a~$\wbeta_0,\wbeta_1$ jsou LSE v~modelu \eqref{Model 1D LR}. Potom \begin{enumerate}
 		\item $\sumin \widehat{e}_i = 0$,
 		\item $\lhyn = \lyn$,
 		\item $\sumin \widehat{e}_i\hyi = 0$.
@@ -582,7 +583,7 @@ Pokud bychom znali rozdělení pravděpodobnostní statistiky $\RMR^2$, nabízí
 \end{proof}
 \end{lemma}
 \begin{theorem}\label{vetasbysxx}
-	Předpokládejme, že $\SST\neq 0$. Potom platí\begin{enumerate}
+	Předpokládejme, že $\SST\neq 0$. Potom v~modelu \eqref{Model 1D LR} platí\begin{enumerate}
 		\item $0\leq \RMR^2\leq1$,
 		\item $\RMR^2 = 1-\frac{\SSE}{\SST}$, kde $\SSE = \sumin (y_i-\hyi)^2$ jako reziduální součet čtverců,
 		\item $\RMR^2 = 1~\Leftrightarrow~(\forall i\in\widehat{n})(\hyi = y_i)$ (všechna data leží na~přímce),
@@ -592,7 +593,7 @@ Pokud bychom znali rozdělení pravděpodobnostní statistiky $\RMR^2$, nabízí
 	\end{enumerate}
 \begin{proof}
 	Důkaz věty bude založen na~rozkladu
-	 $$ \sumin (y_i-\lyn)^2  = \sumin (\hyi-\ly)^2 + \sumin (y_i-\hyi)^2 \iff \SST = \SSR+\SSE.$$
+	 $$ \sumin (y_i-\lyn)^2  = \sumin (\hyi-\lyn)^2 + \sumin (y_i-\hyi)^2 \iff \SST = \SSR+\SSE.$$
 	 Z~lemmatu \ref{lemma_k_vete} vyplývá, že
 	\[
 	\begin{split}
